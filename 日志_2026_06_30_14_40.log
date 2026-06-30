@@ -1,0 +1,251 @@
+
+--- 2026-06-30 05:06:17 ---
+处理目录: D:/game/XXMI/EFMI\mods
+成功更新文件详情（共 4 个）:
+[character\weapons\Excalibur\Excalibur.ini]
+  参数: Freq_var  0.25  --->  0
+  参数: Freq__001  0.25  --->  0
+  参数: Freq__001  0.25  --->  0
+  参数: Freq_var  0.25  --->  0
+
+[character\tangtang\汤汤-兔女郎\汤汤.ini]
+  参数: Freq_group4  0.949999988  --->  0.25
+  参数: Freq_group7  0.524999976  --->  0.875
+  参数: set_rel_x4  0.0450000018  --->  0.0950000286
+  参数: rel_x4  0.0450000018  --->  0.0950000286
+  参数: min_rel_x4  0.0450000018  --->  0.0950000286
+  参数: max_rel_x4  0.0450000018  --->  0.0950000286
+
+[character\xaihi\Curvier Xaihi final\mod.ini]
+  参数: Dress  6  --->  7
+  参数: Butt  7  --->  0
+
+[character\庄方宜\Curvier Fangyi0.95\mod.ini]
+  参数: Boobs  (无)  --->  0
+  参数: UpperBody  (无)  --->  0
+  参数: Headstuff  (无)  --->  0
+  参数: Headstuff2  (无)  --->  1
+  参数: Shoulders  (无)  --->  2
+  参数: Waiststuff  (无)  --->  0
+  参数: Hipstuff  (无)  --->  4
+  参数: Buttstuff  (无)  --->  1
+  参数: legs  (无)  --->  0
+  参数: Legstuff  (无)  --->  4
+  参数: Reflections  (无)  --->  0
+  参数: Textures  (无)  --->  0
+  参数: lock  (无)  --->  0
+
+------------------------------------------------------------
+
+--- 2026-06-30 14:40:23 ---
+处理目录: D:/game/XXMI/ZZMI\mods
+成功更新文件详情（共 26 个）:
+[character\anby\安比-乳穴-肛-尿道\anby.ini]
+  参数: Freq_shape_3  0.991999984  --->  0.976000011
+  参数: Freq_shape_2  0.00999999978  --->  0.280000001
+  参数: Freq__001_3  0.439999938  --->  1
+  参数: Freq__002_2  0  --->  0.220000029
+  参数: Freq__043  0.590000153  --->  0
+  参数: Freq_shape_1  0.64200002  --->  0.0439999998
+  参数: Freq_shape  0.948000014  --->  0.924000025
+  参数: Freq__006_1  1  --->  0.930000305
+  参数: Freq__007_1  1  --->  0
+  参数: Freq__008_1  1  --->  0
+  参数: Freq__009_1  1  --->  0
+  参数: Freq__010_1  1  --->  0
+  参数: Freq__011_1  1  --->  0
+  参数: Freq__012_1  1  --->  0
+  参数: Freq__013_1  1  --->  0
+  参数: Freq__014_1  1  --->  0
+  参数: Freq__015_1  1  --->  0
+  参数: Freq__016_1  1  --->  0
+  参数: Freq__017  1  --->  0
+  参数: Freq__018  1  --->  0
+  参数: Freq__019  1  --->  0
+  参数: Freq__015  0.265999794  --->  1
+  参数: Freq__020  1  --->  0
+  参数: Freq__016  0  --->  0.625999451
+  参数: Freq__021  1  --->  0
+  参数: Freq__022  1  --->  0
+  参数: Freq__023  1  --->  0
+  参数: Freq__024  1  --->  0
+  参数: Freq__025  1  --->  0
+  参数: Freq__026  1  --->  0
+  参数: Freq__027  1  --->  0
+  参数: Freq__028  1  --->  0
+  参数: Freq__029  1  --->  0
+  参数: Freq__030  1  --->  0
+  参数: Freq__031  1  --->  0
+  参数: Freq__032  1  --->  0
+  参数: Freq__033  1  --->  0
+  参数: Freq__034  1  --->  0
+  参数: Freq__035  1  --->  0
+  参数: Freq__036  1  --->  0
+  参数: Freq__037  1  --->  0
+  参数: Freq__038  1  --->  0
+  参数: Freq__039  1  --->  0
+  参数: Freq__040  1  --->  0
+  参数: Freq__041  1  --->  0
+  参数: Freq__042  1  --->  0
+  参数: Freq_Group1  0.970000029  --->  0.189999998
+  参数: Freq_Group2  0.898000002  --->  0.977999985
+  参数: Freq_Group3  0.948000014  --->  0.924000025
+  参数: Freq_Group4  0.64200002  --->  0.0439999998
+  参数: Freq_Group5  0.991999984  --->  0.976000011
+  参数: Freq_Group6  0.00999999978  --->  0.280000001
+  参数: Freq_Group7  0.479999989  --->  0.74000001
+  参数: framevar_5c0240db  68.822998  --->  156.225159
+  参数: framevar_4816de84  75.4230652  --->  162.825226
+
+[character\orphie\奥菲丝-RGB (ctrl+？）\Orphie-Fall evil-Demo1.3\B1\Orphiebodydown.ini]
+  参数: xiongL  0.265599966  --->  0.723200083
+  参数: xiongR  0.566400051  --->  0.761599898
+  参数: shuzhiL  0.265599966  --->  1.27679992
+  参数: shuzhiR  0.566400051  --->  1.2384001
+  参数: xiongsuduL  0.131199986  --->  0.17279999
+  参数: xiongsuduR  0.192000002  --->  0.150399998
+  参数: xiongsuducha  244  --->  192
+
+[character\orphie\奥菲丝-RGB (ctrl+？）\Orphie-Fall evil-Demo1.3\B2\Orphiebodyup.ini]
+  参数: xiongL  0.265599966  --->  0.723200083
+  参数: xiongR  0.566400051  --->  0.761599898
+  参数: shuzhiL  0.265599966  --->  1.27679992
+  参数: shuzhiR  0.566400051  --->  1.2384001
+  参数: xiongsuduL  0.131199986  --->  0.17279999
+  参数: xiongsuduR  0.192000002  --->  0.150399998
+  参数: xiongsuducha  244  --->  192
+
+[character\pyrois\Sirius-Bodhisattva\佩洛伊斯.ini]
+  参数: Freq_Motion_Key_01  0.0  --->  1
+  参数: Freq__22000  0.0  --->  1
+  参数: Freq_Motion_Key_02  0.0  --->  1
+  参数: Freq__22001  0.0  --->  1
+  参数: Freq_Motion_Key_03  0.0  --->  1
+  参数: Freq__22002  0.0  --->  1
+  参数: Freq_Motion_Key_04  0.0  --->  1
+  参数: Freq__22003  0.0  --->  1
+  参数: Freq_Motion_Key_05  0.0  --->  1
+  参数: Freq__22004  0.0  --->  1
+  参数: Freq_Motion_Key_06  0.0  --->  1
+  参数: Freq__22005  0.0  --->  1
+  参数: Freq_Motion_Key_07  0.0  --->  1
+  参数: Freq__22006  0.0  --->  1
+  参数: Freq_Motion_Key_08  0.0  --->  1
+  参数: Freq__22007  0.0  --->  1
+  参数: Freq_Motion_Key_09  0.0  --->  1
+  参数: Freq__22008  0.0  --->  1
+  参数: Freq_Motion_Key_10  0.0  --->  1
+  参数: Freq__22009  0.0  --->  1
+  参数: Freq_Motion_Key_11  0.0  --->  1
+  参数: Freq__22010  0.0  --->  1
+  参数: Freq_Motion_Key_12  0.0  --->  1
+  参数: Freq__22011  0.0  --->  1
+  参数: Freq_Motion_Key_13  0.0  --->  0.239999771
+  参数: Freq__22012  0.0  --->  0.239999771
+  参数: Freq_Motion_Key_14  0.0  --->  0
+  参数: Freq__22013  0.0  --->  0
+  参数: Freq_Motion_Key_15  0.0  --->  0
+  参数: Freq__22014  0.0  --->  0
+  参数: Freq_Motion_Key_16  0.0  --->  0
+  参数: Freq__22015  0.0  --->  0
+  参数: Freq_Motion_Key_17  0.0  --->  0
+  参数: Freq__22016  0.0  --->  0
+  参数: Freq_Motion_Key_18  0.0  --->  0
+  参数: Freq__22017  0.0  --->  0
+  参数: Freq_Group1  0.0  --->  0.680000007
+  参数: Freq_Group2  0.0  --->  0.680000007
+  参数: set_rel_x1  0.5  --->  0
+  参数: set_rel_x2  0.5  --->  0
+  参数: zoom0  1.0  --->  1
+  参数: zoom1  1.0  --->  1
+  参数: min_rel_x1  (无)  --->  0
+  参数: max_rel_x1  (无)  --->  0
+  参数: zoom2  1.0  --->  1
+  参数: min_rel_x2  (无)  --->  0
+  参数: max_rel_x2  (无)  --->  0
+
+[character\r18\Klons Loading Screens Mod FUTA v28\Hashes.ini]
+  参数: coun1  1  --->  100
+
+[character\r18\Klons Random Play Mod FUTA\Klons Random Play Mod FUTA v27 lite\keys.ini]
+  参数: counter1  2  --->  4
+
+[character\r18\Klons UI mod NSFW v27\Alice\cinema.ini]
+  参数: Alicepanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Dialyn\cinema.ini]
+  参数: Dialynpanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\JuFuFu\cinema.ini]
+  参数: JuFufupanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Lucia\cinema.ini]
+  参数: Luciapanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Nangong\cinema.ini]
+  参数: Nangongpanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Orphie\cinema.ini]
+  参数: Orphiepanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Seed\cinema.ini]
+  参数: Seedpanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Sunna\cinema.ini]
+  参数: Sunnapanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\YeShun\cinema.ini]
+  参数: YeShunpanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Yidhari\cinema.ini]
+  参数: Yidharipanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Yixuan\cinema.ini]
+  参数: yixuanpanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Yuzuha\cinema.ini]
+  参数: Yuzuhapanel  0  --->  1
+
+[character\r18\Klons UI mod NSFW v27\Zhao\cinema.ini]
+  参数: Zhaopanel  0  --->  1
+
+[character\r18\Klons World TVs Mod v27\Klons World TVs Mod v27 lite\lum\lumTVs.ini]
+  参数: counter1  0  --->  2
+  参数: counter2  0  --->  2
+  参数: counter3  0  --->  2
+  参数: counter4  0  --->  3
+  参数: counter6  0  --->  1
+  参数: counter7  0  --->  2
+
+[character\r18\配电箱-安比\lod\Animation.ini]
+  参数: swapvar  49  --->  35
+
+[character\r18\配电箱-安比\Animation.ini]
+  参数: swapvar  25  --->  32
+
+[character\seed\席德-小车\席德-小车.ini]
+  参数: Freq_Key  0.150000006  --->  0.970000029
+  参数: Freq_Key001  0.99000001  --->  0.389999986
+  参数: Freq_Group1  0.150000006  --->  0.970000029
+  参数: Freq_Group2  0.99000001  --->  0.389999986
+
+[character\soldier11\牛牛刀\11号 · 牛牛刀.ini]
+  参数: Freq__001  0  --->  0.645626843
+  参数: Freq__5  0  --->  1
+
+[character\yeshunguang\Ye Shunguang-Sword Case\Ye Shunguang-Sword Case.ini]
+  参数: Freq_Motion_Key_2  0.0  --->  1
+  参数: Freq_Motion_Key_3  0.0  --->  1
+  参数: Freq_Motion_Key_4  0.0  --->  1
+  参数: Freq_Motion_Key_5  0.0  --->  0.333333254
+  参数: Freq_Group1  0.0  --->  0.833333313
+  参数: set_rel_x1  0.5  --->  0
+  参数: zoom0  1.0  --->  1
+  参数: zoom1  1.0  --->  1
+  参数: min_rel_x1  (无)  --->  0
+  参数: max_rel_x1  (无)  --->  0
+
+[SSMTGeneratedMod\工作区01\Animation.ini]
+  参数: swapvar  0  --->  17
+
+------------------------------------------------------------

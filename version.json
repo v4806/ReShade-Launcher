@@ -1,0 +1,21 @@
+{
+    "identifier": "ReShade-Launcher-RUA-RUA_v2.4",
+    "xxmi_exe_name": "XXMI Launcher.exe",
+    "game_launch_args": "-force-d3d11",
+    "xxmi_games": [
+        {"exe": "YuanShen.exe",          "name_key": "game_name_xxmi_yuanshen"},
+        {"exe": "GenshinImpact.exe",     "name_key": "game_name_xxmi_genshin"},
+        {"exe": "BH3.exe",              "name_key": "game_name_xxmi_bh3"},
+        {"exe": "StarRail.exe",         "name_key": "game_name_xxmi_starrail"},
+        {"exe": "ZenlessZoneZero.exe",  "name_key": "game_name_xxmi_zzz"},
+        {"exe": "Client-Win64-Shipping.exe", "name_key": "game_name_xxmi_wuthering"},
+        {"exe": "Endfield.exe",         "name_key": "game_name_xxmi_endfield"}
+    ],
+    "xxmi_launch_args_YuanShen": ["--nogui", "--xxmi", "GIMI"],
+    "xxmi_launch_args_GenshinImpact": ["--nogui", "--xxmi", "GIMI"],
+    "xxmi_launch_args_BH3": ["--nogui", "--xxmi", "HIMI"],
+    "xxmi_launch_args_StarRail": ["--nogui", "--xxmi", "SRMI"],
+    "xxmi_launch_args_ZenlessZoneZero": ["--nogui", "--xxmi", "ZZMI"],
+    "xxmi_launch_args_Client-Win64-Shipping": ["--nogui", "--xxmi", "WWMI"],
+    "xxmi_launch_args_Endfield": ["--nogui", "--xxmi", "EFMI"]
+}
