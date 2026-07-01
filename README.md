@@ -1,1 +1,2 @@
-<iframe src="//player.bilibili.com/player.html?bvid=BV1fcTz68EYs&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+使用教程视频：
+https://www.bilibili.com/video/BV1fcTz68EYs/
