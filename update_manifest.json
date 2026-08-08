@@ -4710,8 +4710,8 @@
     }
   ],
   "app": {
-    "version": "2.6.5.0",
-    "url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/update/ReShade_Launcher_2.6.5.0.zip",
-    "sha256": "eca8d2a7bc4b0684adac9128ee60ed7d8c28742b356b1fa144637d0d91136bfc"
+    "version": "2.6.0.0",
+    "url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/update/ReShade_Launcher_2.6.0.0.zip",
+    "sha256": "dcbdf886e70302a69bf59c5dff69a9e28f5cebd6ead7fc64ed66a5ec0aa87c80"
   }
 }
