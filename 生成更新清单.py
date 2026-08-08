@@ -35,8 +35,12 @@ MANIFEST_FILENAME = "update_manifest.json"
 APP_ZIP_DIR = "update"  # 仓库中存放 app 更新包的目录
 
 
-def build_app_zip(app_src: str, out_zip: str) -> None:
-    """将两个 exe 与 _internal 打包成 app 更新 zip（zip 根为两个 exe + _internal/）"""
+def build_app_zip(app_src: str, out_zip: str, extra_files: list = None) -> None:
+    """将两个 exe 与 _internal 打包成 app 更新 zip（zip 根为两个 exe + _internal/）
+
+    extra_files: 可选，附加随 app 一并更新的文件 [(源绝对路径, zip内相对名)]，
+                 如附带 translations.json 使翻译随 app 更新保持一致。
+    """
     with zipfile.ZipFile(out_zip, 'w', zipfile.ZIP_DEFLATED) as z:
         for name in APP_EXE_NAMES:
             p = os.path.join(app_src, name)
@@ -53,6 +57,12 @@ def build_app_zip(app_src: str, out_zip: str) -> None:
                     z.write(fp, arc)
         else:
             print("  ⚠ 缺少 _internal 目录")
+        # 附加随 app 更新的文件（如翻译文件）
+        for src, arc in (extra_files or []):
+            if os.path.isfile(src):
+                z.write(src, arc)
+            else:
+                print(f"  ⚠ 缺少附加文件 {src}，已跳过")
 
 
 def _print_items_summary(items):
@@ -126,7 +136,9 @@ def main():
             os.makedirs(zip_dir, exist_ok=True)
             zip_name = f"ReShade_Launcher_{version}.zip"
             zip_path = os.path.join(zip_dir, zip_name)
-            build_app_zip(app_src, zip_path)
+            build_app_zip(app_src, zip_path, extra_files=[
+                (os.path.join(source, 'translations.json'), 'translations.json'),
+            ])
             manifest["app"] = {
                 "version": version,
                 "url": get_base_url() + f"{APP_ZIP_DIR}/{zip_name}",
