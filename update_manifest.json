@@ -42,11 +42,11 @@
         },
         {
           "path": "REST_Endfield.ini",
-          "sha256": "430163b95fc05bb10cac4a67164e63b68a248559fa0348870adfe057aca1b3fd"
+          "sha256": "0111ba74316b3e8d2233d0b2663c16429a87e180a326c57ba2ab0363b62a31e6"
         },
         {
           "path": "REST_ZenlessZoneZero.ini",
-          "sha256": "077aaf596ffed88f35539979c0484a2a90fd894cc965e014b9075c0305a41cf9"
+          "sha256": "fe457f87adefcf0dd0cad3e9187a84e66aed622559d007253e3d748e2aa8b7e5"
         }
       ]
     },
