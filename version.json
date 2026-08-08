@@ -1,7 +1,4 @@
 {
-    "identifier": "ReShade-Launcher-v2.5",
-    "xxmi_exe_name": "XXMI Launcher.exe",
-    "game_launch_args": "-force-d3d11",
     "xxmi_games": [
         {
             "exe": "YuanShen.exe",
