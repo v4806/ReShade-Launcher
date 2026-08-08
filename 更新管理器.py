@@ -33,6 +33,10 @@ REPO = "v4806/ReShade-Launcher"
 BRANCH = "main"
 MANIFEST_FILENAME = "update_manifest.json"
 
+# 下载策略：待更新文件数 >= 此阈值时，改用「仓库快照(zipball)」一次性拉取，
+# 避免上千个文件逐个 HTTP 下载的连接开销（类似 git 一次拉取）。
+SNAPSHOT_THRESHOLD = 20
+
 # 需要更新检查的顶层条目（与仓库保持一致）
 MANIFEST_ITEMS = [
     {"path": "translations.json", "type": "file"},
@@ -217,6 +221,58 @@ def _download_file(local_root: str, p: dict):
         return p['rel'], False, str(e)
 
 
+def _apply_snapshot(local_root: str, manifest: dict, progress_cb=None, total: int = 0):
+    """
+    下载 GitHub 仓库快照(zipball)，解压后与清单比对，只复制需要更新的文件到本地。
+    适合大量文件更新：一次拉取全部数据（类似 git 拉取），避免逐个 HTTP 下载。
+    返回 (updated, failed)。
+    """
+    snap_url = f"https://codeload.github.com/{REPO}/zip/refs/heads/{BRANCH}"
+    tmp = tempfile.mkdtemp(prefix='ReShadeSnap_')
+    zip_path = os.path.join(tmp, 'snapshot.zip')
+    updated, failed = [], []
+    try:
+        if progress_cb:
+            progress_cb("正在下载仓库快照（一次拉取全部数据）...")
+        download_to(snap_url, zip_path)
+        if progress_cb:
+            progress_cb("解压仓库快照...")
+        with zipfile.ZipFile(zip_path, 'r') as z:
+            z.extractall(tmp)
+        # zipball 顶层目录形如 ReShade-Launcher-main/
+        top = next(
+            (os.path.join(tmp, n) for n in os.listdir(tmp)
+             if os.path.isdir(os.path.join(tmp, n))),
+            tmp
+        )
+        # 与清单重新比对，选择需要更新的文件（保留 sha256 校验与 preserve_existing）
+        pending, _ = check_updates(local_root, manifest)
+        total = len(pending)
+        for i, p in enumerate(pending):
+            src = os.path.join(top, p['rel'].replace('/', os.sep))
+            dest = _local_path(local_root, p['rel'])
+            if not os.path.isfile(src):
+                failed.append((p['rel'], '快照中缺少该文件'))
+                continue
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            try:
+                shutil.copy2(src, dest)
+                if p.get('sha256') is None or sha256_file(dest) == p['sha256']:
+                    updated.append(p['rel'])
+                else:
+                    failed.append((p['rel'], '更新后内容校验不一致'))
+            except Exception as e:
+                failed.append((p['rel'], str(e)))
+            if progress_cb:
+                progress_cb(f"({i + 1}/{total}) 更新 {p['rel']}")
+    except Exception as e:
+        failed.append(('仓库快照', str(e)))
+    finally:
+        # 清理压缩包与解压数据（临时目录）
+        shutil.rmtree(tmp, ignore_errors=True)
+    return updated, failed
+
+
 def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
     """
     执行完整更新流程：获取清单 → 比对 → 下载变更文件。
@@ -254,9 +310,12 @@ def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
 
     result['orphans'] = orphans
 
-    # 3. 并行下载更新的文件（多线程并发下载，下载后校验哈希，防止服务器缓存返回旧内容导致反复下载）
+    # 3. 下载更新的文件：待更新文件多时用「仓库快照」一次性拉取，否则多线程并行
     total = len(pending)
-    if total > 0:
+    if total >= SNAPSHOT_THRESHOLD:
+        result['updated'], result['failed'] = _apply_snapshot(
+            local_root, manifest, progress_cb, total)
+    elif total > 0:
         max_workers = min(6, total)
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as _executor:
             for i, (rel, ok, err) in enumerate(
