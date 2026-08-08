@@ -5,7 +5,7 @@
     {
       "path": "translations.json",
       "type": "file",
-      "sha256": "736810752c41f29c5ae49521a4cc6c51bc60462b915be9aa059aa1a8bf66d765"
+      "sha256": "a0691ff3d4c7cd7e73fe36d0efc0ee98cf85afd3613c3c90a147d9bbe5826658"
     },
     {
       "path": "injector.exe",
@@ -37,11 +37,11 @@
         },
         {
           "path": "REST_Endfield.ini",
-          "sha256": "e8549e7337101ecbb143831cacf533e4cd816a12d0adc2546f52ff7c63c5e155"
+          "sha256": "430163b95fc05bb10cac4a67164e63b68a248559fa0348870adfe057aca1b3fd"
         },
         {
           "path": "REST_ZenlessZoneZero.ini",
-          "sha256": "1992c7126ef4c64f28097558f9d1de1a37a105592d4424b5c217dda19c1ae2f6"
+          "sha256": "077aaf596ffed88f35539979c0484a2a90fd894cc965e014b9075c0305a41cf9"
         }
       ]
     },
@@ -51,47 +51,47 @@
       "files": [
         {
           "path": "CHD.ini",
-          "sha256": "924d879d1e85d183560caf2903b142e236663d5cbcbe0e4c2ca3ff8747513ff4"
+          "sha256": "3bf502c5eb17347ec2786c492808ef951a0578c7da725044223df9596bfe19e1"
         },
         {
           "path": "EDH.ini",
-          "sha256": "6d99a32a97b5e1ce23ad893ae83aa87986a148be25090ea2e73ca710e1693ed0"
+          "sha256": "53548ead36d852cd75657a071ea41ae8a6c916c0dd6b58c019c215493c3cc5b7"
         },
         {
           "path": "HD 3A.ini",
-          "sha256": "c543e452010a52f627654e21af9b6b5e2c230f6ff4ad6c9515f564f4bea59195"
+          "sha256": "c8bdaa04d12f780445decb630ef0b6778fe80bf823f7b1b01dd009c277f883c4"
         },
         {
           "path": "HD 明亮 Pro oil.ini",
-          "sha256": "4a2084cd41fde5abef0a56a10b8d427a6e60a27da39583c4f2a945d64e85cc98"
+          "sha256": "3d2650e02d704f921386e4a01fe785ec39ba99194ed779f7be999cdc347e1ce7"
         },
         {
           "path": "ZZZ3A -Pro.ini",
-          "sha256": "6c3f72e7ff50a8a8e59ce05f364f764a3e7ad8fe2ce39749b8c78c3c900ba50d"
+          "sha256": "d8e05e2a68c9c32d621107bc78b20d4bfa08fe1d4a12e40dd17a3db593986460"
         },
         {
           "path": "focus.ini",
-          "sha256": "154e5f9902ce6103958ad1f602c32387881a8bd74a5344844e45309bd71bf7e2"
+          "sha256": "4a0ba0a4d16e94dc50483a2e9364e0b5817ddb189b5df0862066a35e16d24d6a"
         },
         {
           "path": "focus2.ini",
-          "sha256": "fd1c1a13f0ee9f146149b5d570d96e575b872cf8a9e2618a231d719a66130b8d"
+          "sha256": "44a5f16cca05d7f660fefcd3b1333c35343006edb4b0a1d6295b647f7d2d273f"
         },
         {
           "path": "hazy.ini",
-          "sha256": "24f97884ed330a4c297b6817df6fcdad7f9026e8348b78f3eb1d3c2e9aa03873"
+          "sha256": "1772ca17e1e03a7b4b953fdb5abfcbda76fe6adb4c23b18319bd862a498c2f4a"
         },
         {
           "path": "hd.ini",
-          "sha256": "1d8e3aaaa141fbab794cbbf293411e9f03206714cc6e85afc7ce7f11c256884c"
+          "sha256": "ae8285f9bf3feb2ab802597495468b08aa6b0a64339aa0142576c48dd34d211d"
         },
         {
           "path": "夜店.ini",
-          "sha256": "f6d1aa459fc9196343ac4185c221aaa5a6a66c5cd378c4475d75730b4e3702f7"
+          "sha256": "58d7b681f4c13b20635f4ca52b2bfaec475090049dbf646786d693aea614e4de"
         },
         {
           "path": "明亮Z -Pro.ini",
-          "sha256": "db72027b58eaa00bf9926f098a642f2af3e20154a9c5fc1595162a2f1e6c2f32"
+          "sha256": "3a7a4fdbec369f06ad4e12d9667d3a925664795076341a2afff28eb18ada9973"
         }
       ]
     },
@@ -105,23 +105,23 @@
         },
         {
           "path": "Shaders/ASCII.fx",
-          "sha256": "55bd3ea5286cfb64fdb2a22457bfb2a396d0c40105874fc13a8f3aacba104077"
+          "sha256": "8ad3d7bcc5fe2e958588980e6811a939e5f556efebbae5f08057c4fa8abbcfa7"
         },
         {
           "path": "Shaders/AdaptiveSharpen.fx",
-          "sha256": "1acdcd07456f7457055f7409bd6870c1307a451a0d9e06365423de4e71a8876a"
+          "sha256": "05da45d766a79edc178954e0568ea253d17dc64f77ab083e69d2f8b6566cffdb"
         },
         {
           "path": "Shaders/AmbientLight.fx",
-          "sha256": "138e21005c35b4dbb2d5fbafc7c28aa2f9db8f39fca19272f3dc32969e91783a"
+          "sha256": "e5605fa1313fd1dd48f24fca90b5f8f6f2c81a0fb6725dd32b817f6b63f26037"
         },
         {
           "path": "Shaders/Barbatos_SSR_Lite.fx",
-          "sha256": "a3f69eb139ea574061caffc9c817eb57088e675e0defe50e76b282e72511d276"
+          "sha256": "5ef641875ec129e7cb2919c0307f12e571e096f74fe2b51192c33558198d2840"
         },
         {
           "path": "Shaders/Barbatos_SSRj.fx",
-          "sha256": "27201d2989a0af4f4a31e94f382b03de5bade5cd0bb23502d2bb9a50d8a5cc9e"
+          "sha256": "9c693bd2cc71a8482d415b29b686955c6352f7f2e5590c6438e8c38e73dcdf24"
         },
         {
           "path": "Shaders/Blending.fxh",
@@ -129,11 +129,11 @@
         },
         {
           "path": "Shaders/Bloom.fx",
-          "sha256": "3e8e0ab171ce33c12aa4bccb3733cc2310d2001b22b84313fa962757bbe8ec4c"
+          "sha256": "edff8bbf5b6412f91f2fe04b353181d97e6fc59a68926ec996fd4c586bd6ab56"
         },
         {
           "path": "Shaders/Border.fx",
-          "sha256": "88928afa190f4fcce051abb1e3132572f45763a7cf3d4d8ec82ef5a31b5d5316"
+          "sha256": "f589f6ea0a451444256e7809f3b1ac19e94a72b25a33b01719fe1941cd60f199"
         },
         {
           "path": "Shaders/CAS.fx",
@@ -157,7 +157,7 @@
         },
         {
           "path": "Shaders/Colourfulness.fx",
-          "sha256": "5dfa2c7dd058524f3b6bd5ac5e9013b5a1e8a5a7bce9e329bb25024f52e817a1"
+          "sha256": "898ea7ac9d72a36ea430bc6a618907a201370a9328750ab88e62f75c2e92d44a"
         },
         {
           "path": "Shaders/Curves.fx",
@@ -177,7 +177,7 @@
         },
         {
           "path": "Shaders/Deband.fx",
-          "sha256": "a46339d120773e0201d082605bd2ea100f6f5ea9f0199d8d7cacc4e2784c6dfe"
+          "sha256": "e80411cbdbb8f3d556530321d47654640d25694c64f910d0c50a0cb64483d667"
         },
         {
           "path": "Shaders/Denoise.fx",
@@ -185,7 +185,7 @@
         },
         {
           "path": "Shaders/DisplayDepth.fx",
-          "sha256": "b4d75076b57a47a1a7463ba4584c12ef300de668efce4b15bec37bc45f44f7de"
+          "sha256": "3e0980d4e47b0cf1ffa4b9f2828302e394c7b411676e211e1d426f77ac66f031"
         },
         {
           "path": "Shaders/DrawText.fxh",
@@ -209,11 +209,11 @@
         },
         {
           "path": "Shaders/FilmGrain.fx",
-          "sha256": "313bde423a6ec6b0ace51ad254e67a9827d6911a6397d3c03573b8812cea899c"
+          "sha256": "88589caf27abd9643e1d8bb877464de1799cf1d9f5042d18e0382d57e93a3a98"
         },
         {
           "path": "Shaders/FilmGrain2.fx",
-          "sha256": "a2aced26f0b0c8cf992a9c492c85130c3b013797df2ed7bc667761379195f585"
+          "sha256": "b80c8b6ad78f2e35af43be5968f8c95b29364cc7b20d8c1e9db53d934799e939"
         },
         {
           "path": "Shaders/FilmicPass.fx",
@@ -221,7 +221,7 @@
         },
         {
           "path": "Shaders/FineSharp.fx",
-          "sha256": "87ec3a4a1c145a92e10180f46f0c49ff8a9e9d1225b50deeddf6e9ae5a342879"
+          "sha256": "71cbb096d5df71b56e30c4f6e739d1f05fabe409ae3430f77d9ac0982d1a5128"
         },
         {
           "path": "Shaders/GaussianBlur.fx",
@@ -233,19 +233,19 @@
         },
         {
           "path": "Shaders/HQ4X.fx",
-          "sha256": "c91d714981ab6cbbdc525f630409263fc52c66efe50832d886de42d137216faa"
+          "sha256": "dc9815824f32c36c6d337b305bf1400c2f26e6056444ebd3ba30cdc4c8b2daf2"
         },
         {
           "path": "Shaders/HSLShift.fx",
-          "sha256": "a133dcd8772822746fcce1218401eae098eff8af4e68886609db8f53c150a689"
+          "sha256": "5d3d538458a5491afa815d84b278342bf573a6d6e7621ad5aa11c7571ad22390"
         },
         {
           "path": "Shaders/HighPassSharpen.fx",
-          "sha256": "b696f9dfedd1542af25e77fa945a0c391acea4e21da3284762f2119d0239fb75"
+          "sha256": "df0a68e239166edc819565d5a635c58f8ed2e93f0fda10d897451a555491789b"
         },
         {
           "path": "Shaders/LUT.fx",
-          "sha256": "bc861dceeb1384ece367bc21ce14b459831cf53aba8cacd7da400d09d8b447e6"
+          "sha256": "fd73a8819f8eb7eb335c0afff353701476f6bee6c67a13fa73f86c84be131f9c"
         },
         {
           "path": "Shaders/Layer.fx",
@@ -269,11 +269,11 @@
         },
         {
           "path": "Shaders/LumaSharpen.fx",
-          "sha256": "fcadb8eb08c21ea9e20e3e2c7b642c26faa608ac3807b5b925de6a6a9a278363"
+          "sha256": "383ba17a7fe59895a3e886a08256aebb4e7a226c12e5b2bd36baef67ed9dd3dc"
         },
         {
           "path": "Shaders/MC_SSAO.fx",
-          "sha256": "305e5c27008ae337f7fb1626e53b4882c663481fd1d93147752136b7e3f4ef59"
+          "sha256": "47ed30612ab858b4295d4a2445caa71cdd6957540741405150ab29763c1ddaf8"
         },
         {
           "path": "Shaders/Macros.fxh",
@@ -281,11 +281,11 @@
         },
         {
           "path": "Shaders/MagicBloom.fx",
-          "sha256": "ddc8056fd5c7a91670510c26d289c8de9e858e134b1f648db91906d2a08401da"
+          "sha256": "fb265bab8b80d2eeb16ecef503bc367687bb778a771d8c5d5631a242387c0a13"
         },
         {
           "path": "Shaders/Monochrome.fx",
-          "sha256": "7b06ee1a74703cedad04eb3b817518986bad5c66b8122b6529d846e3404df562"
+          "sha256": "91e5977066810312116b380705adeca1526535b3d1d3a1b687894badb295466b"
         },
         {
           "path": "Shaders/NightVision.fx",
@@ -293,7 +293,7 @@
         },
         {
           "path": "Shaders/Nostalgia.fx",
-          "sha256": "1d6f87bdd84190b929667faacebb0d09762f527100665e5ca82458d4576162c2"
+          "sha256": "b5696ae82f4b36a91f1ef352308d543644f0d61e210bb8a4b79a1ad7b027dff7"
         },
         {
           "path": "Shaders/PostProcessingCore.fx",
@@ -313,7 +313,7 @@
         },
         {
           "path": "Shaders/SMAA.fx",
-          "sha256": "0eda7c23187c3af7e8d86f9764686f1da3bf45aec274585c02e3941293404a93"
+          "sha256": "64d664a9a0b779ef7d0d30056a820c126d3b37cfa4a34bc937298194510e54dd"
         },
         {
           "path": "Shaders/SMAA.fxh",
@@ -321,7 +321,7 @@
         },
         {
           "path": "Shaders/SSAO.fx",
-          "sha256": "e00bb8f18955f9a73fa67f9ffddab894156fa396e3365bdd09369e7640c8c1e8"
+          "sha256": "e21e0460eef43568da8f76d2c1cec5accb5f883a353f0193865a1595b453f0a8"
         },
         {
           "path": "Shaders/Sepia.fx",
@@ -329,7 +329,7 @@
         },
         {
           "path": "Shaders/Splitscreen.fx",
-          "sha256": "b99012b6e65643a248d912f28fd214423a8ba17cac68e2ba7cd628870b6aa06c"
+          "sha256": "3f0570a8902368d966cc109565e8a2b7513f91763aad9db84b9a54bc87e2a094"
         },
         {
           "path": "Shaders/SurfaceBlur.fx",
@@ -337,7 +337,7 @@
         },
         {
           "path": "Shaders/TFAA.fx",
-          "sha256": "e2b5818c90576bec01662d10b977c890b419080e294a5cae85458e438194d3af"
+          "sha256": "7c10965199a34e0e7c5418a345090272cdd5a81e7220d6b2c6cf73677312a8c0"
         },
         {
           "path": "Shaders/Technicolor.fx",
@@ -365,15 +365,15 @@
         },
         {
           "path": "Shaders/Vignette.fx",
-          "sha256": "8c098082b8494df0fa5bf29bfaf56125d39ae6f5c4fb2c59ca4cd6552e026181"
+          "sha256": "1b775921027690ba1dc20e1d54a79cc7849fbefa24cf9730f83edeed54da676c"
         },
         {
           "path": "Shaders/XeGTAO.fx",
-          "sha256": "fe9900aeeaf5d2cc90960ee87f4b723fdde764807410fb97f18510b84d91e84a"
+          "sha256": "ec0255bfc173db40f177ac8f8199defe0ff0264d91f7db372a01716f46315375"
         },
         {
           "path": "Shaders/qUINT_rtgi.fx",
-          "sha256": "dc6e3040d5113083aeff3ef19be070f3629e8cc4ac433a3293250260a93ec03b"
+          "sha256": "2c1cc048de17e35c7dab52d3f26981978567c95070117aec0fac94d81265f7e3"
         },
         {
           "path": "Shaders/Anagrama/anamorpho.fx",
@@ -393,11 +393,11 @@
         },
         {
           "path": "Shaders/AstrayFX/BloomingHDR.fx",
-          "sha256": "b3bcf4e3576c0329873baaab5ac227812491af80f1ea25ee922a71a401da5e91"
+          "sha256": "5f39377a8218d4a1166151b5be7e783cdc689b83d5f2b80c28b520d762c34a5e"
         },
         {
           "path": "Shaders/AstrayFX/Clarity.fx",
-          "sha256": "f1a5c920af1df54e5276f4614b845741edf494256d84a0a4da8f78f175f259b1"
+          "sha256": "77f6f88b9e15e180b07ada65d9bfa5a0874302ca0e3dce4da4388caec13a9062"
         },
         {
           "path": "Shaders/AstrayFX/DLAA_Plus.fx",
@@ -405,19 +405,19 @@
         },
         {
           "path": "Shaders/AstrayFX/Depth_Cues.fx",
-          "sha256": "54e4fd42bac3fda739f3e20d97edd7f189eb0d92d9a478e9433b3f67a8ef22ef"
+          "sha256": "4252cf66a8e189c4e04989abc82b788dc32b1d2bc772b75382b6b24c39bd560e"
         },
         {
           "path": "Shaders/AstrayFX/Flair.fx",
-          "sha256": "05ad9a80c6be76fcfc7519ee59b056ee084b5c938af479c05fd061d08eb34564"
+          "sha256": "2e6fe67f2f8072ce8905d07d8eea89ac5db5ecc0a500d66c14266d2e82bc6fab"
         },
         {
           "path": "Shaders/AstrayFX/GloomAO.fx",
-          "sha256": "de1d80a9c8e2e6a12159e194729e7443c88bbe85f9015bc7385eedbab1a381c4"
+          "sha256": "d32f38622569321bfbd77dcd0b6e12566913864a31c02a2c04237b01d898555d"
         },
         {
           "path": "Shaders/AstrayFX/NFAA.fx",
-          "sha256": "008d0c36a16cdf9c969037e489970d1b87585e14a267ff9f9c6faed0911f0519"
+          "sha256": "975e9ec355b41d2c42ff7b20df952f40e80ff2ea3df5a62a318fdacdf3adb0c0"
         },
         {
           "path": "Shaders/AstrayFX/Overwatch.fxh",
@@ -425,15 +425,15 @@
         },
         {
           "path": "Shaders/AstrayFX/RadiantGI.fx",
-          "sha256": "5c85244af37b6065e2d4701ae51b22f60bafcc88e6d9a2a32d196de1cf94a43e"
+          "sha256": "64cb9a4b9f4eae67ffcf95cfbb0398cc4ea43f1149083014368cbd8660e0a60a"
         },
         {
           "path": "Shaders/AstrayFX/Smart_Sharp.fx",
-          "sha256": "1c153f09cbdfbe9de837d589425afd8d1e0a8fd904495f11cf315e59b0e7c6e1"
+          "sha256": "2d8a2672670f6e18b15ed804399168753532b4351896960e4cbd9ba479402cdc"
         },
         {
           "path": "Shaders/AstrayFX/Temporal_AA.fx",
-          "sha256": "b6afb87541cab6e8653bb5ba64af24620b31760669139d829adc52ed035cb3d4"
+          "sha256": "5a3b74ff7551e10ac3c7c892e5524f8b49931b63cc5ec72c1ac4932773932650"
         },
         {
           "path": "Shaders/AstrayFX/TobiiEye_FreePie_AstrayFX.py",
@@ -441,11 +441,11 @@
         },
         {
           "path": "Shaders/AstrayFX/Trails.fx",
-          "sha256": "53b7ccd47e5cb99e08e280e4aebd2441401f41b4a0c99c5c770170b27d03647f"
+          "sha256": "dc28d00c5ee81693c32f36255a30fd55417811071af44bb588caaf69ae24729a"
         },
         {
           "path": "Shaders/Barbatos/BarbatosNVSharpen.fx",
-          "sha256": "fb5208ae5372c110c89dac8137cb1800bf28786c54d29968d7fa8800c4d95abb"
+          "sha256": "78b2021f89c446c584f3d21bb5824f22b3d0dd426930bd971a90f65525d894a9"
         },
         {
           "path": "Shaders/Barbatos/Barbatos_SSR.fx",
@@ -453,67 +453,67 @@
         },
         {
           "path": "Shaders/Barbatos/Barbatos_SSR_T.fx",
-          "sha256": "a9a9cf7fdfd68e2ad3bb87df6c6e6a9e7848b9c0fe3c6b1bfcc361330a55def7"
+          "sha256": "f572c5d51cb3b54a8c9fd9fdb3e5d27375953fee5ae77674dbeaf72f1495c841"
         },
         {
           "path": "Shaders/Barbatos/ColorGrading.fx",
-          "sha256": "c65964126a7a1575a1e76a380833f99abe28242731ddc7b07fbfaf7a47d628fc"
+          "sha256": "04eb50372302f1b2232920480548b9c3db5ad6762e5f3cfb82f878c1bfa69e54"
         },
         {
           "path": "Shaders/Barbatos/DAA.fx",
-          "sha256": "5801bcbdacac9c5e2a3e68a1ca2a81f4bf7fc819033d75ca89350761df02c7d6"
+          "sha256": "989c6943e496560d5b8387319694b606c8ccf87e492fedf509cedfb079897fd7"
         },
         {
           "path": "Shaders/Barbatos/EVI.fx",
-          "sha256": "5274cce92638d632f079dcae0f6ae288f586689343e1984180e4ba73530a774d"
+          "sha256": "f46c1cdf612da3d2a466e9ec8c57aa1c0a344bc2c6608d375e9b2819c61128e1"
         },
         {
           "path": "Shaders/Barbatos/GBloom.fx",
-          "sha256": "6a9459c3425fa65fae8dda55f8026b024e4d3e5b76e89f4010768aeefb88eebd"
+          "sha256": "4dbbbcf96ef4300e5bb62a376f207dbb14f21601157219962082d3f56e327708"
         },
         {
           "path": "Shaders/Barbatos/LumaFog.fx",
-          "sha256": "4553ae54911c02ba932b69bbe979953afafcff37995c6f60ede3b47dbac7d159"
+          "sha256": "64cbd950f28a8e1e3c9562eb1675b52169d83f987e1dff36deae04209e24fc48"
         },
         {
           "path": "Shaders/Barbatos/MaterialFX.fx",
-          "sha256": "1eddcda428ccca82ca19b8b28c914076a3639a4acab7ef0e148a213107fe110a"
+          "sha256": "5cb880e0888ed3f549b6869bbadc352df45f64ac498f578acd1292c211949560"
         },
         {
           "path": "Shaders/Barbatos/NeoGI.fx",
-          "sha256": "c5f4b948f49d62ac9fb603ecb33bda406d5abc37d7bc14f177701d84b68c4485"
+          "sha256": "6556ff5d4cf3d5d84f135e88b57c6baebc7f2c6888cb919096b4a9752daecb40"
         },
         {
           "path": "Shaders/Barbatos/NeoSSAO.fx",
-          "sha256": "bb4cbf25bda1a66b9e96f4bd2eb55cd7f5ac2fbfc0caa2aaaab82230ab1221ce"
+          "sha256": "b533275add71ed778404a28d5540118edbf2c8b44da015982229800a2617f3cd"
         },
         {
           "path": "Shaders/Barbatos/Outline.fx",
-          "sha256": "cd0198b224da4ef5eb6b241810b27b91bdd13bb4a086df1939c9c03a86736454"
+          "sha256": "5976deb3f4d07af87079becc1adc6c1365cdb14cd9a0d649e0a8faf1e5a48601"
         },
         {
           "path": "Shaders/Barbatos/RCAS.fx",
-          "sha256": "414223413a6dfa31e95af22f2631b4b6fdd15220477fca51e7de066540d1fd85"
+          "sha256": "27ce91d2bb6d9b3ceb16fb923e2938079d85c1a43c906597c8c0dbd64db97e99"
         },
         {
           "path": "Shaders/Barbatos/SSRT.fx",
-          "sha256": "c3f7162d8b4c464a4007eab8a1903841ecde25ca427fab8ca9714b82aa32409c"
+          "sha256": "0c8c33c3fe493543f0bd3f89fb598ba1a83755b72685aa25895d604acbc22a67"
         },
         {
           "path": "Shaders/Barbatos/Shading.fx",
-          "sha256": "efe93dc87dfbf656758953e9699da9cebc87eafa53e9eb93a5c363c98c9a0cb7"
+          "sha256": "14299e1e9b5e620800b91cbba58a40064eb23d3470c21426ddb553ace5bba7df"
         },
         {
           "path": "Shaders/Barbatos/UFakeHDR.fx",
-          "sha256": "dc58f41b8c34f6bce1a96501ab84ab3251e7b5dbbb56aaef53ac7db60a82184f"
+          "sha256": "2e1fbb29593daaee3093f2e01bc6cb024877557f6a7ff96e97b99fe1769744a5"
         },
         {
           "path": "Shaders/Barbatos/VividTone.fx",
-          "sha256": "c0d2192ddbf5d52f97000d10769f41b910cac2f59e1968a395ea6f2346731bbb"
+          "sha256": "b1adae895aea8722307c5f52aec85c5c03f3652967df0cbe3356c43a2dee10e4"
         },
         {
           "path": "Shaders/Barbatos/uEmboss.fx",
-          "sha256": "62b1ba2faa56903cbaeaf808820525a8b4f77f2d867a9b679725ca8c4ec10c23"
+          "sha256": "f42fca5db43038e197bf50e968aac7a51ab5d9a9445bc895a1c1662d0edd6c47"
         },
         {
           "path": "Shaders/brussell/AreaCopy.fx",
@@ -525,7 +525,7 @@
         },
         {
           "path": "Shaders/brussell/EyeAdaption.fx",
-          "sha256": "3349f5940b0142fc2095069fffa1118b0e96c8de751c36dde7e96367c82d55ad"
+          "sha256": "983e89de35b5e6dcb9fc3a33cc680fc18262fb7976630f4418d83c810112f0e4"
         },
         {
           "path": "Shaders/brussell/UIDetect.fx",
@@ -533,11 +533,11 @@
         },
         {
           "path": "Shaders/brussell/UIDetect.fxh",
-          "sha256": "f76aa9a265d50f1c8a460d85af49f159d02e258bd055bd05775a91bb369a5bbd"
+          "sha256": "9be43a4a09edd338d2d40ec378db55b909c425bf7f094abc066c88c50609c796"
         },
         {
           "path": "Shaders/BX-Shade/BX_Multilingual.fxh",
-          "sha256": "26cb776bcab68530f96f41f417bad21f626cf1be67081b36e4d71765ecc14e84"
+          "sha256": "ffb8baf01b95bd38007d1f87ee53338f62174fb71ca9e06a68fab6c1972e0976"
         },
         {
           "path": "Shaders/BX-Shade/BX_ToyCurveTool.fx",
@@ -589,43 +589,43 @@
         },
         {
           "path": "Shaders/CobraFX/Gravity.fx",
-          "sha256": "38fd00bbd224a3d49ee893be82451e3fcc548bae2d3e1267e647f1503795de5c"
+          "sha256": "63d21cf2b9d8c461dfc1ea034e83feb0567a6fed45dd0f6eba33e4ec8e8fc731"
         },
         {
           "path": "Shaders/CobraFX/Gravity_CS.fx",
-          "sha256": "47b5afd6fbf93425769c7bb08f426f59e4c51f07f5ceda956a87856e2c10011e"
+          "sha256": "a05f4fe111c4dfb28ff242d85e20810ca420e775688478f9ef16ae8433bd3de4"
         },
         {
           "path": "Shaders/CobraFX/RealLongExposure.fx",
-          "sha256": "abfadf06ecde72ff2ed0dc5aa271400a8553c61227df53e02cba70e288b05c0d"
+          "sha256": "6b6711dffdeb7e3d628681e4238e4983a475d2ee560fff27033cd006648db16a"
         },
         {
           "path": "Shaders/Complete/COMPLETE_RT.fx",
-          "sha256": "b608a11f10b9cd70fca94577bf3e58832904ee65db798f62075ddd189429cec8"
+          "sha256": "ef7957d146a2c7701e2b1e1d9e7246db248ee76bd5b021dbd722ee7fedeeecdd"
         },
         {
           "path": "Shaders/Complete/CompleteFX_Common.fxh",
-          "sha256": "0219b4cff12fa133b2953e85079e3b9522e6a21a41e5cf71b3c832e98da6619e"
+          "sha256": "35ef669675b339aacd3e0c91ca7f16bfd2f1e4c4d2798700465695e5c44e4ce9"
         },
         {
           "path": "Shaders/Complete/CompleteRT_Configs.fxh",
-          "sha256": "a26228dfeadc61a75ff4e8914715cd2a7769b9d16a436b1f4850e3215c4e0313"
+          "sha256": "40a787518fae650b5eee8902a039d923e88e4fbbe91d582b4a7bad1f4f4fcb4b"
         },
         {
           "path": "Shaders/Complete/CompleteRT_Denoise.fxh",
-          "sha256": "bde0b1744dcd0e513212c5deca686c10232e7e2f1ae0c4be11b83b8c77869f55"
+          "sha256": "f354c554cc60e73c606998990154b57cc1e377914101f551f12c72b387bb2ad4"
         },
         {
           "path": "Shaders/Complete/CompleteRT_Main.fxh",
-          "sha256": "da0a2b7e0c0c8f86311a63fb89ed58f14a71154d47f7403638e4a37291610c73"
+          "sha256": "2bf2b6d839e13541dbf5a24f436f516813e06430b5440d73a49f82a931f65ce2"
         },
         {
           "path": "Shaders/Complete/CompleteRT_RayMarch.fxh",
-          "sha256": "a901a08883e4ceeebfacb4d7769931a9cd1ae28cf853b733b8fa6a77e4f7a37d"
+          "sha256": "dd9c13e4f2f029b5baf4ebd33e333482a50e9cc930d4d294ed858e4a57601eef"
         },
         {
           "path": "Shaders/Complete/CompleteRT_UI.fxh",
-          "sha256": "53c75f54e1aa4629761df733d060d137c52c0fb1290714ca03e7593ad4350436"
+          "sha256": "77a10a57d05e04292d0c9970222da24e080cce72008687d7a6eec24ab55fde51"
         },
         {
           "path": "Shaders/Complete/LICENSE.md",
@@ -633,19 +633,19 @@
         },
         {
           "path": "Shaders/CorgiFX/AspectRatioMultiGrid.fx",
-          "sha256": "3898ed5ce2f72f95557a9cd1a3ff5d9b430680f67ae5d0e444ce2d50e100bd00"
+          "sha256": "0bccdcccfb52684a9129ab79fd93215d21986ceed5169e2a8a51e079491d2266"
         },
         {
           "path": "Shaders/CorgiFX/CanvasFog.fx",
-          "sha256": "50fdf2b9b529e05373eaa1d92132cb746bafc00d350ba61eef0448054b7cc46f"
+          "sha256": "be1cecc0c21dfec94f6b7aa206f28486b6ec5c2ad334e289a77babc7ef0620dd"
         },
         {
           "path": "Shaders/CorgiFX/CanvasMask.fx",
-          "sha256": "d8efc508de0cddfde9336c83325d7b05beba9e6b1b5b3fa3f4d2a046ac442b38"
+          "sha256": "1c728c202896dc2dbd200be0e88662d7f9765489dea3d5c8d467d827e3132be6"
         },
         {
           "path": "Shaders/CorgiFX/ColorMask.fx",
-          "sha256": "b043a23d92de157c480b851629d3b72ab5820a7bbd0d4abf88dd05cf11a9b150"
+          "sha256": "fb680889e19f8e6d2ed532888a710d7ddf6c4587236d754a3cdea1edd4a8e04a"
         },
         {
           "path": "Shaders/CorgiFX/Flip.fx",
@@ -653,7 +653,7 @@
         },
         {
           "path": "Shaders/CorgiFX/FreezeShot.fx",
-          "sha256": "f150e01d9510fb8cabc41b3dc725eaa78d212958fd5f1f8d32d55b723327b11a"
+          "sha256": "4b5b8bebe1accd4a3255b1007003065ce8388789a58bb2af06bbf556bca9905a"
         },
         {
           "path": "Shaders/CorgiFX/MagnifyingGlass.fx",
@@ -661,7 +661,7 @@
         },
         {
           "path": "Shaders/CorgiFX/StageDepthPlus.fx",
-          "sha256": "c659947226327a1f4351309a473a8c475361ea611057f616eb0ca5fb2047dbc0"
+          "sha256": "18d17aaeece861412eefa17e3fb5440dfb19270a41295d96b3d49aafdcb38c20"
         },
         {
           "path": "Shaders/CorgiFX/StageDepthPlus with depth buffer modification/ReShade.fxh",
@@ -673,35 +673,35 @@
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale.fx",
-          "sha256": "dda1974c96f3da77e4b0dca7b8347d915588f8ddf875fbd51a8a7296fdeecba9"
+          "sha256": "efba71222e6fe85ed4d7ef0d309cae05b64ac877c98b7c75c6628ca793b70d93"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/version-number.fxh",
-          "sha256": "67092eca5adef657f04d8213dea9b33977b2e71b1c4b5b7bd03aee3b28b4fb77"
+          "sha256": "fbf728e86ba3626e455f1a88fcd95952aff293246fe01d5f390e83f1fba54cb5"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/bind-shader-params.fxh",
-          "sha256": "216c7d00b533fc763ec88e6e2e9cfbf72b71b3221441db2307e7d10e3e95c746"
+          "sha256": "5e2a160c83a15650ae80058c867814fef811eb766e1c0506f0ce5ca439546c81"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/bloom-functions.fxh",
-          "sha256": "3bc7f06b2ced054a19c6e8ab2d6e905914e65cac2b9df69e5286f979b43a9e23"
+          "sha256": "d9829b4a172722a9eaf6a9dcc7aaf82051786ab051230d4a5f0f3a27f5ec6754"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/blur-functions.fxh",
-          "sha256": "d939de9daef50f2641f527cb85e715c5d50837cecd390f6953bc3eae37f15758"
+          "sha256": "e6474805e0b61fb737be7941ae6839ce5985fe1ae4dab2a04eab1018b451a045"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/derived-settings-and-constants.fxh",
-          "sha256": "483a0cd677c0b560bd070684d33fadd40fbdc1bce03e4d1de13ec65aa3736501"
+          "sha256": "7fc2a9b599ccb749653a16c692c703e045f3ec2ea2920b150a8c8b0ae9bac4c2"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/downsampling-functions.fxh",
-          "sha256": "5b2e4eff44e0909767a909f5eda5fbebc364b8f168bb0dd1c6bd2a497a203f94"
+          "sha256": "0d0eaf8b1acb1d4228d0e322eddf19886330e1f1efe218bbfc2fa27f540e2aee"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/gamma-management.fxh",
-          "sha256": "fdf52bb8f8cc98b64a506de37114ca5c64d2167ac1154aee9b58c454d1c7855d"
+          "sha256": "2ab935645dd213381560d4e613ed7af7d14c5e9b752f50696e7da67b0fdd8a3f"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/geometry-functions.fxh",
@@ -709,75 +709,75 @@
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/helper-functions-and-macros.fxh",
-          "sha256": "755592f97ced9d045eb27187cdc346d3eea1b14cb65a8a6eec3023cf97144dd1"
+          "sha256": "51cee701cece2cb86a36a5a69e07aea28640432863863978e0c184ccd44884b5"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/phosphor-mask-calculations.fxh",
-          "sha256": "e5da670c63f33a60c22a660dfd2e4e410aac22c02c4487602b6ed1a369ba4c2b"
+          "sha256": "759edb7848bfec0840ab98451dd09a0f1023eb011e46d80b5cbf3218e9c1a86e"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/quad-pixel-communication.fxh",
-          "sha256": "24e0cdd2902a21129897ce42212650f09b5c8a44a9a085a150f849ea50d92b3f"
+          "sha256": "413c811ede96bb1dbfed1591644c3e2fbb3dea46937edf36918dbccbd948f6f0"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/scanline-functions.fxh",
-          "sha256": "69f23845c9ec1ca8694e33d91e468ede3f3d309162b99619af2a7bcc26ed1d82"
+          "sha256": "60d7de6b98a56c092c09781f83aaf66aebc46f19df26dc7bc6a816f15c87e125"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/special-functions.fxh",
-          "sha256": "25c82fed973d9c484934b9092c08330c32d85066df51d54ab8b90cf7e743005d"
+          "sha256": "5f98a6844f0cc59ee9fecd185973b3e6206e909e61d6650db4524b0daa19ce2c"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/tex2Dantialias.fxh",
-          "sha256": "832b30f707c5b1fa314f119f043128bdc22a836ed4d1e34824e87cc8d4275817"
+          "sha256": "9eb732117f86244cb04857aa9e7eef8f8ffbe3435544b85e52600ee06ccdeb8a"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/lib/user-settings.fxh",
-          "sha256": "451c6dd1f5dc9a731fb31956322ed5000271196846e35b2137a84f63296fb22e"
+          "sha256": "f1b5e255d2fbda03d2094d9aeaa9c2d8c61c823ca45305c7da0f1e00d675f997"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/bloom.fxh",
-          "sha256": "e5e9e2b1d6eef2009cf9bb00225ff22aa988046cd6062e2c72ec7a52ef37f7f6"
+          "sha256": "c01e55ced0f244d2057ec979a7a8344bebf00b0c0cc352564cf939712e311660"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/blurring.fxh",
-          "sha256": "c2070ce80c32ab85653aa84f5c8b47c330701f6c42a552d87c344087dccb9d54"
+          "sha256": "5a586060e69a7e672b2accdd537f9fd429c6f6ed9a0370ed690f93ac35e14e17"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/brightpass.fxh",
-          "sha256": "f526d7c9ffefb9dfd5ad0cdc653673e318732af80c921444ac7c18532138c58c"
+          "sha256": "670ddc22be1c3004c6d4b306467458425fba470479602053731add81fd9a11c4"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/content-box.fxh",
-          "sha256": "0f7c851ad8cab45815077c968160381dbb1751d4c8b06fe7c1d04c658dcf4856"
+          "sha256": "01bf7e6c2795288bad73fb18ec45cac325a51caaa3035a73cefccb5536575f34"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/deinterlace.fxh",
-          "sha256": "903b27fc4351d0005ddcde037b8ec2c8ff06332c12656b13c80db87c61852c66"
+          "sha256": "7abfa4c9ef92c4eff7f10704814a22048a5ec759bab3dbc4b48d40bdbbef0729"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/electron-beams.fxh",
-          "sha256": "b7953b9df79e4c842c01971712814ea001883f7086a72024176c3c7d957f5ea7"
+          "sha256": "eb73de47c1e7bfe555bcd05af36f1ab9fdbfdab2cea9b7b249b302b791d34a36"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/geometry-aa-last-pass.fxh",
-          "sha256": "61726a303ba607156381dfedab37f22e503b358b5a74069a942ef4f1fd08d0c2"
+          "sha256": "5ce7457af9581d3446010be783d4f8558e09e7f39bb3eab2b252225c25b89e23"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/input-blurring.fxh",
-          "sha256": "22d0b68b328a0d12bdcf0b40ffd301d64fdc89b2bc69a0cafd39a17548f0765f"
+          "sha256": "d0b55800d139b689d0faceac6f05f3cf671de98de5a831ba07d05843a17a2157"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/phosphor-mask.fxh",
-          "sha256": "36a1e05c9cb6dd3f01e1063c5ded5ca80056855eca6f371b5babbb380c253cad"
+          "sha256": "977ba44aef92dd02f1cef6a6b21c35fe249c65cf58f170a82b00c14ac903ae02"
         },
         {
           "path": "Shaders/CRT-Royale/crt-royale/shaders/shared-objects.fxh",
-          "sha256": "e6c3a8b1845e8e6e5e5a70d14ef40b59855192032479bf072370fe57ab53e74b"
+          "sha256": "3a6c3a1bc57ad80af16b007c72b1415f35c079d861f2aad08b4f324de9f691ef"
         },
         {
           "path": "Shaders/Daodan/AspectRatioComposition.fx",
-          "sha256": "f18743a51c831f6ee4dc14357d90722fdcea3749119655a50e5a68832d9b035a"
+          "sha256": "ae954d4df76d75cda5795b28e54de20048094d23d6c66c8328ede3023d039293"
         },
         {
           "path": "Shaders/Daodan/ColorIsolation.fx",
@@ -785,27 +785,27 @@
         },
         {
           "path": "Shaders/Daodan/ColorfulPoster.fx",
-          "sha256": "50ccd8bea5a7499865fe465b9766dd0740515c41ddb78822423be679e5fd2e42"
+          "sha256": "c91fd612f6ea95f429f47e6d7d4bf87a9ee592f7f8dd518fcf324a6402e28daf"
         },
         {
           "path": "Shaders/Daodan/Comic.fx",
-          "sha256": "78be57faef9ae783a132424b53d887349acc9494bd483c51c3c65cd64d444538"
+          "sha256": "c03fffd780af26ed26c478e60b63a0f93962ee19f57cf40c37d40f78dc15c0c3"
         },
         {
           "path": "Shaders/Daodan/MeshEdges.fx",
-          "sha256": "449edb3795e66955a6b044c9ed516e8431fbf33ed1ff4bf6cbb6eaf309e4e5e6"
+          "sha256": "3bd1a776d2abaf3491bdd7651254eb6601f060befaa03d56ec7232525db23d1c"
         },
         {
           "path": "Shaders/Daodan/MultiTonePoster.fx",
-          "sha256": "fb93bae0f4041a943ad295caa3dcc54f44db8391c309a8eb16fee79b7fcd059b"
+          "sha256": "a6248f276c417e6a22d21c2413cdcef682074f53221af90cfe3493e5f3357677"
         },
         {
           "path": "Shaders/Daodan/RemoveTint.fx",
-          "sha256": "2f85288e3d411a72f6ea0986b7be089777092aa91ac42e766a6707bf9c7b26e6"
+          "sha256": "ef67285a43dfa9f365c0f99b36525903ee561353e166aae124c2b9b6e475aed9"
         },
         {
           "path": "Shaders/Daodan/RetroTint.fx",
-          "sha256": "d2f16be9946cf90c0fd7405c3d49820395a6c15378fc056c6a09b0168207ebbf"
+          "sha256": "a4cbe0bf6dff563d9ac6427375b2ff63c36197a435b48693368c47d4e80153e7"
         },
         {
           "path": "Shaders/Daodan/dev/Canvas.fxh",
@@ -813,7 +813,7 @@
         },
         {
           "path": "Shaders/Daodan/dev/DrawOverlay.fx",
-          "sha256": "8a3e35b35ac2cb338582d48fb19fa14ffce515263b231fcde973f9386ad63995"
+          "sha256": "671a2b081726a5ec2e47986c2939cef84c640d85d35312de9ee9ca13f64f71d8"
         },
         {
           "path": "Shaders/Daodan/dev/Stats.fxh",
@@ -837,11 +837,11 @@
         },
         {
           "path": "Shaders/Depth3D/SuperDepth3D.fx",
-          "sha256": "96aab66bf1357e8f2932f3909e1c0023a644ecd16c0526ba1e896ecf7f8042e2"
+          "sha256": "cf1b5f67141e58a70185129873bed53b4d8c24ebbac2dba1bc5c2ccc8c8d8035"
         },
         {
           "path": "Shaders/Depth3D/SuperDepth3D_VR+.fx",
-          "sha256": "711655e151b4f500b15d76ae941d27ac5806528669cdc4405b0b76e7065c923a"
+          "sha256": "430dbf0ba2280f025b3e1125719808cbe550d2dd19f1e440a569b6fbbefb3637"
         },
         {
           "path": "Shaders/Depth3D/TobiiEye_FreePie_Depth3D.py",
@@ -849,23 +849,23 @@
         },
         {
           "path": "Shaders/DH/DH_UI_TextDetect.fx",
-          "sha256": "bed15b625580feb19e37c065edec0fe60837f2bc881b0da7ac5dbfe49be335e1"
+          "sha256": "d80ca67fc686cc2ee14783ec87d30f634d32709498882bf4ab97c86d0c49ac72"
         },
         {
           "path": "Shaders/DH/dh_Lain.fx",
-          "sha256": "c1571cb046dfbccbffac35ca28b9da4755f2367fa0aafc9f53a749c7889cfbe2"
+          "sha256": "9527f607638fc987a248ef6dd4064b6bd2f0a1c06b93d8b1230c088ce7da7418"
         },
         {
           "path": "Shaders/DH/dh_ambient_remove.fx",
-          "sha256": "9faabab1c4ebaf16ef808bfe8ba049a10076bab4c4e84fae52d03d3d1bd6a5e4"
+          "sha256": "097182d7ced4c23c2ca2352710db50fca62cb74c3c99469a537dde805bd0e077"
         },
         {
           "path": "Shaders/DH/dh_anime.fx",
-          "sha256": "2210249e27518910998921ace05d49f7df7354ed0e3746e980a71ad9a2184f8d"
+          "sha256": "f762db1abeb5f9d07dc641db5498a701c63669dc2de7388e204ce43b28bf1e82"
         },
         {
           "path": "Shaders/DH/dh_pastel_bug.fx",
-          "sha256": "14d4c5a95842ef34d9ddd29d924c916246c2a4e3a77da815cc31fe8fda89cc28"
+          "sha256": "e873b638ebbbb4d98e50c530088b2153ddd496a35a062c166c7d42cdc639f109"
         },
         {
           "path": "Shaders/DH/dh_sync.fx",
@@ -873,11 +873,11 @@
         },
         {
           "path": "Shaders/DH/dh_uber_mask.fx",
-          "sha256": "ea782146170f598a556f092aeb7b2902407eb972b7e17a2dee93b0e44dd95867"
+          "sha256": "9f0f111d30f23a85e7a365f7d12dfd0c5531cc5758662b7c2c7f95d11b0dc237"
         },
         {
           "path": "Shaders/DH/dh_uber_motion.fx",
-          "sha256": "63702671bb0679f09f9bd9c4efc2bcf7bed5bfb4cb39a54539abbc798ddab70a"
+          "sha256": "e79cfacd52bd078803b547a4d02691782c7f0ff61961089620a226c97181a82f"
         },
         {
           "path": "Shaders/DH/dh_uber_rt.fx",
@@ -885,11 +885,11 @@
         },
         {
           "path": "Shaders/DH/dh_undither.fx",
-          "sha256": "c8f7409700e4b82de56753d075ef9469a709f98f541b4ce22091df456821d057"
+          "sha256": "4d7bdb0b04dfe04090403df6f9300e957752707305ed11d772f1a7de6defad76"
         },
         {
           "path": "Shaders/DH/dh_uniformity_correction.fx",
-          "sha256": "7e576d04621ce2557c421ff3a7287c96ce1a2cb552fd50e9f3ae2dc440ef27e0"
+          "sha256": "b6b0bfbd751f2645009fb811676499fa38e4c466a139772c19d0261238ab5f9c"
         },
         {
           "path": "Shaders/FGFX/FGFXFastCascadedSeparableBlur16X.fx",
@@ -901,11 +901,11 @@
         },
         {
           "path": "Shaders/Fubax/AspectRatio.fx",
-          "sha256": "6a721582ce1514e70fa33edc98809c5e1fd7698710750c98c4426ac114c69446"
+          "sha256": "2df93d87c54f801e6f1a36a1c95fb5ce04a9e27b6ba32f3b573dd364c7f7f4c5"
         },
         {
           "path": "Shaders/Fubax/BeforeAfter.fx",
-          "sha256": "d5c89c299d0017dcca3101f416729d01eb7841fced78af7eefcf3c2bd3b73303"
+          "sha256": "abeaef38d67ce234d9d11e89cfe8cc939336abd77aadd51a5bce9ba7f3bc8611"
         },
         {
           "path": "Shaders/Fubax/BlueNoiseDither.fxh",
@@ -913,7 +913,7 @@
         },
         {
           "path": "Shaders/Fubax/Chromakey.fx",
-          "sha256": "08940afbdd769a9ba77c2c9902753e64545dd8036bfd58993b9ba8ce8ae19f3d"
+          "sha256": "76a1ad6d351dc11510a7354a618c70c26ce85afda8fdd0fb226e77dea5d0ae05"
         },
         {
           "path": "Shaders/Fubax/ColorConversion.fxh",
@@ -921,15 +921,15 @@
         },
         {
           "path": "Shaders/Fubax/ContrastSharpening.fx",
-          "sha256": "b20a3096c9d244eeac271209eae9020899ccc2eae3bb62b3fd6628adf45fad7b"
+          "sha256": "b078b3b733046dbfcd1cc02ee9cc76c0e3cbc3f93233f5215f43528bb76b37b3"
         },
         {
           "path": "Shaders/Fubax/FilmicAnamorphSharpen.fx",
-          "sha256": "6d4067032f26d222480e21dc4681860a1cc4a888d7a4e5c855a1c08f06dc61b8"
+          "sha256": "1e6f5d0f8b17d9048939e2cfd63593070551fe657000d9c6b9586e24620217e3"
         },
         {
           "path": "Shaders/Fubax/FilmicSharpen.fx",
-          "sha256": "dd45671b523ae84cbfc23d80bbe994da3c0ba66d52ebaa66dd9ebbc913aff733"
+          "sha256": "b3443aa704fa727f93b523f50119f4b27d9c9c422c09dd08983a267c7634c0dc"
         },
         {
           "path": "Shaders/Fubax/Flipbook.fx",
@@ -953,7 +953,7 @@
         },
         {
           "path": "Shaders/Fubax/Letterbox.fx",
-          "sha256": "53dd49a3bbb8ac8cd62cbe719f9307740515b816263ac60dd9eac318790c3669"
+          "sha256": "d63f817c7875f3f4f8553ad200daaf7f0b12d4a4c5a28c5c8a333083e3bd5763"
         },
         {
           "path": "Shaders/Fubax/LinearGammaWorkflow.fxh",
@@ -969,7 +969,7 @@
         },
         {
           "path": "Shaders/Fubax/Prism.fx",
-          "sha256": "38ce1f9171132caaa277d75eb6433c5fbca4102adf20991e7a622cbcfebb94a5"
+          "sha256": "c377d4e8bbfc3f6d91c59cc96bd926252c12315c82573bdbe72ba20f39a38e94"
         },
         {
           "path": "Shaders/Fubax/SimpleGrain.fx",
@@ -977,7 +977,7 @@
         },
         {
           "path": "Shaders/Fubax/SunsetFilter.fx",
-          "sha256": "5fa5f63938c36aa11ed1ef64b6a26ba3cf0211d7abe403468e664eb8a1e1eedf"
+          "sha256": "c7ab5db1dde58d3fcbc655e59495d672651f1de289bbfba2fc936c6ba9e03776"
         },
         {
           "path": "Shaders/Fubax/TiltShift.fx",
@@ -1001,11 +1001,11 @@
         },
         {
           "path": "Shaders/FXShaders/AdaptiveTonemapper.fx",
-          "sha256": "44d5ad74774e4225cfedbf41797b5ce6ed1d43c847c545eb42307d9d5d2cc823"
+          "sha256": "762b961f9d31ef1951cca186fb177bbe8bb7d773e943f78e9a212a30291d70d1"
         },
         {
           "path": "Shaders/FXShaders/ArcaneBloom.fx",
-          "sha256": "d2863097a36488203c758983d683306ce8188af145163369414e8d89c85679cf"
+          "sha256": "98e58a10df4d518ec1bec3ed8048e62b2c8296d3d75fa64545c28921206eba2a"
         },
         {
           "path": "Shaders/FXShaders/ArcaneBloom.fxh",
@@ -1013,15 +1013,15 @@
         },
         {
           "path": "Shaders/FXShaders/ArtisticVignette.fx",
-          "sha256": "33dcb6ea6acf12316b8eae744579db9fafbfd0aaacd4e3a27355a4f8142f1636"
+          "sha256": "c1bbfa5602cdc556ca5f145c6fc71ef49a8072710220318f074a60865cce510a"
         },
         {
           "path": "Shaders/FXShaders/AspectRatioSuite.fx",
-          "sha256": "63198b320af485fe2634b69c794a26b8380a9caf5fd82971dacd4ee25d6b1b2a"
+          "sha256": "22575595c301cdde2ec390e5b16a1a47907ad6da792b1ae59b756ab9dced143f"
         },
         {
           "path": "Shaders/FXShaders/CRT_Lottes.fx",
-          "sha256": "c315d7ad802a7d6451a64459ed4542e78fa52a5e8fc375fca5a3a055cc0a9d04"
+          "sha256": "aff9bb68757585506207c044a1e8e34cd71b0d392dd5c607b176206b11ad44a7"
         },
         {
           "path": "Shaders/FXShaders/CRT_Lottes.fxh",
@@ -1029,15 +1029,15 @@
         },
         {
           "path": "Shaders/FXShaders/CRT_Yee64.fx",
-          "sha256": "8ed232097d6fe5ac1366bf67c113642c7e85ac49d1d170c8c911fc71ce2b7c8b"
+          "sha256": "eb62a27ff07b7f960e0230ac63209b6e2da6dcc550ce4ff2dd771464e3d76e66"
         },
         {
           "path": "Shaders/FXShaders/CRT_Yeetron.fx",
-          "sha256": "59e6c7215739ec947fb5862685b279f7e933b26f034ed63f480f2997d5ef5c97"
+          "sha256": "17c6294364fba54f67e4dbd71ebb2b8e5735f4e7d893979b5e7f2413bff5ff5b"
         },
         {
           "path": "Shaders/FXShaders/Checkerboard.fx",
-          "sha256": "848831c3e8825ca46d6aefacad209524bd0f2e84475878b5b2852521e8fcdb3d"
+          "sha256": "3a665b1f1d73d0b0435d29c930f4fa625dbeb7ac7b3c9fe87027c55078c555c6"
         },
         {
           "path": "Shaders/FXShaders/ColorLab.fx",
@@ -1053,23 +1053,23 @@
         },
         {
           "path": "Shaders/FXShaders/DepthAlpha.fx",
-          "sha256": "7ba3aa671741f7b2586b389a98522c5dbd6905be4acf3545bf0e52c23eb1de16"
+          "sha256": "60c43d602740de47e762b50ae26c01df662cd18138563536809d1bbe75f51355"
         },
         {
           "path": "Shaders/FXShaders/Dither.fx",
-          "sha256": "35c8341c21eb513058c61711e704f401c279e2dcaf07c42919942b84d5302ba4"
+          "sha256": "dc3899c0b4c59cf58ad8fa856a235da30732873b0bbfb72f12b070edf41f0d5c"
         },
         {
           "path": "Shaders/FXShaders/Flashlight.fx",
-          "sha256": "544eb81b30bf0c18f086b1b90af47938c7752086512089935dfa9029cceeb61a"
+          "sha256": "b597881e60e3fa030ef47333126706d798652b8a81ae3e0e803a07807e1dc1d7"
         },
         {
           "path": "Shaders/FXShaders/FlexibleCA.fx",
-          "sha256": "4b02ba9135002010b6089657415c04bc118160e8ed66661173385a23234c0144"
+          "sha256": "3f2c870dc8a03cc59c07df4bc1e4c8e5073dac40be987623a0a1a09bdcb74fb8"
         },
         {
           "path": "Shaders/FXShaders/FocalDOF.fx",
-          "sha256": "cc0e501bfd744d49bf6a1bb50ad480122b4e141d00e878bbf491214014800e2e"
+          "sha256": "8cce0784f96680a640c7233c8c168b43d58ba419abf2dd3a4631037f0c16a1ee"
         },
         {
           "path": "Shaders/FXShaders/FramerateLimiter.fx",
@@ -1077,7 +1077,7 @@
         },
         {
           "path": "Shaders/FXShaders/HexLensFlare.fx",
-          "sha256": "9c3253f70fe42acdd9e1c70d9cc2eeae33fef86668913240a81f1886285c9214"
+          "sha256": "26f6d3b97fe7d42ee9b0bc4b06adee63f90962387a0a67a8fa48969649286a55"
         },
         {
           "path": "Shaders/FXShaders/KeyCodes.fxh",
@@ -1085,19 +1085,19 @@
         },
         {
           "path": "Shaders/FXShaders/LiquidLens.fx",
-          "sha256": "f4cbd61475ae3e5815e9312bd15cb5ff19a1272ee3ef61e6f90379a1ceeef818"
+          "sha256": "73746c78b659d98e159b62a1e6b7c3117376dc442aee67c7aa3f0ac472ce55ca"
         },
         {
           "path": "Shaders/FXShaders/MBMB.fx",
-          "sha256": "4d24294bdc9c2bf6808775447c77e8cab1a420d05499ccce1132f288c07a0a04"
+          "sha256": "19f5db799576d9f0b2463b376f31a5ef8eff26edc58d81eff4774860c4076faa"
         },
         {
           "path": "Shaders/FXShaders/MagicHDR.fx",
-          "sha256": "37e860cfe3a631365a6560e1473c02979c87891ce601a61e4573732cfe9a97c3"
+          "sha256": "99d462b58ab188db0055b5aa5f34ccc3fe1111a01d0c6322f807a902c3fab1e6"
         },
         {
           "path": "Shaders/FXShaders/MinimalColorGrading.fx",
-          "sha256": "2d4017e13a75d999c2f29088a8a001dd019bbf78fc05619bf5339f28c6d3570c"
+          "sha256": "2ea92ff1f0b449ae0972675fe310621bbf809cdfbf746e4aa7936f49de7215d4"
         },
         {
           "path": "Shaders/FXShaders/MultiFX.fx",
@@ -1105,7 +1105,7 @@
         },
         {
           "path": "Shaders/FXShaders/NeoBloom.fx",
-          "sha256": "c18a9b733432f77fea39ab0676a6fdb75b67f95a2e79e60a22ab3b16a86a7fdc"
+          "sha256": "95d0e90a75a25b13d39150061686f2ae2b98e6652198a15bc48db107ac7d71ac"
         },
         {
           "path": "Shaders/FXShaders/NormalMap.fx",
@@ -1113,19 +1113,19 @@
         },
         {
           "path": "Shaders/FXShaders/Overlay.fx",
-          "sha256": "a3c52a50f56edf5cf285783b7185f711e5ab19b5caf2b94478b68b41252aaa78"
+          "sha256": "a4b82d438da8e85ae3d3bb89723d144b3028f1a66ba229e3e3365ad11bde4282"
         },
         {
           "path": "Shaders/FXShaders/PiecewiseFilmicTonemap.fx",
-          "sha256": "df35114eea41a934da81d159de82bb6ebd983ba855f2ab5a9bb9ee7400bf0785"
+          "sha256": "4e8392a88e3df02af5da08d0d6d3d745e7bb5e96cc2d6e336dfa1ab6303e297a"
         },
         {
           "path": "Shaders/FXShaders/Pong.fx",
-          "sha256": "844afca64678c068c0f1bfb559338f0fe0b5ce27721f850e5cdfa30d8d3dabce"
+          "sha256": "6ed5b8f32b1eb949717d867cba0c4097dae3a2dae49b85a0dea99f3ff7f253c7"
         },
         {
           "path": "Shaders/FXShaders/RetroFog.fx",
-          "sha256": "4f631d3d83576f01ca90e3df8cc93daff056309f8234cd3eb864337d20ebffb9"
+          "sha256": "2231c38f9cf7e2e98e27d8ff8c450ca0d7785e912a2d980faacdca9092fd1fb8"
         },
         {
           "path": "Shaders/FXShaders/SCurve.fx",
@@ -1133,23 +1133,23 @@
         },
         {
           "path": "Shaders/FXShaders/Sketch.fx",
-          "sha256": "984fde3fc55aeda0c949fe49bc36beb0ae81af702f9ba02eeb516562d2a42457"
+          "sha256": "1a4092ef40291cc6a4a764deb47fe5fc3be754556e81204219c81a33673e6c54"
         },
         {
           "path": "Shaders/FXShaders/TrackingRays.fx",
-          "sha256": "f0df8c7dd5811ee75dc80ed4aaadd660a83d434d21cf21e0e54369a4ef71c97c"
+          "sha256": "f89444f33522ec483c7ed390f68055114a63225f48f19f3fba4c5ce234e5e8f8"
         },
         {
           "path": "Shaders/FXShaders/UnrealLens.fx",
-          "sha256": "46e6efd8bb76a00b04664e6698b67abbbd074e277318bd6fb2705ca3669445fd"
+          "sha256": "05a1d4ab21b6f862da9d5aba2eed60717045f9262a76524139f787542dac543d"
         },
         {
           "path": "Shaders/FXShaders/Unsharp.fx",
-          "sha256": "a6a0b03d16b2b10eb757efdbb7e88a139529e25b2a3b076f66d71a4f6636b361"
+          "sha256": "f67ec135d97c8cc383e72e0bacbc913dadeaa590db4149b208d1f03f71020f11"
         },
         {
           "path": "Shaders/FXShaders/VirtualResolution.fx",
-          "sha256": "876a4d64faa88b841b7f87fef24e36eb5c64b587b8a89074d2da9862ca042b41"
+          "sha256": "86d8a8ce8990ad4066c585acec76af912ea31e863f401c634bc47480db5b7fa9"
         },
         {
           "path": "Shaders/FXShaders/WhitepointFixer.fx",
@@ -1205,7 +1205,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/4xBRZ.fx",
-          "sha256": "55c753971f40f76f01f7ac502c63fc56683ecc8caee8e09eeb57f85cb23e1e4e"
+          "sha256": "75e92fe33d9112af44c050c40516f99873dce405075a5bbff01d92cbb45ad12f"
         },
         {
           "path": "Shaders/GShade-Shaders/AdaptiveColorGrading.fx",
@@ -1213,7 +1213,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/Bumpmapping.fx",
-          "sha256": "e0151146e6957322bd1dc2e9160b61395b2d991c1a53632d5256b42aa5990b91"
+          "sha256": "216f3d86f833bb524d2874620c9fc40c96c1e8633ac736a3cd0bdb6a11b43dad"
         },
         {
           "path": "Shaders/GShade-Shaders/CA.fx",
@@ -1221,15 +1221,15 @@
         },
         {
           "path": "Shaders/GShade-Shaders/CEOG.fx",
-          "sha256": "6f22f63a4378797f27966d2b21b43ac64b9b9e3c0bb190136fdd9e5efa6e97c9"
+          "sha256": "7ab57d01a1f34a0476e415cb3bfa0b4ade281cf3c965ba25ff4fe5551fac3e68"
         },
         {
           "path": "Shaders/GShade-Shaders/CRTGeomMOD.fx",
-          "sha256": "051ee23c0dc5eb92acb6b7b64489ca55ce07b4fcbc6ec81348e0a47a518a703f"
+          "sha256": "78d9708b2847abf7c489aa15a1c66ff8bc1936e18e4c2c704ecf8f3659f22e61"
         },
         {
           "path": "Shaders/GShade-Shaders/CathodeRayTube.fx",
-          "sha256": "cd161a6d99262bdce8713594241110b5e769adf8e8c2a38616f178ea0475d7f1"
+          "sha256": "a081f6523b59abcbdfbc7e30cedca95bc299c2d654ed8d798e09ebbd2213d603"
         },
         {
           "path": "Shaders/GShade-Shaders/Censor.fx",
@@ -1241,11 +1241,11 @@
         },
         {
           "path": "Shaders/GShade-Shaders/ChromaSubSampling.fx",
-          "sha256": "09b9297240708c960abe8e6684d06374253048168b5e217a032dc96c5d522773"
+          "sha256": "1bf8c4fe3205b03e8000bee1d9b84b5775a2f0163d25798f31f0cc2aea0a245d"
         },
         {
           "path": "Shaders/GShade-Shaders/Clarity2.fx",
-          "sha256": "cab4ea63be3f5030e04d95da4d8018cc597b1d908ef8b97fb6206568731a016c"
+          "sha256": "974f3d4f18b6611f63d10e0f09a5e3096c7ac7a0fba4887c3267df805b446af6"
         },
         {
           "path": "Shaders/GShade-Shaders/ColShift.fx",
@@ -1253,15 +1253,15 @@
         },
         {
           "path": "Shaders/GShade-Shaders/ColorInversion.fx",
-          "sha256": "3b1a952c3c844efa4d008651b7432d1d3356bb96a1676f288d3cb423f6518f95"
+          "sha256": "7027ce0bd02b98e117af16571ab33bf6cc118e76716b2f590c078f7d37d1a868"
         },
         {
           "path": "Shaders/GShade-Shaders/ColorMod.fx",
-          "sha256": "63432ec6cf8c8e967297acaf55d6edbf169eaed28f13a6fbcf4f7364bbcd7785"
+          "sha256": "913122e979418b7eac1b76c636a59ecf2f819ceba425235e243eebe7f876579b"
         },
         {
           "path": "Shaders/GShade-Shaders/ColorToAlpha.fx",
-          "sha256": "dc422ab4ab0851b8d48455015063b5d44564ed76203d08eca57641d1fad69083"
+          "sha256": "6a46f88ef441d25736dc4c1aac1fbdd243506a8ba8b517dd302c6a10a405d0de"
         },
         {
           "path": "Shaders/GShade-Shaders/Composition.fx",
@@ -1269,7 +1269,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/CrossProcess.fx",
-          "sha256": "155228f494101542e18d14825d1f39246eea328df87cc83e74405c94d3d12abd"
+          "sha256": "d0f9bc7553f724cb5666d3f8516abdbc9c3cd0dbad7f5cbc392d170c268415d1"
         },
         {
           "path": "Shaders/GShade-Shaders/Deblur.fx",
@@ -1277,15 +1277,15 @@
         },
         {
           "path": "Shaders/GShade-Shaders/DepthSharpen.fx",
-          "sha256": "4a06ae448bac78117071a454e7709ee5ee251b01da8ed807a0698364dedf2f8e"
+          "sha256": "ce5963a823435b5f037f2956e8ad77fcebf1e09c22572d253ed57c04b474dc09"
         },
         {
           "path": "Shaders/GShade-Shaders/DepthSharpenStaticDof.fx",
-          "sha256": "914f682a32f53c1858f4c58636b807434408c316bb5544368656419327d6167b"
+          "sha256": "e9e40ce0cdbbe453392f1bdf5d4d2cc0983a80fcdbaaa8a6eeb9cea855dc1ab2"
         },
         {
           "path": "Shaders/GShade-Shaders/DisplayMod.fx",
-          "sha256": "1e0510fa26a6fb98e62e51931cbfff98c194e03a9e6ce987c53bf09db7deedb8"
+          "sha256": "cf1a3bedc0143ca8047e48eb5f9c7bef0d389ec8d6e706e96d5144581a2b94c8"
         },
         {
           "path": "Shaders/GShade-Shaders/DropShadow.fx",
@@ -1305,7 +1305,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/FastSharpen.fx",
-          "sha256": "18143e533b1f3cba3cfa5f8f6ef0f0793281004f5946d7cf9f8d3846c2d039cd"
+          "sha256": "34edcfab0d8751f0818560632e91871629685d414e772d102fa69d6b017bb45d"
         },
         {
           "path": "Shaders/GShade-Shaders/Fisheye Horizontal.fx",
@@ -1317,7 +1317,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/GAUSSIAN.fx",
-          "sha256": "8e6324f67914c27561e1830c10b18a29d9ef8cad0d09ac72718807713ab08df4"
+          "sha256": "2d4e20a801d6d59a9b1362c332eabedf2963318d68b09c3b59366b3762629b19"
         },
         {
           "path": "Shaders/GShade-Shaders/GaussianBloom.fx",
@@ -1325,7 +1325,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/GlobalAlpha.fx",
-          "sha256": "3063bf809713fe52e42ab502a82ae1c42ea14f0aa1ff8c365856795837ca0cda"
+          "sha256": "2fa9ef8f7714a609ca4b4f7198af6d7fcb970333177df2b023fb88deeabe0d59"
         },
         {
           "path": "Shaders/GShade-Shaders/GuestCRT.fx",
@@ -1333,7 +1333,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/Halation.fx",
-          "sha256": "49ce3c2d135fe1f73c2fbd3ec59ef971ddbe04125964be1f2122cf269e86ee73"
+          "sha256": "44f0b57c114bd37d97c9c1aa80a8304d4d4163a56a2104a40348cab1c822a0f5"
         },
         {
           "path": "Shaders/GShade-Shaders/HueFX.fx",
@@ -1341,7 +1341,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/ImageSharpening.fx",
-          "sha256": "9b8329bcfcbfd344792bf578877a5a0dae62ab47a7fcd63b232da4de96ab6b10"
+          "sha256": "1dd3ccb90012e89719f9b5cd2f52017cd4b1ee663caad3b7eb811887702f561d"
         },
         {
           "path": "Shaders/GShade-Shaders/Interlacing.fx",
@@ -1349,7 +1349,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/LevelIO.fx",
-          "sha256": "2cc6c7241989ca3723a23b0a7c1ff3568ef2354aec4683f1b75a86068d4982fa"
+          "sha256": "fac41bbe420cc47035a5064a661c15b2950b5e0fc9e8e2ace716a06f0eedf231"
         },
         {
           "path": "Shaders/GShade-Shaders/LightPersistance.fx",
@@ -1373,11 +1373,11 @@
         },
         {
           "path": "Shaders/GShade-Shaders/PPFX_Bloom.fx",
-          "sha256": "c77b7a540933abffe95707a0f60c90c90e591ad804056422984b29b97c211201"
+          "sha256": "bc2b83e7ecd77360744206228285fb6cf81bed73b1d3b833ad11c87881332574"
         },
         {
           "path": "Shaders/GShade-Shaders/PPFX_Godrays.fx",
-          "sha256": "571ef9cc5af6e2de852cfab2c936362fed900184cd2b6a0f9c13f748cba35065"
+          "sha256": "8d96ccf901cb6c799756e1c4aa841ff9297190edbba5a6aed1fa06ce55893693"
         },
         {
           "path": "Shaders/GShade-Shaders/PPFX_SSDO.fx",
@@ -1385,19 +1385,19 @@
         },
         {
           "path": "Shaders/GShade-Shaders/PatternShading.fx",
-          "sha256": "0f131729328db792e8d2145d2cda4449b9845aaf14e0ea1477bd36a7274e4fcd"
+          "sha256": "744c7a3d6e77fd4e982c04f0b165c16ab18395a0f31b407d8aa1252b3feddcec"
         },
         {
           "path": "Shaders/GShade-Shaders/Pirate_Bloom.fx",
-          "sha256": "ac27a098095ec17941317d3030e50814d11cb01894e8adc237f73a08efdcd56b"
+          "sha256": "32d41dac129c510b54f837f58e4f34ed6b1d84af9a1b2b13d99db2fe8f02a320"
         },
         {
           "path": "Shaders/GShade-Shaders/Pirate_Depth_DOF.fx",
-          "sha256": "d01b5632e611e2fe89a25e317e96cbf2d53414d2fe88820db840966b0ea22fd0"
+          "sha256": "138498bec27bbf4e0e1919e7550df81eea1f7ca191203488a0f68e2f0f6e7509"
         },
         {
           "path": "Shaders/GShade-Shaders/Pirate_Depth_GI.fx",
-          "sha256": "f6d497cd1086a11de923425fb58ecf2cb0307115fb7032e3a2af496893f6d5ce"
+          "sha256": "d968b9387ef011c5c4d340f4faf6d777c3e59fdf0d79713eef1e4c111303864f"
         },
         {
           "path": "Shaders/GShade-Shaders/Pirate_FXAA.fx",
@@ -1417,11 +1417,11 @@
         },
         {
           "path": "Shaders/GShade-Shaders/SimpleBloom.fx",
-          "sha256": "67cc8bdd2e38413454d7519407b9d92428f679a9a147356995d1478af4a1d9b5"
+          "sha256": "fb3be8476b9b1bb8db5c0a3bebcdd65ec5081902c56ae9d71f9c8e385375b8af"
         },
         {
           "path": "Shaders/GShade-Shaders/SkySave.fx",
-          "sha256": "5506e61b9feb479f8d3bde4676cd2f8309a0b79bdfd4aca75ca050c77207866f"
+          "sha256": "53a10ffd0dee33cf8d8f0c7bee02143cb26f76cb984badfd82f15bfc4a614f18"
         },
         {
           "path": "Shaders/GShade-Shaders/SmartDeNoise.fx",
@@ -1453,7 +1453,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/ThreeColorGradient.fx",
-          "sha256": "eb11570ee4c9903b4a29b0a573024a72af46d7072805232f2de95d7c52bb6d78"
+          "sha256": "a1302fbf21d6d04eefea498ffd8ac5cc1f60ec8b38adbfddfc3a678091fe9f1b"
         },
         {
           "path": "Shaders/GShade-Shaders/VHSPro.fx",
@@ -1461,7 +1461,7 @@
         },
         {
           "path": "Shaders/GShade-Shaders/VerticalPreviewer.fx",
-          "sha256": "16c893f20ae8bcb96f6ed1eb08ff028dbbf9b84610b1e5e563278ce1496a7fe0"
+          "sha256": "fe43342abdac95d223a3286680f3cc6201a1408e67a738b1e4ceba780d2c8215"
         },
         {
           "path": "Shaders/GShade-Shaders/WatchDogs.fx",
@@ -1477,19 +1477,19 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_CLARITY.fx",
-          "sha256": "da8450d1c9dc98b5a5b605990e0c4964ac24a28c3ca5f194e956851defc69cfd"
+          "sha256": "8db3f635ddf92008b1c54b850b790f7f65c4e8a9164de5f2e6c06d36911630a1"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_DEPTHOFFIELD.fx",
-          "sha256": "59c116a9d69e0e5ce40a58849dc903060ae4fdb8f4c9f94245f53786ff2be8be"
+          "sha256": "4810508cef8216c05f80a3535ffe8880000d795d790d0f9383c55fe6c16a460f"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_EXPOSUREFUSION.fx",
-          "sha256": "94b99e9cb7d31c8d7fc9da070db5a1a9f5f08b79a3c0595ed10f483beceb06e8"
+          "sha256": "ad8b31b9b900d3204dd6cdd33d0110b7129fe01a03023776e9e9899686820932"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_FFTBLOOM.fx",
-          "sha256": "e3943d4ded993de6f0f4b08b22c43bb500f6843321ebb569a67e4916932fdafb"
+          "sha256": "ef7d37a033ab2174c044c78009d3705cfe523b3b3099161cd827098a94b8f016"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_FILMGRAIN.fx",
@@ -1501,11 +1501,11 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_INSIGHT.fx",
-          "sha256": "0b3fad6f4ae664d38b5561833814d8098a4303d1180a23f2c49a5c177691ec75"
+          "sha256": "0c0b60874aeeb6aaf601ff4b75878342bf251e9c1a9f56a345336f1b21b1a0fc"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_LAUNCHPAD.fx",
-          "sha256": "5f98a7098bb2c1b62ade46de46e3a1accf4e560420923d8c4f812919a34aef4b"
+          "sha256": "9e78d5101b7b5547f89833d404c421178d4826fedd1fc5dadf3470386e55786b"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_LOCALLAPLACIAN.fx",
@@ -1517,11 +1517,11 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_LUTMANAGER.fx",
-          "sha256": "6603f5bcd739a3d6c12dae3dfda5ca4e0be8d6b505963d0b125a5c5102cdc5de"
+          "sha256": "1d63f276995b6ad3774612183294cf1fbc18ae3615ddffdf5733b23c8740591a"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_MXAO.fx",
-          "sha256": "9c4b1dfd4220427a00194f584e4c6d560d2848ce7541e4de805d1f1d18406b2d"
+          "sha256": "ded4c188f42ae78d5bae0f461a8daa18f0f9dad93c480977df62b1b2b1e41637"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_NVSHARPEN.fx",
@@ -1529,11 +1529,11 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_REGRADE+.fx",
-          "sha256": "48098ca9f9d8d50a99da0db6f95be748ea055e672b3c082d2cff7f0abb92c13a"
+          "sha256": "cd07c786b26ff8937ef9b79ec72a13a3cce7304288da290ff62dd9f7706cd13d"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_REGRADE.fx",
-          "sha256": "4bd8f537b20ead9266f877fa7b4e8c0599357811663a258bd48efebf827a1c23"
+          "sha256": "29cc7425ab5806a1328583e3219fd9c35093d010ef9b2d6a35e90f3990d6bffc"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_RELIGHT.fx",
@@ -1541,19 +1541,19 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_RTGI.fx",
-          "sha256": "79cda37a16d0c514565bb2ca8151f2c2dbd65351098f695803d9c14adbe0b4e5"
+          "sha256": "1bbba22ccb40de6d3783d6f5a3af7a00c0fb7f1cde964b32f35cd9979a50a760"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_SHARPEN.fx",
-          "sha256": "10643cc331ec0fba85b4a1841ef1af58cc5e3a8f88f3b4e2cbf3a5ae61083fd8"
+          "sha256": "85f02cdc7bb7fd4c05e890c986b3cd97e6671e73da937710ce991010897f8c17"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_SMAA.fx",
-          "sha256": "da13980c0beaf07e0246c652eca9de92fc0d4f5f51a3391ad6423e05fd504974"
+          "sha256": "be5343900338b40a95999054ce7ff60083340057ec80a1b87f91df76056aa4e0"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_SOLARIS.fx",
-          "sha256": "eca12e9f11d2163b1d92ced2c564eecfaa5cf5658b79b9bb3bd58bc2fdf41725"
+          "sha256": "f4a68f2727ecfc032de868b9fb56716e919c636c1ca1918429a4bf6fbe119629"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods_TODDYHANCER.fx",
@@ -1561,55 +1561,55 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_bxdf.fxh",
-          "sha256": "602ae5408b455720a568b7bf154cbb8b8d3209a66e11ca096536ea4f8edf15ff"
+          "sha256": "29816e8f95c4d930e04b0cd7fd27b0af11a1bbedf573c73b834b1b408a70454d"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_camera.fxh",
-          "sha256": "1edf18c6ccc1b1ec35c14a07365ae67440e2c7e4f07a96ef360c42b13d0156af"
+          "sha256": "cd26c23b75fba2658a2164b32b1653fb4213e879dda8b865f7ebd3be9b88ef46"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_colorspaces.fxh",
-          "sha256": "db3d0fe9c12a852b54e8d1e0237c2a3f9b58adfb6bccff536aba8dab41787589"
+          "sha256": "c5a6ddf47a3896b9c439c440ba3dfe145864d896d89cd78d60d653165b04201e"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_debug.fxh",
-          "sha256": "0b34ced9f9e3553281932a356fa275e325036e7840cf889e5cb0ecf99037a972"
+          "sha256": "a04d396bc47f6ba490facf2981f083bce10fc0e383197dab8dcbaca932c060f8"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_deferred.fxh",
-          "sha256": "b980347259d6852a4450fe532124a6d926e82832c0b40f44e58b955a9328f2f0"
+          "sha256": "effd41b7ac7a617a0a9c6cb74c8d7ed11cb0ce582d2be81f1545afb88c95cd9c"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_depth.fxh",
-          "sha256": "afd732cd32809ca9376c87655ac39ae56f939ef38d08fdfd58c909bd1a2ca840"
+          "sha256": "14d747980ff5d0e7197be4e1196361eb51716fd813684ead0fefac23d7ec3dca"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_fft.fxh",
-          "sha256": "79884a7073c326d5a6ddde1288453211caf5ed84f635efc3f7919236a66dc85f"
+          "sha256": "867e5ea5ac9b39d2fa4b1093dcf7b87e5d4cf710906f39576ac769ccc3e52ab4"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_global.fxh",
-          "sha256": "4790b75fe7a6da0452d230f3277df486cba9be36309822b8d490dad022f3b2e7"
+          "sha256": "8deaa83a574473b5fc18b09eb8a4fa3ec3199eaab54db331f60c444f401a834e"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_harmonics.fxh",
-          "sha256": "919e8877d57e403e584a98f66ccdfe51f7265136e125fc6a21f46c84bcac5a5a"
+          "sha256": "f5c7490c8d5bc85adab0fd368dfa857089e766d554273175d91f31d6ae841729"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_hash.fxh",
-          "sha256": "09ef8ffdb53c709a0da63425a60f3a007269ff2f748bf12b610b6ce50adb02e8"
+          "sha256": "4c1bf89bb3881434aeffca4e7afa03355bf7e461e7438569fda5af9c45e8237d"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_input.fxh",
-          "sha256": "501692a46f7f5b4d21b8de0d01e69405c7fa7b73daf91a7d0f4fbfe4a2b24f4f"
+          "sha256": "4564cd9ba6dd12d4ee24f03291d05ae3477c6e5b21ad64e3a948560c8644dbef"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_math.fxh",
-          "sha256": "6bc7a5132cfd7af744162bcfff4c4381941f6e60a8e3a601f9633042c12b1b20"
+          "sha256": "e09751d76efd982fb28e64557fc63d43efbb877189974a199ced6eedb8e84f7a"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_qmc.fxh",
-          "sha256": "cd4a61e069d7c4f38adf53561be3b74f14a5223742570b846e0e7b6a45ebd3c7"
+          "sha256": "58dac456c2ed37f3f79b58432fc71769b2c8a2ca637671998597cbb2131f362b"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_random.fxh",
@@ -1617,39 +1617,39 @@
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_sfc.fxh",
-          "sha256": "dc891d1949ad3d0490f9cc4ca0052ab882b6c7d9615521de16a52c8e016c8491"
+          "sha256": "3ac268e3581a5057fdb45d40ae63a9190174da06e3d3e9c8c50acc86b4a2c46f"
         },
         {
           "path": "Shaders/iMMERSE/MartysMods/mmx_texture.fxh",
-          "sha256": "3d30e50b86eecba1bb1aff1c2bcba7b2b28dbe5dba67f727a4edd175bb2d777b"
+          "sha256": "b263d2d9c1c97d642547036cf1a0cd6d80c2230c8709f4582aff017fb2f73248"
         },
         {
           "path": "Shaders/Insane-Shaders/Bessel_Bloom.fx",
-          "sha256": "4d29c3974cb4b290a86c6795ea8fbc1f2d63582287bccb6e25b1d8d7744c2143"
+          "sha256": "1e3cd2e4e312495b46c2e61c3d88981a41f5d8c31fe1bdcfa50850dbf546e76e"
         },
         {
           "path": "Shaders/Insane-Shaders/BilateralCS.fx",
-          "sha256": "f6ee1a67b579c8c616d4c887c45497143e54d0178bff9c9d6d3176cdc03491e0"
+          "sha256": "eae561809adf749aa9a0eb5c6b1b4fdfc76588e6c354accff0880043bb419908"
         },
         {
           "path": "Shaders/Insane-Shaders/BilateralComic.fx",
-          "sha256": "a875c7d665a20e3bfa6b379a90fbfd05eb603f4cfa9a6db14f1c240ecaa773a3"
+          "sha256": "6d68c9f77e4fede729f618fd21ce627597571fb47c13f4d30d1aebee615b3d5b"
         },
         {
           "path": "Shaders/Insane-Shaders/CMAA_2.fx",
-          "sha256": "a097b3932f8175ae1f8ca78a6e5c20a40370d74729f7c27179345641ac023da9"
+          "sha256": "029a3f798c683d573bad036de134230d051337e32c7f7f13705959fc6cc27729"
         },
         {
           "path": "Shaders/Insane-Shaders/ContrastStretch.fx",
-          "sha256": "879ae79fe05a6b705f740f0c6306d9053f24cb68952c6387c153d2b0db144084"
+          "sha256": "430aa2018762816590aa68c3f1a3e4c889c947d820d9b0ffc4d5038f67936b47"
         },
         {
           "path": "Shaders/Insane-Shaders/DeepFry.fx",
-          "sha256": "963ddea1e7b5d1d2b2fc14833ea23c206852dc69d7b31b4be2b82670ee5eb053"
+          "sha256": "ac9b823f0c06852dfe156a1fef00452403854b055a84e249643088284386156c"
         },
         {
           "path": "Shaders/Insane-Shaders/Dehaze.fx",
-          "sha256": "8e5dd236b4dc09f2e0f3f2d9c8d1b899d0a4005f1f10b7dd0ebfbcdd3683279a"
+          "sha256": "06bb711a447de5e5e60b2247dbf7896d08f2129726b7bee88dff4093df6acc9d"
         },
         {
           "path": "Shaders/Insane-Shaders/GaussianBlurCS.fx",
@@ -1657,7 +1657,7 @@
         },
         {
           "path": "Shaders/Insane-Shaders/Halftone.fx",
-          "sha256": "9d6a415ead44f69d40fe865dac0e815bb45aae192570ef3062a0b807b2f3054a"
+          "sha256": "d82c2c0fd1b351a459ad7a99205f53b8e6613188b7a91172b5edd5a663165ce7"
         },
         {
           "path": "Shaders/Insane-Shaders/LocalContrastCS.fx",
@@ -1669,51 +1669,51 @@
         },
         {
           "path": "Shaders/Insane-Shaders/Oilify.fx",
-          "sha256": "1dbb5f49932835c499fd5aa38cab0fb2247c325cf52f16edba985f33505815a9"
+          "sha256": "26e7531296ab6dc57a2969f77439a6f4b8ee0079cb47571f16f62660b6a3645f"
         },
         {
           "path": "Shaders/Insane-Shaders/ReVeil.fx",
-          "sha256": "3527a1e944798ef3f05f193410ff9b402a04eaa3e19e52708b20d324dddcbfa5"
+          "sha256": "e82b0a3e4f203c1593e66e4504107b1d8867edd456d6475e591f4da7ecb4eb10"
         },
         {
           "path": "Shaders/Insane-Shaders/SharpContrast.fx",
-          "sha256": "4a644acf670640dacdd25e575749a8f739b09d862a25cb38a8bbc7280ffb3f24"
+          "sha256": "4764f798f18caac233324588a2022e16a88ec4410af5edcc4dc2ff21844e5a74"
         },
         {
           "path": "Shaders/Insane-Shaders/UIMaskCreator.fx",
-          "sha256": "5bafa190576b351426315375de2d29c895682bea5c7fd077da8e81e35df1d099"
+          "sha256": "b9f202d7747784de0742f094e24c3dc854c2b2bfb1605e58c2d6bbe59f44e00a"
         },
         {
           "path": "Shaders/Insane-Shaders/VRS_Map.fx",
-          "sha256": "568efb27582a5339fa40d1ea5cd2842c0f704c601729c554c092d5206f0d6a42"
+          "sha256": "b67955711e74f22012f5331d1a33984c6b50cd00f6bff4352463fdb090939ec0"
         },
         {
           "path": "Shaders/Insane-Shaders/VRS_Map.fxh",
-          "sha256": "388d79336fd846df552b689c01836df687b9700f4acd991b4d900c7bcd71c85b"
+          "sha256": "0d12ca1f1b9572655e626a1808dfbff22c4d294dc95d6100eb52c926a19354bb"
         },
         {
           "path": "Shaders/MaxG3D/HDRBloom.fx",
-          "sha256": "ed80fcd30f4002d4fd1d20141be995075cbf47d16a8b3dc9a35741b1ffc9bf97"
+          "sha256": "71f71fab0ed8d863ba9a716b9d1c3af55cd2f1a1750e4c3cf4e6d9869836da6a"
         },
         {
           "path": "Shaders/MaxG3D/HDRMotionBlur.fx",
-          "sha256": "2e9121626de0bcad8e17e714dbc7f0080b9f7c54835b8852d4872c812172d7ae"
+          "sha256": "77e40f6190922e544a68afd8370c08bed3bfff68cb251aa7e340ce0f67318402"
         },
         {
           "path": "Shaders/MaxG3D/HDRSaturation.fx",
-          "sha256": "2709a3468bca5fe8225124a8df379c1d51220148094d545ec381785697789b94"
+          "sha256": "7f96555b59252f3c33d57cc14a3c4d08eec161fbb4e7df5de6051aec80d3caaf"
         },
         {
           "path": "Shaders/MaxG3D/HDRShadersFunctions.fxh",
-          "sha256": "dbe0f3aaf1be93bc311b9ec7e7235282f90accaec3c6112cd6cf97e31a5602eb"
+          "sha256": "2ff509b711b7a599e1eb81b59b3c795496518c522728794b4e3993988da6b0ff"
         },
         {
           "path": "Shaders/METEOR/MartysMods_CHROMATICABERRATION.fx",
-          "sha256": "5fd78d66d29eca16fca8addf405dce9ddf415e27bf9b797f879f6e44859e13a7"
+          "sha256": "ac3a56aec24da455754954729fbe83be55e61f809d07d2773282d0d45362ffb9"
         },
         {
           "path": "Shaders/METEOR/MartysMods_FILMGRAIN.fx",
-          "sha256": "296d2a7b26506f6053721dad37bec61d6e0661a7fb6730c80e523ed1a778ff4e"
+          "sha256": "08e0e88883402e1a07c3ac80d95fa1915d876d1868a83e8d28213b4c14abf556"
         },
         {
           "path": "Shaders/METEOR/MartysMods_HALFTONE.fx",
@@ -1789,7 +1789,7 @@
         },
         {
           "path": "Shaders/NiceGuy-Shaders/DynamicRaindrops.fx",
-          "sha256": "79873a44a74c710f43a8a0f26a3edb4b48de613fa682f6b0080e9e9f397386b7"
+          "sha256": "e3be707fb0c7dd35f5c5ebc645ed398560b9bc9d5604b86da8a74c0244bf5e24"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/FastSharp.fx",
@@ -1805,39 +1805,39 @@
         },
         {
           "path": "Shaders/NiceGuy-Shaders/NGLighting-Configs.fxh",
-          "sha256": "33c30936f17f30d07ee6f01652322afcbe3b27025104b679a07489f716d43657"
+          "sha256": "f87a8ab6e57b39150cbed12302c7df6630d5fb37b8fcac7d5c57c1887cdd8e18"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/NGLighting-Shader.fxh",
-          "sha256": "0f4b9c59238981fbcd7be1722f0430cb1488a0c2eb409aaa98e5e3df60b8d37a"
+          "sha256": "7b8c3ea945f362531be254220d450a1ba069dc8136373655ae74fcfe23f0d106"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/NGLighting.fx",
-          "sha256": "7452b6207de4773f91a493ca4daf1a457359bc6dec46c6c8ef993ebb071bbdf9"
+          "sha256": "0f483fff8c5b151be9d8806b93a6ac4a875b9d004d81aba8a73f4245bd8911f3"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/NGLightingUI.fxh",
-          "sha256": "6c0f0a2617786db6516eb65a0f5d6a3c5e528c421d75245a6fc6850db8156b2f"
+          "sha256": "b9f8a861e9cca903f34993298cb78361983fd54706b560b01cb0ff6cc20bc142"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/NiceGuy_Lamps.fx",
-          "sha256": "fc2d2feed0b261302dbdfc63d4baf1cc53d2a90f8331503965ca2fd2f36bdf51"
+          "sha256": "99a455fa578215a5c924264b977caa021bcb7e5ebbc1849a0716cce1546b9474"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/Rim.fx",
-          "sha256": "32b56d87cfcbf115dd497009a40217b68e6b080f44bcf8c43b0184b9855580f6"
+          "sha256": "ace05f59e109d86dab77a0ca6a969521d68bd4e445cf067dade96a42b6ff3d8e"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/Scatter.fx",
-          "sha256": "c8aa7af1ce58eee07bae952a445b2c79c5e96f535b6b9d34f73738acd7902fc8"
+          "sha256": "cba15f708bb591a0a42c119836832c552c08641d6424476a828a23020182e5bb"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/SlowSharp.fx",
-          "sha256": "ddca6ce67906d12ec5d0fd7491b4e9b49ce151a875089b6f7d5a1c19b6497713"
+          "sha256": "850699560162a1f4889d7ef900130b9239ac8545a62802345e18e7fed9182109"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/Volumetric Fog V2.0.fx",
-          "sha256": "205762d8411b804fefa7944ceb4963a22c882ab79d5bd8ffc4ad3fd6f740ba96"
+          "sha256": "d8ffcfd16b1084ac772a9a8bd065150ae2f2e9c7faa1b3a3e3152abdb29fcc14"
         },
         {
           "path": "Shaders/NiceGuy-Shaders/VolumetricFog.fx",
@@ -1849,7 +1849,7 @@
         },
         {
           "path": "Shaders/OtisFX/CinematicDOF.fx",
-          "sha256": "c1164a45eeca82aa511932064a80cdd5eb3f8b10dd5f5436c18c3c495510ad65"
+          "sha256": "78467c06606b903b586e051bc0e3ddfadfdd6d492f19d0616b99e03b54e75522"
         },
         {
           "path": "Shaders/OtisFX/DepthDarkness.fx",
@@ -1861,7 +1861,7 @@
         },
         {
           "path": "Shaders/OtisFX/DirectionalDepthBlur.fx",
-          "sha256": "4a1c420464e0040feca52361dfcd1e237ccc7edddd588d0dca4851e84ab90217"
+          "sha256": "0e6d621210ad089ec8ef559bfcaed94b5aa46be1c5df76186f252987a067f9d8"
         },
         {
           "path": "Shaders/OtisFX/Emphasize.fx",
@@ -1869,11 +1869,11 @@
         },
         {
           "path": "Shaders/OtisFX/GoldenRatio.fx",
-          "sha256": "4baf345161ca7ef07d2b47c85d6083e50ce4e890313d2f394e7acd0b785121db"
+          "sha256": "eb7cd99d05ac782d4d224e17d7d741b141c123bfe5ee338805c3a988a850682b"
         },
         {
           "path": "Shaders/OtisFX/Heightfog.fx",
-          "sha256": "7dd75fba3d9942f8f10ea5abf8a5526c8be54d6ab6951781a243c33ea8df9ab6"
+          "sha256": "42fe8fdadf44b67287e1b42f1e3dae29eb4f86707758a444eae57ff94eda74a2"
         },
         {
           "path": "Shaders/OtisFX/MagicBorder.fx",
@@ -1885,7 +1885,7 @@
         },
         {
           "path": "Shaders/OtisFX/PandaFX.fx",
-          "sha256": "42a54ce7b1abc3951156338f45dd2d3d82946a523377f6bd79b583a5b21b810e"
+          "sha256": "a3f789056afa214c61faaf8cdcb4eef40a62ccd0a1d8d4463cb3c36683c7797d"
         },
         {
           "path": "Shaders/PD80/PD80_00_Base_Effects.fxh",
@@ -1909,7 +1909,7 @@
         },
         {
           "path": "Shaders/PD80/PD80_01B_RT_Correct_Color.fx",
-          "sha256": "5d2f6ffb8dfdeb3023ff82ea61083716a9856abb2b89cbaecad00047273f118c"
+          "sha256": "07b5d6fa1a497fb10bcb0f0ee0f6b125a1585b67feb0ff6c24232c4a10f36c0e"
         },
         {
           "path": "Shaders/PD80/PD80_01_Color_Gamut.fx",
@@ -1917,7 +1917,7 @@
         },
         {
           "path": "Shaders/PD80/PD80_02_Bloom.fx",
-          "sha256": "7500dbebbcd25ef4b9ac519ed8f03def26d6eb997a4f252025abc6f00f4dfb0d"
+          "sha256": "704d8ee19d5becedab9e415ae1dde2227484ccda890cc6cccb0a184012c1ff3c"
         },
         {
           "path": "Shaders/PD80/PD80_02_Bonus_LUT_pack.fx",
@@ -1933,7 +1933,7 @@
         },
         {
           "path": "Shaders/PD80/PD80_03_Color_Space_Curves.fx",
-          "sha256": "3e75728433da753aeb42adee5db2526194d1689356b8bcb52ea214916f534118"
+          "sha256": "f3042918bb336e00c2cfa78806a81608d7f587b803f26925b779e506e12e913b"
         },
         {
           "path": "Shaders/PD80/PD80_03_Curved_Levels.fx",
@@ -1941,7 +1941,7 @@
         },
         {
           "path": "Shaders/PD80/PD80_03_Filmic_Adaptation.fx",
-          "sha256": "9db1304b919ffbe229977e55169790730d5790228e5071db29628d9b65a70a4d"
+          "sha256": "c6facfeb80ea01dd79497b6df1f261d9ae2aad37fa431cec98d49be3143bc7e1"
         },
         {
           "path": "Shaders/PD80/PD80_03_Levels.fx",
@@ -1949,19 +1949,19 @@
         },
         {
           "path": "Shaders/PD80/PD80_03_Shadows_Midtones_Highlights.fx",
-          "sha256": "8b2c34e516443b3c9af1f842d4a84c1cc731591b0ae1a1fc8e4c8b93d78655c9"
+          "sha256": "bff9a0bd8fabdaf4ebb42b6749a0cfd5945d1d9c2c3ba6a88b8c6f526f61cdb5"
         },
         {
           "path": "Shaders/PD80/PD80_04_BlacknWhite.fx",
-          "sha256": "bcabef59f33bc26b365c2fa3495274ab734a2428faa89d48441a648e2a74bb31"
+          "sha256": "ab6c05287196adb1dcaff5e9da4058e9270886f59db9f21d87b6e399b2bb27d6"
         },
         {
           "path": "Shaders/PD80/PD80_04_Color_Balance.fx",
-          "sha256": "e9c93b8442081fd5372da2a56dfc2c22bb5a8051a89c5a442792d17160bb6736"
+          "sha256": "a4650880b1d14648621d71aa83179d12823fda03b5a61f48d9bfce095ae2a842"
         },
         {
           "path": "Shaders/PD80/PD80_04_Color_Gradients.fx",
-          "sha256": "51fc754b9df2cf7c896c74a286439f25235b1b0962b895a290fed67256a37a2f"
+          "sha256": "fee1741301b4db34eaa15148895ad91fa16a3364036fff6b0dd6579573bb101c"
         },
         {
           "path": "Shaders/PD80/PD80_04_Color_Isolation.fx",
@@ -1973,11 +1973,11 @@
         },
         {
           "path": "Shaders/PD80/PD80_04_Contrast_Brightness_Saturation.fx",
-          "sha256": "91073e9ea6da1acad0bdd34dba62a2ffdc38aa77e8b463d9a0286939f17e2e67"
+          "sha256": "a36dd8beb299d32ec9675464c2fb67e1ab640e4aaf1aa693ae4175bfc7f83092"
         },
         {
           "path": "Shaders/PD80/PD80_04_Magical_Rectangle.fx",
-          "sha256": "a0ec2600db0accb7e6452ca8c2857696c3abe9c1d4e352e442cf5efb2dbb863b"
+          "sha256": "f488b2024e02d88c924a67574be49b132c5f4e2e4a691799fc18ff4b017ea1a8"
         },
         {
           "path": "Shaders/PD80/PD80_04_Saturation_Limit.fx",
@@ -1985,11 +1985,11 @@
         },
         {
           "path": "Shaders/PD80/PD80_04_Selective_Color.fx",
-          "sha256": "3c554d9d6d959cdc995e4b205dfdc7c4db6406cdc920200bf0e6f203f2f033f6"
+          "sha256": "4c83497aefaafe8a811aee7f8643a1f27c3d22fd3e1bc67f0436af0660a41a52"
         },
         {
           "path": "Shaders/PD80/PD80_04_Selective_Color_v2.fx",
-          "sha256": "79629f61015da79f73922089288072bd0bfb35775811313a30282c1a62abb5a8"
+          "sha256": "4f428b01e02962c5c39361394854142f33000d76ef1c7f19a5ac71944cbf1161"
         },
         {
           "path": "Shaders/PD80/PD80_04_Technicolor.fx",
@@ -1997,19 +1997,19 @@
         },
         {
           "path": "Shaders/PD80/PD80_05_Sharpening.fx",
-          "sha256": "da0fe2518ca4fdd3a669e1be890ac68da9f804442d9bc729571674758566a49d"
+          "sha256": "6d071c090d022c312298714845db895d9ff711e6c606f9d6710f17d9c8b453aa"
         },
         {
           "path": "Shaders/PD80/PD80_06_Chromatic_Aberration.fx",
-          "sha256": "d5ea3b5bb65c869f015f5b8334d95fb994bfd945d622b5baebe8e5a0c24212d3"
+          "sha256": "c27e52ca52b0f8b488db37c07d69a111e5619c0ee5af8ecef493d88aea96e7eb"
         },
         {
           "path": "Shaders/PD80/PD80_06_Depth_Slicer.fx",
-          "sha256": "d53831f361943fda535e96899b3636871416518336d2aae01419186c60daec7c"
+          "sha256": "299f7237be87f13c5a6ccc7a1508ef6a64c7ae9898aaefa0df5de281b25c2f50"
         },
         {
           "path": "Shaders/PD80/PD80_06_Film_Grain.fx",
-          "sha256": "cfa3119a090d97622a96f5802df94aff3ab6e9c0e0bedc77f506f991da6f5b44"
+          "sha256": "8c394b5103d72c9ece14fc29ed72c1f0f98cca7071aed1ffc5a5c325bbc0222a"
         },
         {
           "path": "Shaders/PD80/PD80_06_Luma_Fade.fx",
@@ -2017,7 +2017,7 @@
         },
         {
           "path": "Shaders/PD80/PD80_06_Posterize_Pixelate.fx",
-          "sha256": "1dc4df19e52504ebe74963de5debb49c8bfcc856b8e6950695c69d6d60c22a72"
+          "sha256": "32b62d660e5a1e27537c010bba9fe6132f5e09b77dc5322bac039caba67fd212"
         },
         {
           "path": "Shaders/PD80/PD80_LUT_v2.fxh",
@@ -2029,19 +2029,19 @@
         },
         {
           "path": "Shaders/potatoFX/pCamera.fx",
-          "sha256": "9cbe5d9ab915c5b8ca58537fe80db5fee36a20dc9217f3796c8181f0ff0e12cb"
+          "sha256": "a17b3d837d603757ab9e6e98cbaf34d43e051b72719acc778a386e1ff92855f3"
         },
         {
           "path": "Shaders/potatoFX/pColorNoise.fx",
-          "sha256": "9366f6bcce3793e4c88602bdb22775557828864721dacdc2ac9d9118585cd8a3"
+          "sha256": "e128f0b28e56a7dec87a932e69fc87359b1d75595b945bf4d0053684503b686f"
         },
         {
           "path": "Shaders/potatoFX/pColors.fx",
-          "sha256": "9764c75aba8082e266bcd079f1c9eb84a1ca597130cd8a3b049958e516fd66f7"
+          "sha256": "575a6369addce7c37b7bf217824f883d2e6b74651e24b4ab229e3124540f917b"
         },
         {
           "path": "Shaders/potatoFX/pPalettePosterize.fx",
-          "sha256": "95d924954e0a916b5489e773525f9202e74cec092142a2d415826e1932fd4c45"
+          "sha256": "245199d782e9f85842aa57f108c20d63545fac73ffadc9280007ceedb62a8c6d"
         },
         {
           "path": "Shaders/potatoFX/pUtils.fxh",
@@ -2049,7 +2049,7 @@
         },
         {
           "path": "Shaders/Ptho-FX/DownsampleSSAA.fx",
-          "sha256": "13ce38b7fbb098babb7e9df8722d9bf35ac992b7580eab4d08829a78987af6c7"
+          "sha256": "35b4d55ac2fb4e48da2d180875eb93df8d138feac8d43f5d4b802a5748652b60"
         },
         {
           "path": "Shaders/Pumbo/Color.fxh",
@@ -2057,27 +2057,27 @@
         },
         {
           "path": "Shaders/Quark/ContinuityCommon.fxh",
-          "sha256": "e3c5e200967d9f46be9f78438805144fad87ae26d1c632cb0beb9ab9c2a2336e"
+          "sha256": "1ca175ea822692e8d91ba4582aad52572390f357d73160d0144e3b14dce7a406"
         },
         {
           "path": "Shaders/Quark/Quark_Continuity.fx",
-          "sha256": "01a3ab3a990ffc2eaa80f4391500318986247b91fd3df47acef301daef31c7e0"
+          "sha256": "9600e29919d2bcbd6b0843a0564d76e12cca0ac22d40b7b13190eb7f4fcc2f3c"
         },
         {
           "path": "Shaders/Quark/Quark_Fast_GI.fx",
-          "sha256": "c8dff29caa0317b815484a7e1911a23372dd77b022b87935819ac3d7bb922236"
+          "sha256": "08b0f1df52aa135b8ea04ce9e6fa991f10192a753a39e28228faf2c4caa9c533"
         },
         {
           "path": "Shaders/Quark/Quark_Film_Grain.fx",
-          "sha256": "05adc454782a962457737e5a5a5a68c8d015c8766bade18279d326057ec98d09"
+          "sha256": "7a2337515c041b4444bc95b3475df9596f933e6d679627e05c3a12e24858d3e8"
         },
         {
           "path": "Shaders/Quark/Quark_Local_Contrast.fx",
-          "sha256": "9196a7f430b70adffccf3b3082cfc8dbad366256d9e440d93f7debce6d5f1436"
+          "sha256": "47f9fcb7e292201045b17ded671327a2e52e9d35405b26f18b314dd903fd8488"
         },
         {
           "path": "Shaders/Quark/Quark_Xenon_Bloom.fx",
-          "sha256": "0845dfd3e61421cfe381db1dafa612d25de5ee5376b56be2dbce60ba47aa1432"
+          "sha256": "29e2b3d419a729f07eb24fa6f123cabeddd1e1a1f88df52e28e0ff75e43fe156"
         },
         {
           "path": "Shaders/qUINT/qUINT_bloom.fx",
@@ -2089,7 +2089,7 @@
         },
         {
           "path": "Shaders/qUINT/qUINT_deband.fx",
-          "sha256": "34f1fc97f9192bc1893bed0a8741347673c626cb925422effd64a76d8f054335"
+          "sha256": "87937576ca71617f645bebefda7bf93c6fdf93bb9396958a1ac7f3589c7c8ff7"
         },
         {
           "path": "Shaders/qUINT/qUINT_dof.fx",
@@ -2097,7 +2097,7 @@
         },
         {
           "path": "Shaders/qUINT/qUINT_lightroom.fx",
-          "sha256": "fc6a1d2d584c743b9c1750693f0fb39dffc0dbdb6e71990056ab9eb84b6c2058"
+          "sha256": "c61c38ae985802eaea6829277b6506862bb789d5059bdd10d2b977c99986f887"
         },
         {
           "path": "Shaders/qUINT/qUINT_mxao - 副本.txt",
@@ -2113,7 +2113,7 @@
         },
         {
           "path": "Shaders/qUINT/qUINT_ssr.fx",
-          "sha256": "fd688cc3076db10eb136828871d9393fd8c70c571fe49bdc03788b80116275f6"
+          "sha256": "3a222ef5061c9200f18a77db66c9a24158d369ae61652c4a23c17be9ae2ddc78"
         },
         {
           "path": "Shaders/ReShade_HDR_shaders/lilium__cas_hdr.fx",
@@ -2129,7 +2129,7 @@
         },
         {
           "path": "Shaders/ReShade_HDR_shaders/lilium__inverse_tone_mapping.fx",
-          "sha256": "31b8c7cc4194d4e2381d30c1d0c5fc1b5b91e56a6c25dc233d7c92e3468e020d"
+          "sha256": "6ddaca40e7f7bf5fe6f082067a2d362f43b7b9929b8e7dbce70a41ed537e17f4"
         },
         {
           "path": "Shaders/ReShade_HDR_shaders/lilium__map_sdr_into_hdr.fx",
@@ -2205,15 +2205,15 @@
         },
         {
           "path": "Shaders/REST/REST_FLIP.fx",
-          "sha256": "2f4d03477513597aa66e76f7000f0f3aa49f2af3e890d735a42c9bfc78c142be"
+          "sha256": "ac18ab3d728f5e83855c8aff0709c00923094d32b73ed751593ba0d6adaca215"
         },
         {
           "path": "Shaders/REST/REST_NOOP.fx",
-          "sha256": "8e4da7e6303c32f67ee44dcd50585b3f88295ed445b382e01ae9e51ebe21112f"
+          "sha256": "86c16124f0d3658ce421e2362d7b0a77717a0b48522416c7833a4922ed6a3b67"
         },
         {
           "path": "Shaders/REST/REST_TONEMAP.fx",
-          "sha256": "e1de1121236bb4271c61b8a14de2b55a1c3c9bdbba60e30eea1d4026a839d1b3"
+          "sha256": "c76c4d29ce1d328f7f4d7be45c6a44b839e3cec1aa1db4c4c26fb1ce9a5f1e6b"
         },
         {
           "path": "Shaders/RSRetroArch/3DFX.fx",
@@ -2277,7 +2277,7 @@
         },
         {
           "path": "Shaders/RSRetroArch/CRTLottes2.fx",
-          "sha256": "066dd03cc0be734611389bc81da901c55a5cbf77905edab5342a5ccb77b973a2"
+          "sha256": "9f63cfd90e6a85a148fd533021497cfc0b93783d0cb693317d519dea97bd7711"
         },
         {
           "path": "Shaders/RSRetroArch/CRTPi.fx",
@@ -2321,7 +2321,7 @@
         },
         {
           "path": "Shaders/RSRetroArch/CoolRetroTerminal.fx",
-          "sha256": "0210e3b2d0f5b998f9ae2a51656b1bdffde727ecbf06c6e04171fd1ad8db273b"
+          "sha256": "e32575634fd02b22492c9bab359c0b6b88ba92a6848eb6f91a162be3da367899"
         },
         {
           "path": "Shaders/RSRetroArch/DOSGame.fx",
@@ -2441,11 +2441,11 @@
         },
         {
           "path": "Shaders/RSRetroArch/mdapt.fx",
-          "sha256": "b06d7f7b6575603bb394b04eb2abc7d9aef2f1fde3abff7dfd09682dcead1a3f"
+          "sha256": "b2a75b708f73189cf6ad9dc9a8b9318c212e164d2f28ecb59be8472832df3d51"
         },
         {
           "path": "Shaders/RSRetroArch/nGlide_3DFX.fx",
-          "sha256": "0424df6b70d90a373bb5f7cd817be06bd27fbae5e84345a4d42ed5d80f2a9c23"
+          "sha256": "e735d377f1047231606dbff66ebac5cfaafbc4f8dce41cc9dcae97e50912d4c5"
         },
         {
           "path": "Shaders/RSRetroArch/ntsc.fx",
@@ -2565,27 +2565,27 @@
         },
         {
           "path": "Shaders/SomeEffects/BAYER.fx",
-          "sha256": "24ed246d30eb79f6309e469be23683f3427b4a002f3ad8606442c7e3f7980b66"
+          "sha256": "a9b15ee7382e62edda0f06400beb8e6dbb7c403065c0fad205a0dac450e593bf"
         },
         {
           "path": "Shaders/SomeEffects/CMYK.fx",
-          "sha256": "fe63c89097f524860a5aba77829fd0f5a926cbcfde9397442c43293d311d81ad"
+          "sha256": "e40f51d96d6c6fb778304e0e6eda8231415cfbd93dd4d032114cd36a3c703e49"
         },
         {
           "path": "Shaders/SomeEffects/DINN - BASE.fx",
-          "sha256": "b1d812ed05f4089fd9110f85a80d740431fe03a504bd47eeeb6cea6054ed294e"
+          "sha256": "7c431d60be49bd7eb51f1427b89d828061212d80f126c0d9769483317613e1c7"
         },
         {
           "path": "Shaders/SomeEffects/DINN - DIFF.fx",
-          "sha256": "d7efce2f153425aa793f82127046e486f00d7b65083f9eb5de5c5eefc3699191"
+          "sha256": "f74fafad53a611b0865df369db5ca41a7842ae68fb191279494fdd6d5f2c6018"
         },
         {
           "path": "Shaders/SomeEffects/DINN - GAUSS.fx",
-          "sha256": "e40fb5fa9e99e5906ddc42198bc6fd897d788873f1befc0c92eb91ce8463bb5f"
+          "sha256": "801fdc797c95190231d118729ca378bf6666a07d783c18dc4570cdc6519ec0b3"
         },
         {
           "path": "Shaders/SomeEffects/PixelShifter.fx",
-          "sha256": "e0dc6aca1049967f412cc69c07e663f7788fea4c8ff423ee51880cf37e2ffa00"
+          "sha256": "c5cc56c54207c255d877eb11cf5161404d03bffcaa4b85caadb385c20a7e4875"
         },
         {
           "path": "Shaders/vort_Shaders/vort_HDR.fx",
@@ -2693,7 +2693,7 @@
         },
         {
           "path": "Shaders/Warp-FX/BulgePinch.fx",
-          "sha256": "5f48c36e46e002423bc22f27132806b9d3ca898faf9d8a3d9df2c09c0129acdb"
+          "sha256": "d06c9bf9327ee2688dd383c295c94ed431ded719cc18a9ed48b86b9643f3012f"
         },
         {
           "path": "Shaders/Warp-FX/Drunk.fx",
@@ -2713,7 +2713,7 @@
         },
         {
           "path": "Shaders/Warp-FX/Swirl.fx",
-          "sha256": "ea9bb2610ad6f19a5f363d0e4d6b968b7c71ff1af6f9003fe63b1ee4f5656450"
+          "sha256": "891fb8faffdb99211b6162a5f69452d6f797be234ceba2df25106c0372e664bd"
         },
         {
           "path": "Shaders/Warp-FX/TinyPlanet.fx",
@@ -2721,7 +2721,7 @@
         },
         {
           "path": "Shaders/Warp-FX/ZigZag.fx",
-          "sha256": "894514f06969f34c8256f06c2910207847608adfecfbceafb20fa9ee9360f7d7"
+          "sha256": "32ddfe7545419ccb7b2bec172b857148d15ed225bbcd68a774707186e43c4f03"
         },
         {
           "path": "Shaders/Warp-FX/Include/BulgePinch.fxh",
@@ -2801,27 +2801,27 @@
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_FilmGrain.fx",
-          "sha256": "98a5e28a64541edd13435334d9931a98d16844f5943588b6edddda50fde150dc"
+          "sha256": "06a8991d8972557ab02a72f01c9e6963c85049d2e06054eb935ca7ee89a0b776"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_Framework.fx",
-          "sha256": "4bfa0a9703bfd0ee3035d53d31165818d43e11bb114c379c8b140533fc5e6c59"
+          "sha256": "60ff01500ec71b7e1ffe8c96eb050e388d4f5c6ec9479cadecdde3973a333bbf"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_LocalContrast.fx",
-          "sha256": "5ace573d3b66371a08b4c8e436097284859256d3e89b781f84388994fdd2a75b"
+          "sha256": "a9d02a068697333291f25f2a90b24d2d8c5c82eb79f99fd01299c2f5b83a7ec1"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_Motion.fx",
-          "sha256": "cb283053d9b74bad7e1114cd148f46b29bf93f5d3baf92975dfd9fea53648cdb"
+          "sha256": "46a3569be94619aab31eb21a2066f038731b238548d266a78450fa9c51f07949"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_PaletteMap.fx",
-          "sha256": "473f8b801aa9e50766121b494ac7cd096f565353f0c2a9973a2a81afe1e04f45"
+          "sha256": "800a6c14a3837ff87268776310c9f527c360e1a7b40c076ec13f3eb49019cb23"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_SSAO_History.fx",
-          "sha256": "cca1cd1eb0abb815577c5f0f0ba28e7dcb8161a68548a1fbf4e2e463b7483c2e"
+          "sha256": "33af23e8d078231523d1868cf6a3137661e1438be424cfea8534361d8760a11b"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_Sharpen.fx",
@@ -2829,31 +2829,31 @@
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_TurboGI.fx",
-          "sha256": "ceb60eebf78b1856bd3c70443a41670bacee423d8643a24f872cb386a475d694"
+          "sha256": "38c19020b7d511989ae0b415c9f6fb7b872dbd476ba6dbf924c0cf858d6da94e"
         },
         {
           "path": "Shaders/ZenteonFX/Zenteon_XenonBloom.fx",
-          "sha256": "17c53154e4617ff22330089f7529053d192c4778b5074144a0984a816cd9a1db"
+          "sha256": "2d3b8a930660d8a0fe8fb1047f73a7165c2916e1245cf0e203fb65b4772796aa"
         },
         {
           "path": "Shaders/ZN_FX/ZN_DAMP_RT.fx",
-          "sha256": "1ea7e0f32fe554289e6a2c6348d553accd8d1c4758c2eeaea52b44a857bcc6e5"
+          "sha256": "8e0e117f9c2211297a76c8e0078c30d3f46d855ba7ad204064d08bc7db9becc8"
         },
         {
           "path": "Shaders/ZN_FX/ZN_GI.fx",
-          "sha256": "3e878b78044082bb938c0c2795ed28d5e958a983a93589b34ca899799bb2b117"
+          "sha256": "6279ac754ad7fc415a4feb7b0f35af5c912804dfa5a56cdc5d862c24b0cb564d"
         },
         {
           "path": "Shaders/ZN_FX/ZN_LC.fx",
-          "sha256": "3a2f70a783380c111b0f8a7d5a845508fbcda20f06646412dda800770997bf88"
+          "sha256": "3379d45f3232deabb105e73176305e4c42d5d619af6e2a1ca8f17fa1df9d1a9f"
         },
         {
           "path": "Shaders/ZN_FX/ZN_Stylize.fx",
-          "sha256": "b69d445623627b1665c4ec2873562282f04d78fd34e929a7c45ecd52a0ebcda1"
+          "sha256": "cc60a31b8cc8083b6e19481a4bc8bd867408f101332dfec15796a2d3b941859a"
         },
         {
           "path": "Shaders/ZN_FX/ZN_WF.fx",
-          "sha256": "abc84c8d6fb6e2b13034be6b5e6b4b36bd9902ad4f3b17a7bf00447d8aac9442"
+          "sha256": "4ed1b1cdb446ff5c4e064e89b9b6cdc4b7f8bf5ddbc5abbee9f1fd10d6e0a987"
         },
         {
           "path": "Textures/Alchemy.png",
@@ -3089,7 +3089,7 @@
         },
         {
           "path": "Textures/PutYourEffectsLibraryFileHere.md",
-          "sha256": "19ee96e96192ceea7a519c0afae5e7ec3b469ade1b225fd8e71824ee276dfbe5"
+          "sha256": "846e23c13ebb2dd3a50bd372ceba1308487b79e68a0462259b276c6bd41751ee"
         },
         {
           "path": "Textures/QuarkBN.png",
@@ -3653,7 +3653,7 @@
         },
         {
           "path": "Textures/desktop.ini",
-          "sha256": "cd6b649232e834f8ccb9d7e09be585c78606c5d265c2c75969d32da0dd36d2d3"
+          "sha256": "513002e8fc9e5162aaa73cf99ddbe6aeff4c65fb6f28913302d7c29268687cba"
         },
         {
           "path": "Textures/dh_bluenoise.png",
