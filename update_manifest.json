@@ -5,7 +5,12 @@
     {
       "path": "translations.json",
       "type": "file",
-      "sha256": "68b6df5db21ef477bf1baad8cf56c152a8fef65f676fa4aa0a41c95202d1fea0"
+      "sha256": "2a9130f75c22feb2e74c17cac61d0d6dff48e876a7405fbf0db0ce8c4b13762f"
+    },
+    {
+      "path": "version.json",
+      "type": "file",
+      "sha256": "751b84319f7e959c8fc247fc498811068a97b8a2bc0f20c5e78b01aab5e449ce"
     },
     {
       "path": "injector.exe",
@@ -50,24 +55,8 @@
       "type": "dir",
       "files": [
         {
-          "path": "CHD.ini",
-          "sha256": "3bf502c5eb17347ec2786c492808ef951a0578c7da725044223df9596bfe19e1"
-        },
-        {
           "path": "EDH.ini",
           "sha256": "53548ead36d852cd75657a071ea41ae8a6c916c0dd6b58c019c215493c3cc5b7"
-        },
-        {
-          "path": "HD 3A.ini",
-          "sha256": "c8bdaa04d12f780445decb630ef0b6778fe80bf823f7b1b01dd009c277f883c4"
-        },
-        {
-          "path": "HD 明亮 Pro oil.ini",
-          "sha256": "3d2650e02d704f921386e4a01fe785ec39ba99194ed779f7be999cdc347e1ce7"
-        },
-        {
-          "path": "ZZZ3A -Pro.ini",
-          "sha256": "d8e05e2a68c9c32d621107bc78b20d4bfa08fe1d4a12e40dd17a3db593986460"
         },
         {
           "path": "focus.ini",
@@ -80,20 +69,9 @@
         {
           "path": "hazy.ini",
           "sha256": "1772ca17e1e03a7b4b953fdb5abfcbda76fe6adb4c23b18319bd862a498c2f4a"
-        },
-        {
-          "path": "hd.ini",
-          "sha256": "ae8285f9bf3feb2ab802597495468b08aa6b0a64339aa0142576c48dd34d211d"
-        },
-        {
-          "path": "夜店.ini",
-          "sha256": "58d7b681f4c13b20635f4ca52b2bfaec475090049dbf646786d693aea614e4de"
-        },
-        {
-          "path": "明亮Z -Pro.ini",
-          "sha256": "3a7a4fdbec369f06ad4e12d9667d3a925664795076341a2afff28eb18ada9973"
         }
-      ]
+      ],
+      "preserve_existing": true
     },
     {
       "path": "ReShade/reshade_shaders",
@@ -4639,7 +4617,8 @@
           "path": "Textures/ZenteonFX/temp.txt",
           "sha256": "f299a401e4eeffacdf5db8d1090cc4e9aecf30aa3107c82854d8b255c2beae75"
         }
-      ]
+      ],
+      "preserve_existing": true
     },
     {
       "path": "ReShade/sound",
@@ -4729,5 +4708,10 @@
         }
       ]
     }
-  ]
+  ],
+  "app": {
+    "version": "2.6.0.0",
+    "url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/update/ReShade_Launcher_2.6.0.0.zip",
+    "sha256": "c9bd0f5e565f0cf0d8a6f634c6c334a57c5d24269699ea13bdb24272e54004d5"
+  }
 }
