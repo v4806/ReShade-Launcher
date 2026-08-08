@@ -215,7 +215,15 @@
         "edit_config.dpi_enable": "替代此程序的高 DPI 缩放行为（由系统执行缩放，解决 UI 过小或模糊问题）",
         "edit_config.dpi_exe_hint": "目标 EXE: {exe}",
         "edit_config.dpi_no_exe": "（未指定 EXE 路径）",
-        "edit_config.dpi_error": "DPI 设置失败: {error}"
+        "edit_config.dpi_error": "DPI 设置失败: {error}",
+        "button.update": "更新",
+        "button.update.tooltip": "从 GitHub 仓库检测并更新组件与数据文件",
+        "update.confirm": "将从 GitHub 仓库检查并更新组件与数据文件，是否继续？",
+        "update.start": "正在检查更新...",
+        "update.fail": "更新失败：{msg}",
+        "update.no_update": "所有组件已是最新版本",
+        "update.done": "更新完成：更新 {count} 个文件，失败 {failed} 个",
+        "update.restart": "部分核心组件已更新，建议重启软件使更新生效"
     },
     "zh_TW": {
         "button.mods_folder": "mods安裝目錄",
@@ -428,7 +436,15 @@
         "shader.full_running": "正在部署完整著色器...",
         "shader.full_done": "完整著色器部署完成",
         "shader.full_failed": "完整著色器部署失敗",
-        "shader.no_zip": "未找到 full.zip，無法切換著色器模式。\n請確認安裝完整性。"
+        "shader.no_zip": "未找到 full.zip，無法切換著色器模式。\n請確認安裝完整性。",
+        "button.update": "更新",
+        "button.update.tooltip": "從 GitHub 倉庫偵測並更新元件與資料檔",
+        "update.confirm": "將從 GitHub 倉庫檢查並更新元件與資料檔，是否繼續？",
+        "update.start": "正在檢查更新...",
+        "update.fail": "更新失敗：{msg}",
+        "update.no_update": "所有元件皆為最新版本",
+        "update.done": "更新完成：更新 {count} 個檔案，失敗 {failed} 個",
+        "update.restart": "部分核心元件已更新，建議重新啟動軟體使更新生效"
     },
     "en_US": {
         "button.mods_folder": "Mods Folder",
@@ -641,7 +657,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "ja": {
         "button.mods_folder": "Modsフォルダ",
@@ -854,7 +878,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "ko": {
         "button.mods_folder": "Mods 폴더",
@@ -1067,7 +1099,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "fr": {
         "button.mods_folder": "Dossier des mods",
@@ -1280,7 +1320,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "de": {
         "button.mods_folder": "Mods-Ordner",
@@ -1489,7 +1537,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "es": {
         "button.mods_folder": "Carpeta de mods",
@@ -1698,7 +1754,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "pt": {
         "button.mods_folder": "Pasta de mods",
@@ -1907,7 +1971,15 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     },
     "ru": {
         "button.mods_folder": "Папка модов",
@@ -2120,6 +2192,14 @@
         "shader.full_running": "Deploying full shaders...",
         "shader.full_done": "Full shaders deployed",
         "shader.full_failed": "Failed to deploy full shaders",
-        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation."
+        "shader.no_zip": "full.zip not found. Cannot switch shader mode.\nPlease check installation.",
+        "button.update": "Update",
+        "button.update.tooltip": "Check and update components and data from GitHub repository",
+        "update.confirm": "Check and update components and data from GitHub repository. Continue?",
+        "update.start": "Checking for updates...",
+        "update.fail": "Update failed: {msg}",
+        "update.no_update": "All components are up to date",
+        "update.done": "Update complete: {count} files updated, {failed} failed",
+        "update.restart": "Some core components were updated. Please restart the app to apply changes."
     }
 }
