@@ -1,6 +1,10 @@
 # ── PyInstaller 打包产物 ──
 dist/
 build/
+# 顶层打包产物（冗余副本，正式产物在 dist/）
+_internal/
+ReShade Launcher Build.exe
+ReShade Debug.exe
 
 # ── Python 缓存/虚拟环境 ──
 __pycache__/
