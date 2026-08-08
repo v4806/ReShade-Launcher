@@ -95,7 +95,6 @@ def _find_window_by_pid(pid):
     user32.EnumWindows(callback, 0)
     return result[0]
 
-
 def start_center_loop(pid, duration_seconds=15, interval=0.15):
     """
     启动后台线程，持续居中指定 PID 的窗口。
@@ -109,11 +108,28 @@ def start_center_loop(pid, duration_seconds=15, interval=0.15):
         threading.Thread 对象，可调用 join() 等待结束
     """
     def _loop():
+        logger.info(f"[窗口居中] 等待 PID={pid} 的窗口出现...")
+        
+        # 1. 前置等待：持续检测直到窗口真正出现（设60秒超时防止死循环）
+        hwnd = 0
+        start_wait = time.time()
+        max_wait = 60  # 最多等待60秒
+        while time.time() - start_wait < max_wait:
+            hwnd = _find_window_by_pid(pid)
+            if hwnd != 0 and user32.IsWindowVisible(hwnd):
+                logger.info(f"[窗口居中] 窗口已出现 (HWND={hwnd})，开始计时 {duration_seconds} 秒")
+                break
+            time.sleep(interval)
+        else:
+            logger.warning(f"[窗口居中] 等待窗口超时 ({max_wait}秒)，放弃居中")
+            return
+
+        # 2. 找到窗口后，才开始计算居中结束时间
         end_time = time.time() + duration_seconds
         center_count = 0
-        logger.info(f"[窗口居中] 开始守护 PID={pid}，持续 {duration_seconds} 秒")
 
         while time.time() < end_time:
+            # 再次获取句柄（窗口可能被关闭或重建，但居中逻辑会尝试重定位）
             hwnd = _find_window_by_pid(pid)
             if hwnd != 0 and _center_window_once(hwnd):
                 center_count += 1

@@ -7,20 +7,16 @@
 # （增强：强制 ReShade64.dll 为注入列表首位 + 自动转换包含空格的路径为短路径名）
 # （优化：使用新版 injector.exe 集成启动逻辑，不再手动启动游戏）
 # （增强：返回 (game_pid, game_pid) 元组，game_pid 为实际游戏进程 PID）
-# （修改：XXMI模式直接启动XXMI Launcher，跳过注入器）
+# （说明：所有模式（含 XXMI）统一使用 injector.exe 注入）
 
 import os
 import sys
 import subprocess
-import shlex
-import threading
-import json
 import time
 import ctypes
 from ctypes import wintypes
 import urllib.request
 import tempfile
-import winreg
 # ---------- 进程树检测（依赖 pywin32，可选）----------
 try:
     import win32process
@@ -84,19 +80,6 @@ def _get_injector_path(script_dir):
             return secondary
 
     return None
-
-
-def load_version_config(script_dir):
-    """加载 version.json 配置文件（支持主目录及打包临时目录）"""
-    version_path = os.path.join(script_dir, "version.json")
-    if not os.path.exists(version_path) and hasattr(sys, '_MEIPASS'):
-        version_path = os.path.join(sys._MEIPASS, "version.json")
-    try:
-        with open(version_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"[注入启动] 加载 version.json 失败: {e}")
-        return {}
 
 
 def _normalize_path(path):
@@ -166,7 +149,7 @@ def validate_launch(config, script_dir):
     return True, ""
 
 
-def launch_game(config, script_dir, version_config):
+def launch_game(config, script_dir):
     """
     在后台线程中启动游戏（非阻塞）
     script_dir: 应用程序根目录（exe所在目录）
@@ -178,9 +161,12 @@ def launch_game(config, script_dir, version_config):
             
             # ========== 所有模式（含XXMI）统一使用 injector.exe 注入 ==========
             dll_paths = _build_dll_list(config, script_dir, check_exists=False)
-            dll_paths = [_normalize_path(p) for p in dll_paths]
             if not dll_paths:
                 print("[注入启动] 警告：没有需要注入的 DLL，将直接启动游戏而不注入")
+
+            # 日志显示可读的长路径；传给 injector 时转短路径（含空格路径避免解析失败）
+            log_dlls = [_normalize_path(p) for p in dll_paths]
+            injector_dlls = [_normalize_path(get_short_path(p)) for p in dll_paths]
 
             launch_program = config.get('launch_program') or config.get('game_dir')
             target_exe_name = config.get('game_exe_name') or os.path.basename(config.get('game_dir', ''))
@@ -198,12 +184,12 @@ def launch_game(config, script_dir, version_config):
             if not injector_path:
                 raise FileNotFoundError("找不到 injector.exe，请检查安装完整性")
 
-            injector_cmd = [injector_path] + dll_paths + [target_exe_name, full_cmdline]
+            injector_cmd = [injector_path] + injector_dlls + [target_exe_name, full_cmdline]
 
             # 优化日志输出，清晰分隔各部分
             print("[注入启动] ========== 注入器调用详情 ==========")
             print(f"[注入启动] 注入器路径: {injector_path}")
-            print(f"[注入启动] 待注入 DLL 列表: {dll_paths}")
+            print(f"[注入启动] 待注入 DLL 列表: {log_dlls}")
             print(f"[注入启动] 目标进程名: {target_exe_name}")
             print(f"[注入启动] 启动命令行: {full_cmdline}")
             print("[注入启动] ========================================")
@@ -251,14 +237,15 @@ def launch_game(config, script_dir, version_config):
 
 def _build_dll_list(config, script_dir, check_exists=False):
     """
-    根据配置构建需要注入的 DLL 文件列表（完整路径）
+    根据配置构建需要注入的 DLL 文件列表（完整长路径）
     ★ 强制 ReShade64.dll 为列表首位（使用 insert(0)）
-    ★ 自动转换包含空格的路径为短路径名，避免注入器解析失败
     注入顺序：
     1. ReShade64.dll       —— 始终在第一位
     2. d3d11.dll          —— 如果 config 中包含 'd3d11_path' 键
     3. 自定义 DLL 列表    —— 如果 config 中包含 'dll_files' 键
     如果 check_exists=True，返回的列表中只会包含实际存在的文件
+    （注：返回长路径，便于日志显示与存在性校验；
+     短路径转换仅在 launch_game 构造 injector 命令行时进行）
     """
     dlls = []
 
@@ -267,7 +254,6 @@ def _build_dll_list(config, script_dir, check_exists=False):
         reshade_path = os.path.join(script_dir, "ReShade", "ReShade64.dll")
         if not os.path.exists(reshade_path) and hasattr(sys, '_MEIPASS'):
             reshade_path = os.path.join(sys._MEIPASS, "ReShade", "ReShade64.dll")
-        reshade_path = get_short_path(reshade_path)
         if not check_exists or os.path.exists(reshade_path):
             dlls.insert(0, reshade_path)
             # print(f"[注入启动] 添加 ReShade64.dll (首位): {reshade_path}")
@@ -277,7 +263,6 @@ def _build_dll_list(config, script_dir, check_exists=False):
     # 2. 内置模式的 d3d11.dll
     if config.get('d3d11_path'):
         d3d11_path = config['d3d11_path']
-        d3d11_path = get_short_path(d3d11_path)
         if not check_exists or os.path.exists(d3d11_path):
             dlls.append(d3d11_path)
             # print(f"[注入启动] 添加 d3d11.dll: {d3d11_path}")
@@ -287,7 +272,6 @@ def _build_dll_list(config, script_dir, check_exists=False):
     # 3. 自定义 DLL 列表
     if config.get('dll_files'):
         for dll in config['dll_files']:
-            dll = get_short_path(dll)
             if not check_exists or os.path.exists(dll):
                 dlls.append(dll)
                 # print(f"[注入启动] 添加自定义 DLL: {dll}")

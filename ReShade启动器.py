@@ -13,11 +13,11 @@ import threading
 import subprocess
 import time
 from PyQt6.QtCore import Qt, QPoint, QRect, QFileInfo, QSize, QTimer, pyqtSignal
-from PyQt6.QtGui import (QColor, QPixmap, QPainter, QPen, QPainterPath,
-                         QTextLayout, QTextOption, QIcon, QFont, QBrush, QAction, QMovie)
+from PyQt6.QtGui import (QColor, QPixmap, QPainter, QPen,
+                         QIcon, QFont, QBrush, QAction, QMovie)
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel, QPushButton,
                              QToolButton, QMenu, QWidgetAction, QFileDialog, QFileIconProvider,
-                             QSizePolicy, QMessageBox, QDialog, QToolTip)
+                             QMessageBox, QDialog)
 
 # ---------- 导入翻译管理器 ----------
 from 翻译管理器 import _tr
@@ -42,12 +42,11 @@ except ImportError:
 # ----------------------------------------------------------------
 
 # 导入自定义模块
-from 自定义控件模块 import StrokeLabel_4, ConfigMenuItem, StrokePushButton, StrokeToolButton
+from 自定义控件模块 import StrokeLabel_4, ConfigMenuItem, StrokePushButton
 from 数据管理模块 import CustomDataManager
-from 配置管理器 import ConfigManager
+from 配置管理器 import ConfigManager, load_version_config, APP_VERSION
 from 缩放管理器 import get_scaling_manager
-from 注入启动模块 import validate_launch, launch_game, load_version_config
-import reshade配置文件
+from 注入启动模块 import validate_launch, launch_game
 from 窗口居中模块 import start_center_loop
 from 托盘区图标 import TrayIcon
 from 进程管理 import ProcessManager
@@ -68,13 +67,13 @@ class DesignedWindow(QMainWindow):
     game_launched_signal = pyqtSignal(int, int, str, str)
     game_exited_signal = pyqtSignal(int)
     game_window_detected_signal = pyqtSignal()
-    fix_shadow_complete = pyqtSignal()
+    
 
     def __init__(self):
         super().__init__()
         self.app_root = get_app_root()
-        self.original_window_width = 800
-        self.original_window_height = 600
+        self.original_window_width = 610
+        self.original_window_height = 500
 
         self.dragging = False
         self.drag_position = QPoint()
@@ -116,7 +115,7 @@ class DesignedWindow(QMainWindow):
         self.game_launched_signal.connect(self.on_game_launched)
         self.game_exited_signal.connect(self._on_game_exited)
         self.game_window_detected_signal.connect(self._on_game_window_detected)
-        self.fix_shadow_complete.connect(self._on_fix_shadow_complete)
+        
 
         self.setup_window_properties()
         self.setup_ui()
@@ -328,6 +327,78 @@ class DesignedWindow(QMainWindow):
         else:
             QMessageBox.warning(self, _tr("dialog.info"), _tr("shader.no_zip"))
 
+    def _on_update_clicked(self):
+        """更新按钮：选择要更新的组件后，从 GitHub 仓库检测并更新"""
+        from PyQt6.QtWidgets import QDialog
+        from 对话框模块 import UpdateSelectDialog
+        dlg = UpdateSelectDialog(self)
+        if dlg.exec() != QDialog.DialogCode.Accepted:
+            return
+        selected = dlg.get_selected()
+        if not selected:
+            self.launch_status_signal.emit(_tr("update.cancelled"))
+            return
+
+        self.button_update.setEnabled(False)
+        self.launch_status_signal.emit(_tr("update.start"))
+
+        from 更新管理器 import update_all
+
+        def _task():
+            try:
+                result = update_all(
+                    self.app_root,
+                    progress_cb=lambda m: self.launch_status_signal.emit(m),
+                    selected=selected
+                )
+            except Exception as e:
+                self.launch_status_signal.emit(_tr("update.fail", msg=str(e)))
+                self.button_update.setEnabled(True)
+                return
+
+            updated = result.get('updated', [])
+            failed = result.get('failed', [])
+            app_update = result.get('app_update') or {}
+
+            if not result.get('ok'):
+                msg = _tr("update.fail", msg=result.get('error', ''))
+            elif app_update.get('need_update'):
+                msg = _tr("update.app_ready", version=app_update.get('remote', ''))
+            elif not updated:
+                msg = _tr("update.no_update")
+            else:
+                msg = _tr("update.done", count=len(updated), failed=len(failed))
+
+            # 若更新了翻译文件，重新加载翻译供后续使用
+            if any('translations.json' in u for u in updated):
+                try:
+                    from 翻译管理器 import TranslationManager
+                    TranslationManager()._load_translations()
+                except Exception:
+                    pass
+                msg += "\n" + _tr("update.restart")
+
+            self.launch_status_signal.emit(msg)
+
+            # ---------- 新版本已下载：启动重启替换脚本，替换 exe/_internal 后自动重启 ----------
+            if app_update.get('need_update'):
+                from 更新管理器 import make_restart_bat
+                try:
+                    bat = make_restart_bat(self.app_root, app_update.get('stage_dir'))
+                    subprocess.Popen(
+                        [bat],
+                        cwd=os.path.dirname(bat),
+                        creationflags=CREATE_NO_WINDOW | 0x00000008)  # DETACHED_PROCESS
+                    QTimer.singleShot(1500, QApplication.quit)
+                except Exception as e:
+                    self.launch_status_signal.emit(_tr("update.fail", msg=f"重启更新失败: {e}"))
+                    self.button_update.setEnabled(True)
+                return
+
+            self.button_update.setEnabled(True)
+
+        threading.Thread(target=_task, daemon=True).start()
+
     def _open_mods_folder(self):
         """打开当前配置的 mods 文件夹（若不存在则创建，无法确定时让用户手动选择）"""
         folder = self._get_mods_folder_path()
@@ -372,15 +443,7 @@ class DesignedWindow(QMainWindow):
         except Exception as e:
             self.launch_status_signal.emit(f"打开文件夹失败: {e}")
 
-    def _on_fix_shadow_complete(self):
-        """修复阴影线程完成后的回调（主线程）"""
-        # 恢复按钮状态
-        self.button_2.setEnabled(True)
-        # 更新状态提示
-        self.launch_status_signal.emit(_tr("status.depth_toggled"))
-        # 延迟500ms后自动启动游戏
-        from PyQt6.QtCore import QTimer
-        QTimer.singleShot(500, self.on_button_7_clicked)
+
 
     # ---------- 获取应用程序默认图标 ----------
     def get_app_icon(self):
@@ -426,7 +489,7 @@ class DesignedWindow(QMainWindow):
         return False
 
     def _load_version_config(self):
-        return reshade配置文件.load_version_config(self.app_root)
+        return load_version_config(self.app_root)
 
     def load_and_launch_config(self, config_file):
         if not os.path.isabs(config_file):
@@ -472,9 +535,42 @@ class DesignedWindow(QMainWindow):
     def setup_window_properties(self):
         scaled_width = int(self.original_window_width * self.scale_factor)
         scaled_height = int(self.original_window_height * self.scale_factor)
-        self.setWindowTitle(_tr("main.title"))
+        self.setWindowTitle(f"{_tr('main.title')} v{APP_VERSION}")
         self.resize(scaled_width, scaled_height)
         self.setFixedSize(scaled_width, scaled_height)
+
+    def _create_action_button(self, text, x, y, w, h, tooltip_key, on_click):
+        """创建主界面统一风格的描边按钮（已缩放 + 国际化）"""
+        sf = self.scale_factor
+        btn = StrokePushButton(text, self.central_widget)
+        btn.setGeometry(int(x), int(y), int(w), int(h))
+        btn.set_stroke_properties(int(2 * sf), '#000000')
+        btn.setStyleSheet(f"""
+        QPushButton {{
+            background-color: rgba(85, 85, 127, 0.38);
+            color: #FFFFFF;
+            border-radius: {int(5 * sf)}px;
+            border: 3px solid #bababa;
+            padding: {int(5 * sf)}px;
+        }}
+        QPushButton:hover {{
+            background-color: rgba(0, 90, 158, 0.38);
+            color: #FFFFFF;
+        }}
+        QPushButton:pressed {{
+            background-color: rgba(0, 63, 107, 0.38);
+        }}
+        QPushButton:disabled {{
+            background-color: #555555;
+            color: #AAAAAA;
+        }}
+        """)
+        btn.setFont(QFont("Microsoft YaHei", max(1, int(12 * sf))))
+        btn.setToolTip(_tr(tooltip_key))
+        btn.setWindowOpacity(0.38)
+        btn.show()
+        btn.clicked.connect(on_click)
+        return btn
 
     def setup_ui(self):
         """设置UI界面 - 使用缩放系数调整所有尺寸，字体通过 QFont 设置"""
@@ -489,7 +585,7 @@ class DesignedWindow(QMainWindow):
         self.central_widget.setGeometry(0, 0, scaled_width, scaled_height)
 
         # 标签控件 1（背景图片深色遮罩）
-        label1_x, label1_y, label1_w, label1_h = self.scaling_manager.scale_rect(0, 0, 800, 605)
+        label1_x, label1_y, label1_w, label1_h = self.scaling_manager.scale_rect(0, 0, 740, 505)
         self.label_1 = QLabel('', self.central_widget)
         self.label_1.setGeometry(label1_x, label1_y, label1_w, label1_h)
         label1_padding = int(10 * self.scale_factor)
@@ -513,73 +609,16 @@ class DesignedWindow(QMainWindow):
         self.label_1.setWordWrap(False)
         self.label_1.show()
 
-        # 按钮 2 - 修复阴影颠倒
-        btn2_x, btn2_y, btn2_w, btn2_h = self.scaling_manager.scale_rect(490, 550, 160, 40)
-        self.button_2 = StrokePushButton(_tr('button.fix_shadow'), self.central_widget)
-        self.button_2.setGeometry(btn2_x, btn2_y, btn2_w, btn2_h)
-        self.button_2.set_stroke_properties(int(2 * self.scale_factor), '#000000')
         btn_border_radius = int(5 * self.scale_factor)
-        btn_padding = int(5 * self.scale_factor)
-        self.button_2.setStyleSheet(f"""
-        QPushButton {{
-            background-color: rgba(85, 85, 127, 0.38);
-            color: #FFFFFF;
-            border-radius: {btn_border_radius}px;
-            border: 3px solid #bababa;
-            padding: {btn_padding}px;
-        }}
-        QPushButton:hover {{
-            background-color: rgba(0, 90, 158, 0.38);
-            color: #FFFFFF;
-        }}
-        QPushButton:pressed {{
-            background-color: rgba(0, 63, 107, 0.38);
-        }}
-        QPushButton:disabled {{
-            background-color: #555555;
-            color: #AAAAAA;
-        }}
-        """)
-        btn_font = QFont("Microsoft YaHei", max(1, int(12 * self.scale_factor)))
-        self.button_2.setFont(btn_font)
-        self.button_2.setToolTip(_tr("button.fix_shadow.tooltip"))
-        self.button_2.setWindowOpacity(0.38)
-        self.button_2.show()
-        self.button_2.clicked.connect(self.on_button_2_clicked)
 
         # 按钮 3 - 添加游戏
-        btn3_x, btn3_y, btn3_w, btn3_h = self.scaling_manager.scale_rect(150, 550, 160, 40)
-        self.button_3 = StrokePushButton(_tr('button.add_game'), self.central_widget)
-        self.button_3.setGeometry(btn3_x, btn3_y, btn3_w, btn3_h)
-        self.button_3.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_3.setStyleSheet(f"""
-        QPushButton {{
-            background-color: rgba(85, 85, 127, 0.38);
-            color: #FFFFFF;
-            border-radius: {btn_border_radius}px;
-            border: 3px solid #bababa;
-            padding: {btn_padding}px;
-        }}
-        QPushButton:hover {{
-            background-color: rgba(0, 90, 158, 0.38);
-            color: #FFFFFF;
-        }}
-        QPushButton:pressed {{
-            background-color: rgba(0, 63, 107, 0.38);
-        }}
-        QPushButton:disabled {{
-            background-color: #555555;
-            color: #AAAAAA;
-        }}
-        """)
-        self.button_3.setFont(btn_font)
-        self.button_3.setToolTip(_tr("button.add_game.tooltip"))
-        self.button_3.setWindowOpacity(0.38)
-        self.button_3.show()
-        self.button_3.clicked.connect(self.on_button_3_clicked)
+        btn3_x, btn3_y, btn3_w, btn3_h = self.scaling_manager.scale_rect(150, 450, 160, 40)
+        self.button_3 = self._create_action_button(
+            _tr('button.add_game'), btn3_x, btn3_y, btn3_w, btn3_h,
+            'button.add_game.tooltip', self.on_button_3_clicked)
 
         # 标签控件 4 - 描边标签（初始文本留空，由状态更新）
-        label4_x, label4_y, label4_w, label4_h = self.scaling_manager.scale_rect(0, 0, 800, 550)
+        label4_x, label4_y, label4_w, label4_h = self.scaling_manager.scale_rect(0, 0, 740, 450)
         self.label_4 = StrokeLabel_4('', self.central_widget)
         self.label_4.set_stroke_properties(int(2 * self.scale_factor), '#000000')
         label4_font_size = max(1, int(14 * self.scale_factor))
@@ -630,69 +669,19 @@ class DesignedWindow(QMainWindow):
         self.label_4.show()
 
         # 按钮 5 - 强制关闭游戏
-        btn5_x, btn5_y, btn5_w, btn5_h = self.scaling_manager.scale_rect(320, 550, 160, 40)
-        self.button_5 = StrokePushButton(_tr('button.force_close'), self.central_widget)
-        self.button_5.setGeometry(btn5_x, btn5_y, btn5_w, btn5_h)
-        self.button_5.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_5.setStyleSheet(f"""
-        QPushButton {{
-            background-color: rgba(85, 85, 127, 0.38);
-            color: #FFFFFF;
-            border-radius: {btn_border_radius}px;
-            border: 3px solid #bababa;
-            padding: {btn_padding}px;
-        }}
-        QPushButton:hover {{
-            background-color: rgba(0, 90, 158, 0.38);
-            color: #FFFFFF;
-        }}
-        QPushButton:pressed {{
-            background-color: rgba(0, 63, 107, 0.38);
-        }}
-        QPushButton:disabled {{
-            background-color: #555555;
-            color: #AAAAAA;
-        }}
-        """)
-        self.button_5.setFont(btn_font)
-        self.button_5.setToolTip(_tr("button.force_close.tooltip"))
-        self.button_5.setWindowOpacity(0.38)
-        self.button_5.show()
-        self.button_5.clicked.connect(self.on_button_5_clicked)
+        btn5_x, btn5_y, btn5_w, btn5_h = self.scaling_manager.scale_rect(320, 450, 160, 40)
+        self.button_5 = self._create_action_button(
+            _tr('button.force_close'), btn5_x, btn5_y, btn5_w, btn5_h,
+            'button.force_close.tooltip', self.on_button_5_clicked)
 
         # 按钮 6 - 帮助（宽度改为60）
-        btn6_x, btn6_y, btn6_w, btn6_h = self.scaling_manager.scale_rect(660, 550, 60, 40)
-        self.button_6 = StrokePushButton(_tr('button.help'), self.central_widget)
-        self.button_6.setGeometry(btn6_x, btn6_y, btn6_w, btn6_h)
-        self.button_6.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_6.setStyleSheet(f"""
-        QPushButton {{
-            background-color: rgba(85, 85, 127, 0.38);
-            color: #FFFFFF;
-            border-radius: {btn_border_radius}px;
-            border: 3px solid #bababa;
-            padding: {btn_padding}px;
-        }}
-        QPushButton:hover {{
-            background-color: rgba(0, 90, 158, 0.38);
-            color: #FFFFFF;
-        }}
-        QPushButton:pressed {{
-            background-color: rgba(0, 63, 107, 0.38);
-        }}
-        QPushButton:disabled {{
-            background-color: #555555;
-            color: #AAAAAA;
-        }}
-        """)
-        self.button_6.setFont(btn_font)
-        self.button_6.setToolTip(_tr("button.help.tooltip"))
-        self.button_6.setWindowOpacity(0.38)
-        self.button_6.show()
-        self.button_6.clicked.connect(self.on_button_6_clicked)
+        btn6_x, btn6_y, btn6_w, btn6_h = self.scaling_manager.scale_rect(490, 450, 60, 40)
+        self.button_6 = self._create_action_button(
+            _tr('button.help'), btn6_x, btn6_y, btn6_w, btn6_h,
+            'button.help.tooltip', self.on_button_6_clicked)
 
         # 按钮 8 - 配置选择按钮（图标按钮）
-        btn8_x, btn8_y, btn8_w, btn8_h = self.scaling_manager.scale_rect(10, 550, 40, 40)
+        btn8_x, btn8_y, btn8_w, btn8_h = self.scaling_manager.scale_rect(10, 450, 40, 40)
         self.button_8 = QToolButton(self.central_widget)
         self.button_8.setGeometry(btn8_x, btn8_y, btn8_w, btn8_h)
         self.button_8.setIcon(self.get_arrow_icon())
@@ -724,142 +713,47 @@ class DesignedWindow(QMainWindow):
         self.button_8.clicked.connect(self.on_button_8_clicked)
 
         # 按钮 7 - 启动
-        btn7_x, btn7_y, btn7_w, btn7_h = self.scaling_manager.scale_rect(60, 550, 80, 40)
-        self.button_7 = StrokePushButton(_tr('button.launch'), self.central_widget)
-        self.button_7.setGeometry(btn7_x, btn7_y, btn7_w, btn7_h)
-        self.button_7.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_7.setStyleSheet(f"""
-        QPushButton {{
-            background-color: rgba(85, 85, 127, 0.38);
-            color: #FFFFFF;
-            border-radius: {btn_border_radius}px;
-            border: 3px solid #bababa;
-            padding: {btn_padding}px;
-        }}
-        QPushButton:hover {{
-            background-color: rgba(0, 90, 158, 0.38);
-            color: #FFFFFF;
-        }}
-        QPushButton:pressed {{
-            background-color: rgba(0, 63, 107, 0.38);
-        }}
-        QPushButton:disabled {{
-            background-color: #555555;
-            color: #AAAAAA;
-        }}
-        """)
-        self.button_7.setFont(btn_font)
-        self.button_7.setToolTip(_tr("button.launch.tooltip"))
-        self.button_7.setWindowOpacity(0.38)
-        self.button_7.show()
-        self.button_7.clicked.connect(self.on_button_7_clicked)
+        btn7_x, btn7_y, btn7_w, btn7_h = self.scaling_manager.scale_rect(60, 450, 80, 40)
+        self.button_7 = self._create_action_button(
+            _tr('button.launch'), btn7_x, btn7_y, btn7_w, btn7_h,
+            'button.launch.tooltip', self.on_button_7_clicked)
 
         # ---------- 新增：右上角“mod预设保存”按钮（已国际化）----------
         btn_text = _tr("button.save_mod_preset")
         new_btn_width = int(160 * self.scale_factor)
         new_btn_height = int(40 * self.scale_factor)
         window_width = int(self.original_window_width * self.scale_factor)
-        btn_top_x = window_width - new_btn_width - int(10 * self.scale_factor)
+        btn_top_x = window_width - new_btn_width - int(20 * self.scale_factor)
         btn_top_y = int(10 * self.scale_factor)
 
-        self.button_top_right = StrokePushButton(btn_text, self.central_widget)
-        self.button_top_right.setGeometry(btn_top_x, btn_top_y, new_btn_width, new_btn_height)
-        self.button_top_right.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_top_right.setStyleSheet(f"""
-            QPushButton {{
-                background-color: rgba(85, 85, 127, 0.38);
-                color: #FFFFFF;
-                border-radius: {int(5 * self.scale_factor)}px;
-                border: 3px solid #bababa;
-                padding: {int(5 * self.scale_factor)}px;
-            }}
-            QPushButton:hover {{
-                background-color: rgba(0, 90, 158, 0.38);
-                color: #FFFFFF;
-            }}
-            QPushButton:pressed {{
-                background-color: rgba(0, 63, 107, 0.38);
-            }}
-            QPushButton:disabled {{
-                background-color: #555555;
-                color: #AAAAAA;
-            }}
-        """)
-        btn_font_large = QFont("Microsoft YaHei", max(1, int(12 * self.scale_factor)))
-        self.button_top_right.setFont(btn_font_large)
-        self.button_top_right.setToolTip(_tr("button.save_mod_preset.tooltip"))
-        self.button_top_right.setWindowOpacity(0.38)
-        self.button_top_right.show()
-        self.button_top_right.clicked.connect(self.on_top_right_button_clicked)
+        self.button_top_right = self._create_action_button(
+            btn_text, btn_top_x, btn_top_y, new_btn_width, new_btn_height,
+            'button.save_mod_preset.tooltip', self.on_top_right_button_clicked)
 
         # ---------- 新增：mods安装目录按钮 ----------
         mods_btn_text = _tr("button.mods_folder")
         mods_btn_y = btn_top_y + new_btn_height + int(10 * self.scale_factor)  # 在预设按钮下方，间距10
 
-        self.button_mods_folder = StrokePushButton(mods_btn_text, self.central_widget)
-        self.button_mods_folder.setGeometry(btn_top_x, mods_btn_y, new_btn_width, new_btn_height)
-        self.button_mods_folder.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_mods_folder.setStyleSheet(f"""
-            QPushButton {{
-                background-color: rgba(85, 85, 127, 0.38);
-                color: #FFFFFF;
-                border-radius: {int(5 * self.scale_factor)}px;
-                border: 3px solid #bababa;
-                padding: {int(5 * self.scale_factor)}px;
-            }}
-            QPushButton:hover {{
-                background-color: rgba(0, 90, 158, 0.38);
-                color: #FFFFFF;
-            }}
-            QPushButton:pressed {{
-                background-color: rgba(0, 63, 107, 0.38);
-            }}
-            QPushButton:disabled {{
-                background-color: #555555;
-                color: #AAAAAA;
-            }}
-        """)
-        btn_font_large = QFont("Microsoft YaHei", max(1, int(12 * self.scale_factor)))
-        self.button_mods_folder.setFont(btn_font_large)
-        self.button_mods_folder.setToolTip(_tr("button.mods_folder.tooltip"))
-        self.button_mods_folder.setWindowOpacity(0.38)
-        self.button_mods_folder.show()
-        self.button_mods_folder.clicked.connect(self._open_mods_folder)
+        self.button_mods_folder = self._create_action_button(
+            mods_btn_text, btn_top_x, mods_btn_y, new_btn_width, new_btn_height,
+            'button.mods_folder.tooltip', self._open_mods_folder)
 
         # ---------- 着色器切换按钮 ----------
         shader_btn_text = _tr("button.shader_switch")
         shader_btn_y = mods_btn_y + new_btn_height + int(10 * self.scale_factor)
-        self.button_shader = StrokePushButton(shader_btn_text, self.central_widget)
-        self.button_shader.setGeometry(btn_top_x, shader_btn_y, new_btn_width, new_btn_height)
-        self.button_shader.set_stroke_properties(int(2 * self.scale_factor), '#000000')
-        self.button_shader.setStyleSheet(f"""
-            QPushButton {{
-                background-color: rgba(85, 85, 127, 0.38);
-                color: #FFFFFF;
-                border-radius: {int(5 * self.scale_factor)}px;
-                border: 3px solid #bababa;
-                padding: {int(5 * self.scale_factor)}px;
-            }}
-            QPushButton:hover {{
-                background-color: rgba(0, 90, 158, 0.38);
-                color: #FFFFFF;
-            }}
-            QPushButton:pressed {{
-                background-color: rgba(0, 63, 107, 0.38);
-            }}
-            QPushButton:disabled {{
-                background-color: #555555;
-                color: #AAAAAA;
-            }}
-        """)
-        self.button_shader.setFont(btn_font_large)
-        self.button_shader.setToolTip(_tr("button.shader_switch.tooltip"))
-        self.button_shader.setWindowOpacity(0.38)
-        self.button_shader.show()
-        self.button_shader.clicked.connect(self._on_shader_switch)
+        self.button_shader = self._create_action_button(
+            shader_btn_text, btn_top_x, shader_btn_y, new_btn_width, new_btn_height,
+            'button.shader_switch.tooltip', self._on_shader_switch)
+
+        # ---------- 更新按钮 ----------
+        update_btn_text = _tr("button.update")
+        update_btn_y = shader_btn_y + new_btn_height + int(10 * self.scale_factor)
+        self.button_update = self._create_action_button(
+            update_btn_text, btn_top_x, update_btn_y, new_btn_width, new_btn_height,
+            'button.update.tooltip', self._on_update_clicked)
 
         # ---------- 新增齿轮按钮（在帮助按钮右侧，已国际化）----------
-        gear_x, gear_y, gear_w, gear_h = self.scaling_manager.scale_rect(730, 550, 40, 40)
+        gear_x, gear_y, gear_w, gear_h = self.scaling_manager.scale_rect(560, 450, 40, 40)
         self.button_gear = StrokePushButton(" ", self.central_widget)
         self.button_gear.setGeometry(gear_x, gear_y, gear_w, gear_h)
         self.button_gear.set_stroke_properties(int(2 * self.scale_factor), '#000000')
@@ -895,37 +789,6 @@ class DesignedWindow(QMainWindow):
         from 对话框模块 import FileListDemoDialog
         dialog = FileListDemoDialog(self)
         dialog.exec()
-
-    # ---------- 齿轮按钮功能 ----------
-    def on_gear_button_clicked(self):
-        """齿轮按钮点击：弹出更换背景图片菜单"""
-        menu = QMenu(self)
-        menu_scale = self.scale_factor * 0.5
-        menu.setStyleSheet(f"""
-            QMenu {{
-                background-color: #2D2D30;
-                color: #FFFFFF;
-                border: 2px solid #555555;
-                border-radius: {int(10 * menu_scale)}px;
-                padding: {int(15 * menu_scale)}px {int(10 * menu_scale)}px;
-            }}
-            QMenu::item {{
-                background-color: transparent;
-                padding: {int(8 * menu_scale)}px {int(20 * menu_scale)}px;
-                border-radius: {int(4 * menu_scale)}px;
-                font-size: {int(16 * menu_scale * 2)}px;
-            }}
-            QMenu::item:selected {{
-                background-color: #3A3A3E;
-                border: 1px solid #555577;
-            }}
-        """)
-        menu.setMinimumWidth(int(200 * menu_scale * 2))
-        change_bg_action = QAction(_tr("menu.change_background"), self)
-        change_bg_action.triggered.connect(self.change_background_image)
-        menu.addAction(change_bg_action)
-        menu.popup(self.button_gear.mapToGlobal(self.button_gear.rect().bottomLeft()))
-
 
     # ---------- 更新启动状态文本框 ----------
     def update_launch_status_text(self, status):
@@ -1111,46 +974,7 @@ class DesignedWindow(QMainWindow):
         self.base_config_info = info_text
         self.label_4.setText(info_text)
 
-    def on_button_2_clicked(self):
-        """修复阴影颠倒：强制关闭游戏 → 切换深度参数 → 自动重启（全程后台执行）"""
-        # ---------- ✨ 用户手动切换配置，取消自动退出 ----------
-        self.launched_by_shortcut = False
-        # ----------------------------------------------------
-        if not self.current_config:
-            self.launch_status_signal.emit(_tr("status.error.no_config"))
-            return
 
-        # ---------- 获取当前游戏信息（快照）----------
-        config = self.current_config
-        game_exe_name = config.get('game_exe_name', '')
-        if not game_exe_name:
-            game_exe_name = os.path.basename(config.get('game_dir', ''))
-        game_dir = os.path.dirname(config.get('game_dir', ''))
-        game_pid = self.current_game_pid   # 若有记录PID则直接使用，可加速
-
-        # ---------- 界面反馈：禁用按钮，显示状态----------
-        self.button_2.setEnabled(False)
-        self.launch_status_signal.emit(_tr("status.terminating"))
-
-        # ---------- 启动后台工作线程（避免卡死）----------
-        def task():
-            # 1. 强制终结游戏进程（使用已知PID或进程名）
-            success = self.process_manager.terminate_game_process(
-                game_exe_name, game_dir, game_pid=game_pid
-            )
-            if success:
-                # 2. 等待进程完全退出（最多3秒）
-                for _ in range(15):
-                    if not ProcessManager.is_process_running(game_exe_name):
-                        break
-                    time.sleep(0.2)
-                # 3. 切换 ReShade 深度参数
-                reshade配置文件.toggle_depth_upside_down(game_dir, game_exe_name, self.app_root)
-            # 4. 发出完成信号（在主线程中重启游戏）
-            self.fix_shadow_complete.emit()
-
-        thread = threading.Thread(target=task, daemon=True)
-        thread.start()
 
     def on_button_3_clicked(self):
         """添加游戏按钮点击事件"""
@@ -1255,7 +1079,7 @@ class DesignedWindow(QMainWindow):
         self.launch_status_signal.emit(_tr("status.launching"))
         threading.Thread(
             target=self._launch_game_thread,
-            args=(self.current_config, self.app_root, self.version_config,
+            args=(self.current_config, self.app_root,
                 launch_id, game_exe_name),
             daemon=True
         ).start()
@@ -1275,7 +1099,7 @@ class DesignedWindow(QMainWindow):
         if self.tray_icon:
             self.tray_icon.update_icon()
 
-    def _launch_game_thread(self, config, script_dir, version_config, launch_id, game_exe_name):
+    def _launch_game_thread(self, config, script_dir, launch_id, game_exe_name):
         from 注入启动模块 import ensure_vc_redist
         def status_cb(msg):
             self.launch_status_signal.emit(msg)
@@ -1293,7 +1117,7 @@ class DesignedWindow(QMainWindow):
             # ❌ 已删除 ReShade 准备和清理的调用
             # 直接启动游戏，不再进行 ReShade 配置的备份、部署、恢复
 
-            result = launch_game(config, script_dir, version_config)
+            result = launch_game(config, script_dir)
             if result is not None:
                 root_pid, target_pid = result
                 if target_pid is not None:
@@ -1386,10 +1210,6 @@ class DesignedWindow(QMainWindow):
         重建配置菜单（仅构建 QMenu 对象，不弹出）
         当 force=True 时强制重建（忽略缓存状态）
         """
-        from 自定义控件模块 import ConfigMenuItem
-        from PyQt6.QtWidgets import QMenu, QWidgetAction
-        from PyQt6.QtGui import QFont
-
         # 删除旧菜单（如果有）
         if self.config_menu is not None:
             self.config_menu.deleteLater()
@@ -1506,25 +1326,6 @@ class DesignedWindow(QMainWindow):
             if not icon.isNull():
                 return icon
         return self.get_default_icon()
-
-    def get_exe_icon(self, exe_path):
-        """获取EXE文件图标"""
-        try:
-            if exe_path and os.path.exists(exe_path):
-                file_info = QFileInfo(exe_path)
-                icon_provider = QFileIconProvider()
-                icon = icon_provider.icon(file_info)
-                if icon.isNull():
-                    print(f"无法获取图标: {exe_path}")
-                    return self.get_default_icon()
-                print(f"成功获取EXE图标: {os.path.basename(exe_path)}")
-                return icon
-            else:
-                print(f"EXE文件不存在: {exe_path}")
-                return self.get_default_icon()
-        except Exception as e:
-            print(f"获取EXE图标失败: {e}")
-            return self.get_default_icon()
 
     def get_default_icon(self):
         """获取默认图标"""
@@ -1724,29 +1525,6 @@ class DesignedWindow(QMainWindow):
                 else:
                     self.show_message_box(_tr("dialog.error"), _tr("message.exe_invalid"))
                     return None
-        return None
-
-    def show_dll_file_dialog(self):
-        """显示dll文件选择器"""
-        print("显示dll文件选择器")
-        file_dialog = QFileDialog()
-        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
-        file_dialog.setNameFilter(f"{_tr('filter.dll')} (*.dll);;{_tr('filter.all')} (*.*)")
-        file_dialog.setWindowTitle(_tr("file_dialog.select_dll"))
-        if file_dialog.exec():
-            selected_files = file_dialog.selectedFiles()
-            valid_files = []
-            for file_path in selected_files:
-                if self.config_manager.validate_dll_file(file_path):
-                    valid_files.append(file_path)
-                else:
-                    print(f"跳过无效文件: {file_path}")
-            if valid_files:
-                print(f"选择的dll文件: {valid_files}")
-                return valid_files
-            else:
-                self.show_message_box(_tr("dialog.error"), _tr("message.dll_invalid"))
-                return None
         return None
 
     # ------------------------------------------------------------
@@ -2189,54 +1967,6 @@ class DesignedWindow(QMainWindow):
 
     def movable(self):
         return True
-
-    def handle_resize(self, event):
-        if not self.resizing or not self.resize_direction:
-            return
-        current_pos = event.globalPosition().toPoint()
-        delta = current_pos - self.resize_start_pos
-        new_geometry = QRect(self.resize_start_geometry)
-        direction = self.resize_direction
-        if 'left' in direction:
-            new_left = self.resize_start_geometry.left() + delta.x()
-            new_width = self.resize_start_geometry.width() - delta.x()
-            if new_width >= self.minimumWidth():
-                new_geometry.setLeft(new_left)
-                new_geometry.setWidth(new_width)
-        if 'right' in direction:
-            new_width = self.resize_start_geometry.width() + delta.x()
-            if new_width >= self.minimumWidth():
-                new_geometry.setWidth(new_width)
-        if 'top' in direction:
-            new_top = self.resize_start_geometry.top() + delta.y()
-            new_height = self.resize_start_geometry.height() - delta.y()
-            if new_height >= self.minimumHeight():
-                new_geometry.setTop(new_top)
-                new_geometry.setHeight(new_height)
-        if 'bottom' in direction:
-            new_height = self.resize_start_geometry.height() + delta.y()
-            if new_height >= self.minimumHeight():
-                new_geometry.setHeight(new_height)
-        geometry_changed = False
-        if new_geometry.width() < self.minimumWidth():
-            if 'left' in direction:
-                new_geometry.setLeft(new_geometry.right() - self.minimumWidth())
-            else:
-                new_geometry.setWidth(self.minimumWidth())
-            geometry_changed = True
-        if new_geometry.height() < self.minimumHeight():
-            if 'top' in direction:
-                new_geometry.setTop(new_geometry.bottom() - self.minimumHeight())
-            else:
-                new_geometry.setHeight(self.minimumHeight())
-            geometry_changed = True
-        self.setGeometry(new_geometry)
-        if geometry_changed:
-            self.resize_start_geometry = self.geometry()
-            self.resize_start_pos = current_pos
-        elif new_geometry != self.resize_start_geometry:
-            self.resize_start_geometry = new_geometry
-            self.resize_start_pos = current_pos
 
     # ---------- 托盘图标相关方法 ----------
     def _init_tray_icon(self):

@@ -5,8 +5,37 @@
 import os
 import json
 import sys
-from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+# ---------------- 应用版本信息（写进启动器内部；打包时同步注入 exe 资源）----------------
+APP_NAME = "ReShade Launcher"
+APP_VERSION = "2.6.1"
+APP_IDENTIFIER = "ReShade-Launcher-RUA-RUA_v2.6"
+
+
+def load_version_config(app_root: str) -> dict:
+    """
+    加载 version.json 配置文件
+    支持打包环境：优先从 app_root 查找，若不存在且处于打包状态，
+    则从 sys._MEIPASS 临时目录查找。
+    """
+    candidates = []
+    candidates.append(os.path.join(app_root, "version.json"))
+
+    if hasattr(sys, '_MEIPASS'):
+        candidates.append(os.path.join(sys._MEIPASS, "version.json"))
+
+    for path in candidates:
+        if os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"[配置管理器] 加载 version.json 失败 ({path}): {e}")
+
+    print("[配置管理器] 警告：无法找到 version.json，将使用空配置")
+    return {}
+
 
 # 桌面快捷方式依赖（可选）
 try:
@@ -144,65 +173,6 @@ class ConfigManager:
             'Endfield': 'EFMI'
         }
         return mapping.get(game_name)
-
-    def _update_xxmi_config_json(self, xxmi_exe_path: str, module: str, enable_reshade: bool):
-        """
-        修改 XXMI Launcher Config.json 文件，为指定模块设置 extra_libraries 并启用
-        :param xxmi_exe_path: XXMI Launcher.exe 的完整路径
-        :param module: MI模块名，如 EFMI
-        :param enable_reshade: 是否启用 ReShade（决定 extra_libraries 是否包含 ReShade64.dll）
-        """
-        # 定位配置文件：xxmi_exe_path 位于 .../Resources/Bin/XXMI Launcher.exe，配置文件位于 .../XXMI Launcher Config.json
-        xxmi_root = os.path.dirname(os.path.dirname(os.path.dirname(xxmi_exe_path)))  # 向上三级：Bin -> Resources -> XXMI根目录
-        config_path = os.path.join(xxmi_root, "XXMI Launcher Config.json")
-        if not os.path.exists(config_path):
-            print(f"[配置管理器] 警告：找不到 XXMI 配置文件 {config_path}，跳过修改")
-            return
-
-        try:
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-        except Exception as e:
-            print(f"[配置管理器] 读取 XXMI 配置文件失败: {e}")
-            return
-
-        # 定位到 Importers.模块.Importer
-        importers = config.get("Importers", {})
-        if module not in importers:
-            print(f"[配置管理器] 警告：XXMI 配置中没有模块 {module}，跳过修改")
-            return
-
-        importer = importers[module].get("Importer", {})
-        if not importer:
-            return
-
-        # --- 构造 extra_libraries 字符串，保留单个反斜杠 ---
-        reshade_dll_path = os.path.join(self.base_dir, "ReShade", "ReShade64.dll")
-        d3d11_dll_path = os.path.join(xxmi_root, module, "d3d11.dll")
-
-        # 确保路径使用 Windows 反斜杠（但保留单个反斜杠）
-        reshade_dll_path = reshade_dll_path.replace('/', '\\')
-        d3d11_dll_path = d3d11_dll_path.replace('/', '\\')
-
-        # 根据 enable_reshade 决定内容，使用换行符分隔
-        if enable_reshade:
-            extra_libs = reshade_dll_path + "\n" + d3d11_dll_path
-        else:
-            extra_libs = d3d11_dll_path
-
-        # 更新字段
-        importer["extra_libraries"] = extra_libs
-        importer["extra_libraries_enabled"] = True
-
-        # 写回文件，json.dump 会自动将 \ 转义为 \\，将换行符保留为 \n
-        try:
-            with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump(config, f, ensure_ascii=False, indent=4)
-            print(f"[配置管理器] 已更新 XXMI 配置文件: {config_path}")
-            # 调试输出，显示实际写入的 extra_libraries 原始字符串
-            print(f"[配置管理器] extra_libraries 原始内容: {repr(extra_libs)}")
-        except Exception as e:
-            print(f"[配置管理器] 写入 XXMI 配置文件失败: {e}")
 
     def save_xxmi_config(
         self, 
@@ -428,10 +398,6 @@ class ConfigManager:
         except Exception as e:
             print(f"打开目录失败: {e}")
     
-    def get_mod_loader_path(self, game_name: str) -> str:
-        """获取mod加载器目录路径"""
-        return os.path.join(self.mod_loader_dir, game_name)
-    
     def _save_json(self, file_path: str, data: Dict):
         """保存JSON文件"""
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -448,18 +414,6 @@ class ConfigManager:
             print(f"加载JSON文件失败: {e}")
             return None
     
-    def check_and_create_mod_loader_dir(self, game_name: str) -> bool:
-        """检查并创建mod加载器目录"""
-        game_mod_dir = os.path.join(self.mod_loader_dir, game_name)
-        if os.path.exists(game_mod_dir):
-            return True
-        try:
-            os.makedirs(game_mod_dir, exist_ok=True)
-            return False
-        except Exception as e:
-            print(f"创建目录失败: {e}")
-            return False
-
     # ---------- 桌面快捷方式创建 ----------
     def create_desktop_shortcut(self, config_name: str, display_name: str = None) -> bool:
         """

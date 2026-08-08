@@ -17,7 +17,7 @@ import subprocess
 import threading
 import time
 import sys
-from typing import List, Optional, Dict, Tuple
+from typing import List, Optional, Dict
 
 if sys.platform == "win32":
     try:
@@ -39,10 +39,6 @@ class ProcessManager:
         self._lock = threading.Lock()
         self._process_tree_cache = None
         self._cache_time = 0
-
-    def get_all_launched_processes(self) -> List[dict]:
-        with self._lock:
-            return self._launched_processes.copy()
 
     @staticmethod
     def is_process_running(process_name: str) -> bool:
@@ -193,13 +189,6 @@ class ProcessManager:
                 "game_dir": game_dir
             })
             print(f"[进程管理] 已注册根进程: PID={root_pid}, 目标PID={target_pid}, EXE={game_exe_name}, DIR={game_dir}")
-
-    def _get_root_pid_by_game(self, game_exe_name: str, game_dir: str) -> Optional[int]:
-        with self._lock:
-            for p in self._launched_processes:
-                if p["game_exe_name"] == game_exe_name and p["game_dir"] == game_dir:
-                    return p["root_pid"]
-        return None
 
     def _get_game_pid_from_root(self, root_pid: int, game_exe_name: str) -> Optional[int]:
         all_pids = self._get_all_child_pids(root_pid)

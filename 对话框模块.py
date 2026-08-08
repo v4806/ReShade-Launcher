@@ -11,16 +11,16 @@ import os
 import sys
 import winreg
 from PyQt6.QtCore import Qt, QSettings, QSize, QFileInfo, pyqtSignal, QThread
-from PyQt6.QtGui import QIcon, QPixmap, QFont, QPainter, QColor, QMouseEvent, QFontMetrics, QPainterPath, QPen, QMovie
+from PyQt6.QtGui import QIcon, QPixmap, QFont, QPainter, QColor, QFontMetrics, QPainterPath, QPen, QMovie
 from PyQt6.QtWidgets import (QWidget, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
                              QListWidget, QListWidgetItem, QFileDialog, QMessageBox,
-                             QCheckBox, QGroupBox, QLineEdit, QFormLayout, QGridLayout,
+                             QCheckBox, QGroupBox, QLineEdit, QFormLayout,
                              QFileIconProvider, QComboBox, QTextEdit, QApplication,
-                             QStyleOptionButton, QStyle, QSizePolicy)
+                             QSizePolicy)
 from typing import List, Optional, Dict, Any
 
 from 翻译管理器 import _tr
-from 自定义控件模块 import StrokeLabel_4, StrokePushButton, StrokeToolButton
+from 自定义控件模块 import StrokeLabel_4, StrokePushButton
 from mod预设保存 import Worker
 from 数据管理模块 import CustomDataManager   # 新增导入
 
@@ -488,20 +488,10 @@ class EditConfigDialog(StyledDialog):
     def setup_ui(self):
         sf = self.scale_factor
         layout = QVBoxLayout(self)
-        layout.setSpacing(max(1, int(10 * sf)))
+        layout.setSpacing(max(1, int(6 * sf)))
         layout.setContentsMargins(max(1, int(5 * sf)), max(1, int(5 * sf)),
                                   max(1, int(5 * sf)), max(1, int(5 * sf)))
 
-        # 标题（描边标签）—— 原始已有，保留不变
-        title_label = StrokeLabel_4(_tr("edit_config.title", name=self.config_name), self)
-        title_label.set_stroke_properties(int(2 * sf), '#000000')
-        title_label.setStyleSheet("color: #FFFFFF; font-weight: bold; background-color: transparent;")
-        title_font = QFont()
-        title_font.setPointSize(max(1, int(20 * sf)))
-        title_font.setBold(True)
-        title_label.setFont(title_font)
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(title_label)
 
         # ========== 图标预览区域（使用 StrokeGroupBox，标题描边）==========
         icon_group = StrokeGroupBox(_tr("edit_config.icon_group"), self,
@@ -513,20 +503,20 @@ class EditConfigDialog(StyledDialog):
                 font-weight: bold;
                 border: 2px solid #555555;
                 border-radius: {max(1, int(8 * sf))}px;
-                margin-top: {max(1, int(10 * sf))}px;
-                padding-top: {max(1, int(15 * sf))}px;
+                margin-top: {max(1, int(8 * sf))}px;
+                padding-top: {max(1, int(8 * sf))}px;
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        group_font = QFont()
-        group_font.setPointSize(max(1, int(16 * sf)))
-        group_font.setBold(True)
-        icon_group.setFont(group_font)
+        small_group_font = QFont()
+        small_group_font.setPointSize(max(1, int(13 * sf)))
+        small_group_font.setBold(True)
+        icon_group.setFont(small_group_font)
 
         icon_layout = QHBoxLayout()
 
         self.icon_label = QLabel(self)
-        self.icon_label.setFixedSize(max(1, int(80 * sf)), max(1, int(80 * sf)))
+        self.icon_label.setFixedSize(max(1, int(48 * sf)), max(1, int(48 * sf)))
         self.icon_label.setStyleSheet(f"""
             QLabel {{
                 border: 3px solid #555555;
@@ -541,12 +531,12 @@ class EditConfigDialog(StyledDialog):
         icon_layout.addStretch()
 
         icon_btn_layout = QVBoxLayout()
-        icon_btn_layout.setSpacing(max(1, int(10 * sf)))
+        icon_btn_layout.setSpacing(max(1, int(6 * sf)))
 
         change_icon_btn = StrokePushButton(_tr("edit_config.change_icon"), self)
         change_icon_btn.set_stroke_properties(int(2 * sf), '#000000')
         change_icon_btn.setMinimumSize(max(1, int(120 * sf)), max(1, int(35 * sf)))
-        change_icon_btn.setFixedHeight(max(1, int(35 * sf)))
+        change_icon_btn.setFixedHeight(max(1, int(26 * sf)))
         change_icon_btn.setStyleSheet(f"""
             QPushButton {{
                 background-color: rgba(85, 85, 127, 0.5);
@@ -572,7 +562,7 @@ class EditConfigDialog(StyledDialog):
         reset_icon_btn = StrokePushButton(_tr("edit_config.reset_icon"), self)
         reset_icon_btn.set_stroke_properties(int(2 * sf), '#000000')
         reset_icon_btn.setMinimumSize(max(1, int(120 * sf)), max(1, int(35 * sf)))
-        reset_icon_btn.setFixedHeight(max(1, int(35 * sf)))
+        reset_icon_btn.setFixedHeight(max(1, int(26 * sf)))
         reset_icon_btn.setStyleSheet(change_icon_btn.styleSheet())
         reset_icon_btn.setFont(btn_font)
         reset_icon_btn.clicked.connect(self.reset_icon)
@@ -595,34 +585,34 @@ class EditConfigDialog(StyledDialog):
                 font-weight: bold;
                 border: 2px solid #555555;
                 border-radius: {max(1, int(8 * sf))}px;
-                margin-top: {max(1, int(10 * sf))}px;
-                padding-top: {max(1, int(15 * sf))}px;
+                margin-top: {max(1, int(8 * sf))}px;
+                padding-top: {max(1, int(8 * sf))}px;
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        name_group.setFont(group_font)
+        name_group.setFont(small_group_font)
 
         name_layout = QVBoxLayout()
-        name_layout.setContentsMargins(max(1, int(15 * sf)), max(1, int(15 * sf)),
-                                       max(1, int(15 * sf)), max(1, int(15 * sf)))
+        name_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
+                                       max(1, int(8 * sf)), max(1, int(8 * sf)))
 
         self.name_edit = QLineEdit(self)
         self.name_edit.setText(self.custom_data.get('display_name', self.config_name))
-        self.name_edit.setFixedHeight(max(1, int(35 * sf)))
+        self.name_edit.setFixedHeight(max(1, int(28 * sf)))
         self.name_edit.setStyleSheet(f"""
             QLineEdit {{
                 background-color: #2D2D30;
                 color: #FFFFFF;
                 border: 2px solid #555555;
                 border-radius: {max(1, int(5 * sf))}px;
-                padding: {max(1, int(5 * sf))}px;
+                padding: {max(1, int(3 * sf))}px;
             }}
             QLineEdit:focus {{
                 border: 2px solid #82FF55;
             }}
         """)
         edit_font = QFont()
-        edit_font.setPointSize(max(1, int(16 * sf)))
+        edit_font.setPointSize(max(1, int(12 * sf)))
         self.name_edit.setFont(edit_font)
         name_layout.addWidget(self.name_edit)
         name_group.setLayout(name_layout)
@@ -643,10 +633,10 @@ class EditConfigDialog(StyledDialog):
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        program_group.setFont(group_font)
+        program_group.setFont(small_group_font)
 
         form_layout = QFormLayout()
-        form_layout.setSpacing(max(1, int(10 * sf)))
+        form_layout.setSpacing(max(1, int(8 * sf)))
         form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
 
         # 创建三个描边标签
@@ -678,7 +668,7 @@ class EditConfigDialog(StyledDialog):
         # 启动程序行
         self.launch_program_edit = QLineEdit(self)
         self.launch_program_edit.setText(self.config_data.get('launch_program', ''))
-        self.launch_program_edit.setFixedHeight(max(1, int(30 * sf)))
+        self.launch_program_edit.setFixedHeight(max(1, int(26 * sf)))
         self.launch_program_edit.setStyleSheet(f"""
             QLineEdit {{
                 background-color: #2D2D30;
@@ -690,7 +680,7 @@ class EditConfigDialog(StyledDialog):
         """)
         launch_program_btn = StrokePushButton(_tr("edit_config.browse"), self)
         launch_program_btn.set_stroke_properties(int(2 * sf), '#000000')
-        launch_program_btn.setFixedHeight(max(1, int(30 * sf)))
+        launch_program_btn.setFixedHeight(max(1, int(26 * sf)))
         launch_program_btn.setFixedWidth(max(1, int(60 * sf)))
         launch_program_btn.setStyleSheet(f"""
             QPushButton {{
@@ -714,11 +704,11 @@ class EditConfigDialog(StyledDialog):
         # 注入目标程序行
         self.target_program_edit = QLineEdit(self)
         self.target_program_edit.setText(self.config_data.get('target_program', ''))
-        self.target_program_edit.setFixedHeight(max(1, int(30 * sf)))
+        self.target_program_edit.setFixedHeight(max(1, int(26 * sf)))
         self.target_program_edit.setStyleSheet(self.launch_program_edit.styleSheet())
         target_program_btn = StrokePushButton(_tr("edit_config.browse"), self)
         target_program_btn.set_stroke_properties(int(2 * sf), '#000000')
-        target_program_btn.setFixedHeight(max(1, int(30 * sf)))
+        target_program_btn.setFixedHeight(max(1, int(26 * sf)))
         target_program_btn.setFixedWidth(max(1, int(60 * sf)))
         target_program_btn.setStyleSheet(launch_program_btn.styleSheet())
         target_program_btn.clicked.connect(self._browse_target_program)
@@ -731,7 +721,7 @@ class EditConfigDialog(StyledDialog):
         # 启动参数行
         self.launch_args_edit = QLineEdit(self)
         self.launch_args_edit.setText(self.config_data.get('launch_args', ''))
-        self.launch_args_edit.setFixedHeight(max(1, int(30 * sf)))
+        self.launch_args_edit.setFixedHeight(max(1, int(26 * sf)))
         self.launch_args_edit.setStyleSheet(self.launch_program_edit.styleSheet())
         form_layout.addRow(args_label, self.launch_args_edit)
 
@@ -753,11 +743,11 @@ class EditConfigDialog(StyledDialog):
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        dll_group.setFont(group_font)
+        dll_group.setFont(small_group_font)
 
         dll_layout = QVBoxLayout()
-        dll_layout.setContentsMargins(max(1, int(10 * sf)), max(1, int(10 * sf)),
-                                       max(1, int(10 * sf)), max(1, int(10 * sf)))
+        dll_layout.setContentsMargins(max(1, int(5 * sf)), max(1, int(5 * sf)),
+                                       max(1, int(5 * sf)), max(1, int(5 * sf)))
         dll_layout.setSpacing(max(1, int(6 * sf)))
 
         # 可滚动的 DLL 列表区域
@@ -779,7 +769,7 @@ class EditConfigDialog(StyledDialog):
                 border-radius: {max(1, int(4 * sf))}px;
             }}
         """)
-        self.dll_scroll.setMinimumHeight(max(1, int(60 * sf)))
+        self.dll_scroll.setMinimumHeight(max(1, int(80 * sf)))
 
         self.dll_list_widget = QWidget()
         self.dll_list_widget.setStyleSheet("background-color: transparent;")
@@ -840,11 +830,11 @@ class EditConfigDialog(StyledDialog):
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        center_group.setFont(group_font)
+        center_group.setFont(small_group_font)
 
         center_layout = QVBoxLayout()
-        center_layout.setContentsMargins(max(1, int(15 * sf)), max(1, int(12 * sf)),
-                                         max(1, int(15 * sf)), max(1, int(12 * sf)))
+        center_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
+                                         max(1, int(8 * sf)), max(1, int(8 * sf)))
         center_layout.setSpacing(max(1, int(8 * sf)))
 
         # 第一行：复选框（使用普通 QCheckBox 避免 StrokeCheckBox 裁剪问题）
@@ -873,7 +863,7 @@ class EditConfigDialog(StyledDialog):
             }}
         """)
         center_checkbox_font = QFont()
-        center_checkbox_font.setPointSize(max(1, int(12 * sf)))
+        center_checkbox_font.setPointSize(max(1, int(11 * sf)))
         self.center_checkbox.setFont(center_checkbox_font)
         center_enabled = self.config_data.get('force_center_window', False)
         self.center_checkbox.setChecked(center_enabled)
@@ -901,7 +891,7 @@ class EditConfigDialog(StyledDialog):
         self.center_duration_spin.setRange(5, 120)
         self.center_duration_spin.setValue(self.config_data.get('center_window_duration', 15))
         self.center_duration_spin.setSuffix(" " + _tr("edit_config.center_seconds"))
-        self.center_duration_spin.setFixedHeight(max(1, int(28 * sf)))
+        self.center_duration_spin.setFixedHeight(max(1, int(24 * sf)))
         self.center_duration_spin.setFixedWidth(max(1, int(90 * sf)))
         self.center_duration_spin.setStyleSheet(f"""
             QSpinBox {{
@@ -949,11 +939,11 @@ class EditConfigDialog(StyledDialog):
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        dpi_group.setFont(group_font)
+        dpi_group.setFont(small_group_font)
 
         dpi_layout = QVBoxLayout()
-        dpi_layout.setContentsMargins(max(1, int(15 * sf)), max(1, int(12 * sf)),
-                                      max(1, int(15 * sf)), max(1, int(12 * sf)))
+        dpi_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
+                                      max(1, int(8 * sf)), max(1, int(8 * sf)))
         dpi_layout.setSpacing(max(1, int(8 * sf)))
 
         from PyQt6.QtWidgets import QCheckBox as PlainCheckBox
@@ -981,7 +971,7 @@ class EditConfigDialog(StyledDialog):
             }}
         """)
         dpi_checkbox_font = QFont()
-        dpi_checkbox_font.setPointSize(max(1, int(12 * sf)))
+        dpi_checkbox_font.setPointSize(max(1, int(11 * sf)))
         self.dpi_checkbox.setFont(dpi_checkbox_font)
         # 从注册表读取当前 DPI 状态
         self.dpi_checkbox.setChecked(self._dpi_enabled)
@@ -1226,7 +1216,7 @@ class EditConfigDialog(StyledDialog):
 
         dll_edit = QLineEdit(self)
         dll_edit.setText(dll_path)
-        dll_edit.setFixedHeight(max(1, int(26 * sf)))
+        dll_edit.setFixedHeight(max(1, int(22 * sf)))
         dll_edit.setStyleSheet(f"""
             QLineEdit {{
                 background-color: #2D2D30;
@@ -1974,10 +1964,6 @@ class QuestionDialog(StyledDialog):
         self.setStyleSheet("background-color: transparent;")
 
 # ========== 修改后：mod切换参数保存窗口（集成外部脚本，已国际化） ==========
-from PyQt6.QtCore import QThread, pyqtSignal
-from PyQt6.QtWidgets import QFileDialog, QMessageBox
-from mod预设保存 import Worker  # 导入外部脚本的工作类
-
 class WorkerThread(QThread):
     """后台工作线程，执行 Worker.run() 并将日志通过信号发送"""
     log_signal = pyqtSignal(str)
@@ -2295,3 +2281,170 @@ class FileListDemoDialog(StyledDialog):
                 return
 
         self.run_worker(d3dx_path, folder)
+
+
+# ----------------------------------------------------------------------
+# 更新组件选择对话框（按类型分组勾选）
+# ----------------------------------------------------------------------
+class UpdateSelectDialog(StyledDialog):
+    """更新选择对话框：按类型分组列出各组件，用户可勾选要检测/更新的组件"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(_tr("update.select_title"))
+        self.setWindowFlags(Qt.WindowType.Dialog)
+        self.setFixedSize(
+            max(1, int(560 * self.scale_factor)),
+            max(1, int(740 * self.scale_factor))
+        )
+        self.checkboxes = {}
+        self.setup_ui()
+
+    def setup_ui(self):
+        sf = self.scale_factor
+        layout = QVBoxLayout(self)
+        layout.setSpacing(max(1, int(12 * sf)))
+
+        # 标题
+        title = StrokeLabel_4(_tr("update.select_title"), self)
+        title.set_stroke_properties(int(2 * sf), '#000000')
+        title.setStyleSheet("color: #FFFFFF; font-weight: bold; background-color: transparent;")
+        title_font = QFont()
+        title_font.setPointSize(max(1, int(16 * sf)))
+        title_font.setBold(True)
+        title.setFont(title_font)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
+
+        # 分组滚动区域
+        from PyQt6.QtWidgets import QScrollArea
+        scroll = QScrollArea(self)
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet(f"""
+            QScrollArea {{
+                background-color: transparent;
+                border: 1px solid #555555;
+                border-radius: {max(1, int(6 * sf))}px;
+            }}
+            QScrollBar:vertical {{
+                width: {max(1, int(8 * sf))}px; background: #2D2D30;
+            }}
+            QScrollBar::handle:vertical {{
+                background: #555555; border-radius: {max(1, int(4 * sf))}px;
+            }}
+        """)
+        container = QWidget()
+        container.setStyleSheet("background-color: transparent;")
+        vbox = QVBoxLayout(container)
+        vbox.setSpacing(max(1, int(12 * sf)))
+
+        from 更新管理器 import UPDATE_GROUPS
+        self.checkboxes = {}
+        for group in UPDATE_GROUPS:
+            gb = QGroupBox(_tr(group['key']), container)
+            gb.setStyleSheet(f"""
+                QGroupBox {{
+                    color: #FFFFFF; font-weight: bold;
+                    border: 1px solid #555555;
+                    border-radius: {max(1, int(6 * sf))}px;
+                    margin-top: {max(1, int(16 * sf))}px;
+                    padding-top: {max(1, int(24 * sf))}px;
+                    background-color: rgba(45, 45, 48, 0.7);
+                }}
+            """)
+            group_font = QFont()
+            group_font.setPointSize(max(1, int(13 * sf)))
+            group_font.setBold(True)
+            gb.setFont(group_font)
+
+            gl = QVBoxLayout(gb)
+            gl.setSpacing(max(1, int(10 * sf)))
+            gl.setContentsMargins(max(1, int(14 * sf)), max(1, int(2 * sf)),
+                                  max(1, int(14 * sf)), max(1, int(12 * sf)))
+            for item in group['items']:
+                cb = QCheckBox(_tr(item['label']), gb)
+                cb.setChecked(True)
+                cb.setStyleSheet(f"""
+                    QCheckBox {{
+                        color: #FFFFFF; background-color: transparent;
+                        font-size: {max(1, int(12 * sf))}px;
+                        spacing: {max(1, int(8 * sf))}px;
+                    }}
+                    QCheckBox::indicator {{
+                        width: {max(1, int(16 * sf))}px; height: {max(1, int(16 * sf))}px;
+                    }}
+                    QCheckBox::indicator:checked {{
+                        background-color: #82FF55; border: 2px solid #82FF55;
+                        border-radius: {max(1, int(3 * sf))}px;
+                    }}
+                    QCheckBox::indicator:unchecked {{
+                        background-color: #555555; border: 2px solid #AAAAAA;
+                        border-radius: {max(1, int(3 * sf))}px;
+                    }}
+                """)
+                cb_font = QFont()
+                cb_font.setPointSize(max(1, int(12 * sf)))
+                cb.setFont(cb_font)
+                gl.addWidget(cb)
+                self.checkboxes[item['id']] = cb
+            vbox.addWidget(gb)
+        vbox.addStretch()
+        scroll.setWidget(container)
+        layout.addWidget(scroll)
+
+        # 按钮行：全选 / 全不选 | 确定 / 取消
+        btn_layout = QHBoxLayout()
+        btn_layout.setSpacing(max(1, int(10 * sf)))
+        btn_style = f"""
+            QPushButton {{
+                background-color: rgba(85, 85, 127, 0.38);
+                color: #FFFFFF;
+                border-radius: {max(1, int(5 * sf))}px;
+                border: 3px solid #bababa;
+                padding: {max(1, int(6 * sf))}px {max(1, int(18 * sf))}px;
+                font-size: {max(1, int(13 * sf))}px;
+            }}
+            QPushButton:hover {{ background-color: rgba(0, 90, 158, 0.38); }}
+        """
+        btn_font = QFont()
+        btn_font.setPointSize(max(1, int(13 * sf)))
+
+        select_all_btn = QPushButton(_tr("update.select_all"))
+        select_all_btn.setStyleSheet(btn_style)
+        select_all_btn.setFont(btn_font)
+        select_all_btn.clicked.connect(lambda: self._set_all(True))
+
+        select_none_btn = QPushButton(_tr("update.select_none"))
+        select_none_btn.setStyleSheet(btn_style)
+        select_none_btn.setFont(btn_font)
+        select_none_btn.clicked.connect(lambda: self._set_all(False))
+
+        ok_btn = QPushButton(_tr("dialog.ok"))
+        ok_btn.setStyleSheet(btn_style)
+        ok_btn.setFont(btn_font)
+        ok_btn.clicked.connect(self.accept)
+
+        cancel_btn = QPushButton(_tr("dialog.cancel"))
+        cancel_btn.setStyleSheet(btn_style)
+        cancel_btn.setFont(btn_font)
+        cancel_btn.clicked.connect(self.reject)
+
+        btn_layout.addWidget(select_all_btn)
+        btn_layout.addWidget(select_none_btn)
+        btn_layout.addStretch()
+        btn_layout.addWidget(ok_btn)
+        btn_layout.addWidget(cancel_btn)
+        layout.addLayout(btn_layout)
+
+        layout.setContentsMargins(max(1, int(20 * sf)), max(1, int(20 * sf)),
+                                  max(1, int(20 * sf)), max(1, int(20 * sf)))
+        self.setStyleSheet("background-color: transparent;")
+
+    def _set_all(self, checked: bool):
+        """全选 / 全不选"""
+        for cb in self.checkboxes.values():
+            cb.setChecked(checked)
+
+    def get_selected(self):
+        """返回勾选中的组件 id 列表"""
+        return [cid for cid, cb in self.checkboxes.items() if cb.isChecked()]
