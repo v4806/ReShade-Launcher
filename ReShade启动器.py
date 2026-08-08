@@ -67,6 +67,7 @@ class DesignedWindow(QMainWindow):
     game_launched_signal = pyqtSignal(int, int, str, str)
     game_exited_signal = pyqtSignal(int)
     game_window_detected_signal = pyqtSignal()
+    restart_quit_requested = pyqtSignal()
     
 
     def __init__(self):
@@ -115,6 +116,7 @@ class DesignedWindow(QMainWindow):
         self.game_launched_signal.connect(self.on_game_launched)
         self.game_exited_signal.connect(self._on_game_exited)
         self.game_window_detected_signal.connect(self._on_game_window_detected)
+        self.restart_quit_requested.connect(self._on_update_quit)
         
 
         self.setup_window_properties()
@@ -388,7 +390,7 @@ class DesignedWindow(QMainWindow):
                         [bat],
                         cwd=os.path.dirname(bat),
                         creationflags=CREATE_NO_WINDOW | 0x00000008)  # DETACHED_PROCESS
-                    QTimer.singleShot(1500, QApplication.quit)
+                    self.restart_quit_requested.emit()
                 except Exception as e:
                     self.launch_status_signal.emit(_tr("update.fail", msg=f"重启更新失败: {e}"))
                     self.button_update.setEnabled(True)
@@ -412,10 +414,15 @@ class DesignedWindow(QMainWindow):
                 cwd=os.path.dirname(exe),
                 creationflags=CREATE_NO_WINDOW | 0x00000008)  # DETACHED_PROCESS
             self.launch_status_signal.emit(_tr("update.restarting"))
-            QTimer.singleShot(1500, QApplication.quit)
+            # 通过跨线程信号在主线程执行延迟退出（QTimer 不能在后台线程触发）
+            self.restart_quit_requested.emit()
         except Exception as e:
             self.launch_status_signal.emit(_tr("update.fail", msg=f"自动重启失败: {e}"))
             self.button_update.setEnabled(True)
+
+    def _on_update_quit(self):
+        """更新后延迟退出（在主线程事件循环中执行，确保旧进程正常退出）"""
+        QTimer.singleShot(1200, QApplication.quit)
 
     def _open_mods_folder(self):
         """打开当前配置的 mods 文件夹（若不存在则创建，无法确定时让用户手动选择）"""
