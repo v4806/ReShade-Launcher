@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Tuple
 
 # ---------------- 应用版本信息（写进启动器内部；打包时同步注入 exe 资源）----------------
 APP_NAME = "ReShade Launcher"
-APP_VERSION = "2.6.2"
+APP_VERSION = "2.6.3"
 APP_IDENTIFIER = "ReShade-Launcher-RUA-RUA_v2.6"
 
 
