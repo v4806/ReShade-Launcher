@@ -1,0 +1,20 @@
+# ── PyInstaller 打包产物 ──
+dist/
+build/
+
+# ── Python 缓存/虚拟环境 ──
+__pycache__/
+*.pyc
+.venv/
+
+# ── 用户配置/运行数据（不入库） ──
+custom_data/
+launch_config/
+MOD_loader/
+
+# ── 日志 ──
+*.log
+
+# ── 系统文件 ──
+Thumbs.db
+.DS_Store

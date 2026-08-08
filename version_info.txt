@@ -1,0 +1,30 @@
+# UTF-8
+# 由 PyInstaller --version-file 使用：设置 exe 的文件/产品版本信息
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(2, 6, 1, 0),
+    prodvers=(2, 6, 1, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+  ),
+  kids=[
+    StringFileInfo([
+      StringTable(
+        '080404B0',
+        [StringStruct('CompanyName', 'v4806'),
+         StringStruct('FileDescription', 'ReShade Launcher - \u542f\u52a8\u5668'),
+         StringStruct('FileVersion', '2.6.1.0'),
+         StringStruct('InternalName', 'ReShade Launcher'),
+         StringStruct('OriginalFilename', 'ReShade Launcher.exe'),
+         StringStruct('ProductName', 'ReShade Launcher'),
+         StringStruct('ProductVersion', '2.6.1.0'),
+         StringStruct('LegalCopyright', 'Copyright (C) 2026 v4806')]
+      )
+    ]),
+    VarFileInfo([VarStruct('Translation', [2052, 1200])])
+  ]
+)
