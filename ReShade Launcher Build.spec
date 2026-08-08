@@ -5,7 +5,7 @@ a = Analysis(
     ['ReShade启动器.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('icon.ico', '.'), ('b.jpg', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

@@ -472,6 +472,8 @@ def make_restart_bat(app_root: str, stage_dir: str) -> str:
         'copy /y /q "%~dp0ReShade Launcher Build.exe" "%APP%\\ReShade Launcher Build.exe"',
         'copy /y /q "%~dp0ReShade Debug.exe" "%APP%\\ReShade Debug.exe"',
         'if exist "%~dp0translations.json" copy /y /q "%~dp0translations.json" "%APP%\\translations.json"',
+        'if exist "%~dp0icon.ico" copy /y /q "%~dp0icon.ico" "%APP%\\icon.ico"',
+        'if exist "%~dp0b.jpg" copy /y /q "%~dp0b.jpg" "%APP%\\b.jpg"',
         'if exist "%APP%\\_internal_old" rmdir /s /q "%APP%\\_internal_old"',
         'start "" "%APP%\\ReShade Launcher Build.exe"',
         'start "" cmd /c "ping 127.0.0.1 -n 4 >nul & rmdir /s /q \"%~dp0\""',

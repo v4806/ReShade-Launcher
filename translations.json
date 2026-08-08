@@ -244,7 +244,8 @@
         "update.item.readme": "说明文档 (README)",
         "update.select_all": "全选",
         "update.select_none": "全不选",
-        "update.cancelled": "已取消更新"
+        "update.cancelled": "已取消更新",
+        "update.restarting": "更新完成，正在重启启动器..."
     },
     "zh_TW": {
         "button.mods_folder": "mods安裝目錄",
@@ -486,7 +487,8 @@
         "update.item.readme": "說明文件 (README)",
         "update.select_all": "全選",
         "update.select_none": "全不選",
-        "update.cancelled": "已取消更新"
+        "update.cancelled": "已取消更新",
+        "update.restarting": "更新完成，正在重新啟動啟動器..."
     },
     "en_US": {
         "button.mods_folder": "Mods Folder",
@@ -728,7 +730,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "ja": {
         "button.mods_folder": "Modsフォルダ",
@@ -970,7 +973,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "ko": {
         "button.mods_folder": "Mods 폴더",
@@ -1212,7 +1216,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "fr": {
         "button.mods_folder": "Dossier des mods",
@@ -1454,7 +1459,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "de": {
         "button.mods_folder": "Mods-Ordner",
@@ -1692,7 +1698,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "es": {
         "button.mods_folder": "Carpeta de mods",
@@ -1930,7 +1937,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "pt": {
         "button.mods_folder": "Pasta de mods",
@@ -2168,7 +2176,8 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     },
     "ru": {
         "button.mods_folder": "Папка модов",
@@ -2410,6 +2419,7 @@
         "update.item.readme": "Documentation (README)",
         "update.select_all": "Select all",
         "update.select_none": "Select none",
-        "update.cancelled": "Update cancelled"
+        "update.cancelled": "Update cancelled",
+        "update.restarting": "Update complete. Restarting the app..."
     }
 }

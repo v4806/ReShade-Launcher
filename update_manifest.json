@@ -5,7 +5,7 @@
     {
       "path": "translations.json",
       "type": "file",
-      "sha256": "2a9130f75c22feb2e74c17cac61d0d6dff48e876a7405fbf0db0ce8c4b13762f"
+      "sha256": "dc4fed8e01e9be77e5b89647929e3d6d2551d8a790bf34f033693bf306919dbc"
     },
     {
       "path": "version.json",
@@ -4710,8 +4710,8 @@
     }
   ],
   "app": {
-    "version": "2.6.3.0",
-    "url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/update/ReShade_Launcher_2.6.3.0.zip",
-    "sha256": "1ed694d345bcf2d7ebd396cbd1765a5abc2e531a35ae33f17fcdbea13033382f"
+    "version": "2.6.4.0",
+    "url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/update/ReShade_Launcher_2.6.4.0.zip",
+    "sha256": "48154b718b289cf70348b4d34ec85c0b8c54b22303990882acae59a1c86f3720"
   }
 }

@@ -6,6 +6,7 @@
 """
 
 import os
+import sys
 from PyQt6.QtCore import QObject, pyqtSignal
 from PyQt6.QtGui import QIcon, QAction, QFont
 from PyQt6.QtWidgets import QSystemTrayIcon, QMenu
@@ -179,10 +180,7 @@ class TrayIcon(QObject):
                 print(f"[托盘] 获取配置图标失败: {e}")
 
         if icon is None or icon.isNull():
-            if self.default_icon_path and os.path.exists(self.default_icon_path):
-                icon = QIcon(self.default_icon_path)
-            else:
-                icon = QIcon.fromTheme("application-x-executable")
+            icon = self._load_fallback_icon()
 
         if icon and not icon.isNull():
             self.tray_icon.setIcon(icon)
@@ -199,6 +197,45 @@ class TrayIcon(QObject):
             self.tray_icon.setToolTip(tooltip)
         else:
             print("[托盘] 警告：无法设置托盘图标")
+
+    def _load_fallback_icon(self):
+        """加载兜底图标：默认图标文件(icon.ico) → 打包内嵌(_MEIPASS) → 绘制占位图标。
+        避免 icon.ico 缺失时 fromTheme 在 Windows 无效导致托盘无图标。"""
+        candidates = []
+        if self.default_icon_path:
+            candidates.append(self.default_icon_path)
+        if hasattr(sys, '_MEIPASS'):
+            candidates.append(os.path.join(sys._MEIPASS, 'icon.ico'))
+        for p in candidates:
+            if p and os.path.exists(p):
+                try:
+                    icon = QIcon(p)
+                    if not icon.isNull():
+                        return icon
+                except Exception:
+                    pass
+        # 绘制占位图标（Windows 下 QIcon.fromTheme 通常返回空）
+        try:
+            from PyQt6.QtGui import QPixmap, QPainter, QColor, QBrush, QPen
+            from PyQt6.QtCore import Qt
+            size = max(16, int(48 * self.scale_factor))
+            pixmap = QPixmap(size, size)
+            pixmap.fill(Qt.GlobalColor.transparent)
+            painter = QPainter(pixmap)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            painter.setBrush(QBrush(QColor(0, 120, 215)))
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.drawRoundedRect(0, 0, size, size, size // 4, size // 4)
+            painter.setPen(QPen(QColor(255, 255, 255), max(1, size // 16)))
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            font = painter.font()
+            font.setPointSize(max(8, int(18 * self.scale_factor)))
+            painter.setFont(font)
+            painter.drawText(size // 4, size * 3 // 4, "R")
+            painter.end()
+            return QIcon(pixmap)
+        except Exception:
+            return QIcon()
 
     def hide_tray(self):
         """隐藏托盘图标"""

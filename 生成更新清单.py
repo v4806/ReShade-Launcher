@@ -138,6 +138,8 @@ def main():
             zip_path = os.path.join(zip_dir, zip_name)
             build_app_zip(app_src, zip_path, extra_files=[
                 (os.path.join(source, 'translations.json'), 'translations.json'),
+                (os.path.join(source, 'icon.ico'), 'icon.ico'),
+                (os.path.join(source, 'b.jpg'), 'b.jpg'),
             ])
             manifest["app"] = {
                 "version": version,

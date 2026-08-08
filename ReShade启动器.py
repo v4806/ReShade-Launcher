@@ -376,7 +376,6 @@ class DesignedWindow(QMainWindow):
                     TranslationManager()._load_translations()
                 except Exception:
                     pass
-                msg += "\n" + _tr("update.restart")
 
             self.launch_status_signal.emit(msg)
 
@@ -395,9 +394,28 @@ class DesignedWindow(QMainWindow):
                     self.button_update.setEnabled(True)
                 return
 
+            # ---------- 数据更新完成：有实际更新则自动重启，让新数据生效 ----------
+            if updated:
+                self._restart_app()
+                return
+
             self.button_update.setEnabled(True)
 
         threading.Thread(target=_task, daemon=True).start()
+
+    def _restart_app(self):
+        """数据更新完成后自动重启启动器（启动新进程后退出当前，使新数据生效）"""
+        try:
+            exe = sys.executable
+            subprocess.Popen(
+                [exe],
+                cwd=os.path.dirname(exe),
+                creationflags=CREATE_NO_WINDOW | 0x00000008)  # DETACHED_PROCESS
+            self.launch_status_signal.emit(_tr("update.restarting"))
+            QTimer.singleShot(1500, QApplication.quit)
+        except Exception as e:
+            self.launch_status_signal.emit(_tr("update.fail", msg=f"自动重启失败: {e}"))
+            self.button_update.setEnabled(True)
 
     def _open_mods_folder(self):
         """打开当前配置的 mods 文件夹（若不存在则创建，无法确定时让用户手动选择）"""
