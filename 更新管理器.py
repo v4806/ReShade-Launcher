@@ -24,6 +24,7 @@ import shutil
 import tempfile
 import zipfile
 import ctypes
+import concurrent.futures
 import urllib.request
 from urllib.parse import quote
 
@@ -199,6 +200,23 @@ def download_to(url: str, dest: str) -> None:
                 pass
 
 
+def _download_file(local_root: str, p: dict):
+    """下载单个文件并校验哈希（供并行下载使用）。返回 (rel, ok, error)。"""
+    dest = _local_path(local_root, p['rel'])
+    try:
+        ok = False
+        for _attempt in range(3):
+            download_to(p['url'], dest)
+            if p.get('sha256') is None or sha256_file(dest) == p['sha256']:
+                ok = True
+                break
+        if ok:
+            return p['rel'], True, ''
+        return p['rel'], False, '下载内容校验不一致（服务器缓存滞后），请稍后重试'
+    except Exception as e:
+        return p['rel'], False, str(e)
+
+
 def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
     """
     执行完整更新流程：获取清单 → 比对 → 下载变更文件。
@@ -236,25 +254,19 @@ def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
 
     result['orphans'] = orphans
 
-    # 3. 逐个下载更新的文件（下载后校验哈希，防止服务器缓存返回旧内容导致反复下载）
+    # 3. 并行下载更新的文件（多线程并发下载，下载后校验哈希，防止服务器缓存返回旧内容导致反复下载）
     total = len(pending)
-    for i, p in enumerate(pending):
-        if progress_cb:
-            progress_cb(f"({i + 1}/{total}) 下载 {p['rel']}")
-        dest = _local_path(local_root, p['rel'])
-        try:
-            ok = False
-            for _attempt in range(3):
-                download_to(p['url'], dest)
-                if p.get('sha256') is None or sha256_file(dest) == p['sha256']:
-                    ok = True
-                    break
-            if ok:
-                result['updated'].append(p['rel'])
-            else:
-                result['failed'].append((p['rel'], '下载内容校验不一致（服务器缓存滞后），请稍后重试'))
-        except Exception as e:
-            result['failed'].append((p['rel'], str(e)))
+    if total > 0:
+        max_workers = min(6, total)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as _executor:
+            for i, (rel, ok, err) in enumerate(
+                    _executor.map(lambda p: _download_file(local_root, p), pending)):
+                if progress_cb:
+                    progress_cb(f"({i + 1}/{total}) 下载 {rel}")
+                if ok:
+                    result['updated'].append(rel)
+                else:
+                    result['failed'].append((rel, err))
 
     # 5. 检测并准备 exe/_internal 更新（按版本号，整体 zip 更新；仅当未过滤或选中 app）
     app_update = {'need_update': False, 'local': '', 'remote': '', 'error': ''}
