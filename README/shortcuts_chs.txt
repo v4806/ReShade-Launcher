@@ -1,0 +1,8 @@
+快捷键说明：
+
+Home：			开启/关闭设置面板
+Delete：			开启/关闭效果
+Insert：			重新载入效果
+Page Up：		切换到前一个预设
+Page Down：		切换到后一个预设
+End：			截图

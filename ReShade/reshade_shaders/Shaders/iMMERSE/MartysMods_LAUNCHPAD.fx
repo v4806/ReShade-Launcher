@@ -106,6 +106,22 @@ uniform int TEXTURED_NORMALS_QUALITY <
     ui_category = "法线贴图";	
 > = 2;
 
+uniform float DepthFadeStart <
+    ui_category = "通用设置";
+    ui_type = "drag";
+    ui_label = "深度淡出起始";
+    ui_tooltip = "计算开始淡出的深度位置（0=摄像机，1=天空）。\n在此深度之前完全计算，超过此值后逐渐跳过远处计算以节省性能。";
+    ui_min = 0.0; ui_max = 1.0; ui_step = 0.001;
+> = 0.0;
+
+uniform float DepthFadeEnd <
+    ui_category = "通用设置";
+    ui_type = "drag";
+    ui_label = "深度淡出结束";
+    ui_tooltip = "计算完全跳过的深度位置（0=摄像机，1=天空）。\n在此深度之后完全跳过光流和平滑法线计算以提升性能。";
+    ui_min = 0.0; ui_max = 1.0; ui_step = 0.001;
+> = 1.0;
+
 #if LAUNCHPAD_DEBUG_OUTPUT != 0
 uniform int DEBUG_MODE < 
     ui_type = "combo";
@@ -510,6 +526,11 @@ float2 update_sophia(inout SophiaOptimizer s, float2 grad)
 
 float4 filter_flow(in VSOUT i, sampler s_flow, const int depth_mip = 3, const int radius = 3)
 {	
+	float linearDepth = Depth::get_linear_depth(i.uv);
+	if (linearDepth >= DepthFadeEnd)
+	{
+		return float4(0, 0, 1.0, 0);
+	}
 	//if(DISABLE_POOLING) return tex2Dlod(s_flow, i.uv, 0);
 	float2 txflow = rcp(tex2Dsize(s_flow));
 	float depth = tex2Dlod(sLinearDepthCurr, i.uv, depth_mip).x;
@@ -535,6 +556,11 @@ float4 filter_flow(in VSOUT i, sampler s_flow, const int depth_mip = 3, const in
 //can't write to the final flow map when I read it here so
 float4 filter_flow_final(in VSOUT i, sampler s_flow, const int depth_mip = 2, const int radius = 3)
 {
+	float linearDepth = Depth::get_linear_depth(i.uv);
+	if (linearDepth >= DepthFadeEnd)
+	{
+		return float4(0, 0, 1.0, 0);
+	}
 	//if(DISABLE_UPSCALING) return tex2Dlod(s_flow, i.uv, 0);
 	float2 txflow = rcp(tex2Dsize(s_flow));
 	float depth = tex2Dlod(sLinearDepthCurr, i.uv, depth_mip).x;
@@ -567,6 +593,12 @@ float4 calc_flow(VSOUT i,
 					 const int blocksize)
 {
 	float2 motion = 0;
+
+	float linearDepth = Depth::get_linear_depth(i.uv);
+	if (linearDepth >= DepthFadeEnd)
+	{
+		return float4(0, 0, 1.0, 0);
+	}
 	
 	[branch]
 	if(level < 7)//if we're not the first pass, do some neighbour pooling to get a better initial guess
@@ -835,6 +867,12 @@ float4 smooth_normals_mkii(in VSOUT i, int iteration, sampler sGbuffer)
 	
 	float3 p, n;
 	get_gbuffer_hi(i.uv, p, n);
+
+	if (Depth::get_linear_depth(i.uv) >= DepthFadeEnd)
+	{
+		return float4(n, p.z);
+	}
+
 	float2x3 kernel_matrix = to_tangent(n);
 
 	float4 bin_front = float4(n, 1) * 0.001;

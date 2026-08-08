@@ -1,0 +1,8 @@
+快速鍵說明：
+
+Home：			開啟/關閉設定面板
+Delete：			開啟/關閉效果
+Insert：			重新載入效果
+Page Up：		切換到前一個預設
+Page Down：		切換到後一個預設
+End：			擷圖

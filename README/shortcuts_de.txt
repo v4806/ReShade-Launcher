@@ -1,0 +1,8 @@
+Tastenkombinationen：
+
+Home：			Einstellungs-Panel öffnen/schließen
+Delete：			Effekte aktivieren/deaktivieren
+Insert：			Effekte neu laden
+Page Up：		Zum vorherigen Preset wechseln
+Page Down：		Zum nächsten Preset wechseln
+End：			Screenshot aufnehmen

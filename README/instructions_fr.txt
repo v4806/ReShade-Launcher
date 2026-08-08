@@ -1,0 +1,29 @@
+ReShade & Mod Launcher - Présentation du logiciel
+
+Déclaration de sécurité importante
+Ce logiciel utilise la technologie d'injection de processus pour mettre en œuvre les fonctions d'amélioration graphique ReShade et de chargement de mods. Ce type de mécanisme technique peut être mal jugé comme un risque potentiel par les logiciels de sécurité, mais il est en réalité uniquement utilisé pour l'optimisation graphique des jeux et la gestion des mods, et ne contient aucun comportement malveillant. Si vous avez des préoccupations concernant la sécurité de la technologie d'injection, utilisez-la avec prudence.
+
+Utilisation de base
+• Installer
+• Exécutez le programme pour la première fois, suivez les instructions pour sélectionner le programme principal du jeu ou le lanceur XXMI
+• Aucun réglage répété nécessaire pour les démarrages ultérieurs
+• Lancement du jeu en un clic via le raccourci du bureau
+• Appuyez sur la touche Home dans le jeu pour basculer le panneau d'effets ReShade
+• Chemin de stockage des fichiers mod : Répertoire d'installation\Mods_Loader\mods
+
+Fonctionnalités principales
+• Option pour utiliser XXMI pour lancer le jeu
+• Chargement externe de ReShade pour éviter les conflits avec les fichiers natifs du jeu
+• Processus de démarrage automatisé, chargeant simultanément les effets d'amélioration graphique et les mods du jeu
+• Interface multilingue adaptée à l'environnement linguistique du système
+• Mécanisme de sauvegarde automatique des fichiers de configuration
+• Chargeur de mods intégré (fonctionnalité optionnelle, à utiliser selon les besoins)
+• Paramètres d'optimisation prédéfinis, prêts à l'emploi
+• Plusieurs préréglages graphiques intégrés, utilisant par défaut l'effet "Focus"
+• Plugin de filtrage de rendu UI prédéfini intégré pour empêcher l'affichage anormal de l'interface utilisateur du jeu
+
+Conseils d'utilisation
+• En cas de fausse alerte des logiciels de sécurité, vous pouvez temporairement désactiver la protection ou ajouter à la liste de confiance
+
+Paramètres avancés
+• Si vous souhaitez obtenir la liste complète des shaders pour la "version légère des shaders" ultérieurement, vous pouvez extraire "Répertoire d'installation\ReShade\reshade-shaders\Full-Shaders.zip" (directement "Extraire dans le dossier actuel" et écraser) pour obtenir tous les shaders complets

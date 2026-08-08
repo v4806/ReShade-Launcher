@@ -818,6 +818,14 @@ namespace XeGTAO
             return ReconstructFloat4(encodedValue);
         }
 
+        float normalizedDepth = viewspaceZ_raw / RESHADE_DEPTH_LINEARIZATION_FAR_PLANE;
+        float depthFade = saturate(1.0 - smoothstep(AO_FadeStart, AO_FadeEnd, normalizedDepth));
+        if (depthFade <= 0.001)
+        {
+            float encodedValue = XeGTAO_EncodeVisibilityBentNormal(1.0, float3(0, 0, 1));
+            return ReconstructFloat4(encodedValue);
+        }
+
         half3 viewspaceNormal = tex2Dlod(sNormal, float4(scaled_uv, 0, 0)).xyz * 2.0 - 1.0;
         const half3 viewVec = (half3) normalize(-pixCenterPos);
 
@@ -945,6 +953,7 @@ namespace XeGTAO
         visibility /= (half) sliceCount;
         visibility = pow(saturate(visibility), (half) FinalValuePower);
         visibility = max(0.03, visibility);
+        visibility = lerp(1.0, visibility, (half) depthFade);
 
         if (ComputeBentNormals)
         {
@@ -1090,10 +1099,6 @@ namespace XeGTAO
             half visibility = tex2D(sUpscaledAOTex, uv).r;
             float occlusion = 1.0 - visibility;
             occlusion = saturate(occlusion * Intensity);
-
-            float depth = getDepth(uv);
-            float fade = saturate(1.0 - smoothstep(AO_FadeStart, AO_FadeEnd, depth));
-            occlusion *= fade;
 
             originalColor.rgb = lerp(originalColor.rgb, OcclusionColor.rgb, occlusion);
             return originalColor;

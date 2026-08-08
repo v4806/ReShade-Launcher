@@ -1,0 +1,29 @@
+ReShade & Mod Launcher - Software Introduction
+
+Important Security Statement
+This software uses process injection technology to implement ReShade graphics enhancement and Mod loading functions. This type of technical mechanism may be misjudged as a potential risk by security software, but it is actually only used for game graphics optimization and mod management, and does not contain malicious behavior. If you have security concerns about injection technology, please use with caution.
+
+Basic Usage
+• Install
+• Run the program for the first time, follow the instructions to select the game main program or XXMI launcher
+• No need to repeat settings for subsequent startups
+• One-click game launch via desktop shortcut
+• Press Home key in game to toggle ReShade effect panel
+• Mod file storage path: Installation directory\Mods_Loader\mods
+
+Core Features
+• Option to use XXMI to launch the game
+• External ReShade loading to avoid conflicts with native game files
+• Automated startup process, simultaneously loading graphics enhancement effects and game mods
+• Multi-language interface adaptive to system language environment
+• Configuration file automatic backup mechanism
+• Integrated Mod loader (optional feature, use as needed)
+• Preset optimization parameters, ready to use out of the box
+• Built-in multiple graphics presets, default using "Focus" effect
+• Integrated preset UI rendering filter plugin to prevent game UI display anomalies
+
+Usage Suggestions
+• If encountering security software false alarms, temporarily disable protection or add to trust list
+
+Advanced Settings
+• If you want to obtain the complete shader list for the "Lightweight Shaders" later, you can extract "Installation directory\ReShade\reshade-shaders\Full-Shaders.zip" (directly "Extract to current folder" and overwrite) to get all complete shaders

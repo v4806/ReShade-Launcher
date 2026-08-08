@@ -1,0 +1,492 @@
+///////////////////////////////////////////////////////////////////////////////////
+// pColors.fx by Gimle Larpes
+// Shader with tools for color correction and grading.
+///////////////////////////////////////////////////////////////////////////////////
+
+#define P_OKLAB_VERSION_REQUIRE 100
+#include "ReShade.fxh"
+#include "ReShadeUI.fxh"
+#include "Oklab.fxh"
+
+static const float PI = pUtils::PI;
+
+//White balance
+uniform float WBTemperature < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -0.25; ui_max = 0.25;
+	ui_label = "色温";
+	ui_tooltip = "色温调节 (蓝 <-> 黄)";
+	ui_category = "白平衡";
+> = 0.0;
+uniform float WBTint < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -0.25; ui_max = 0.25;
+	ui_label = "色调";
+	ui_tooltip = "色调调节 (品红 <-> 绿)";
+	ui_category = "白平衡";
+> = 0.0;
+//Global adjustments
+uniform float GlobalSaturation < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "饱和度";
+	ui_tooltip = "饱和度调节";
+	ui_category = "全局调整";
+> = 0.0;
+uniform float GlobalBrightness < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "亮度";
+	ui_tooltip = "亮度调节";
+	ui_category = "全局调整";
+> = 0.0;
+
+
+//Advanced color correction
+#ifndef ENABLE_ADVANCED_COLOR_CORRECTION
+	#define ENABLE_ADVANCED_COLOR_CORRECTION 0
+#endif
+#if ENABLE_ADVANCED_COLOR_CORRECTION == 1
+	//Hue 1
+	uniform float3 Hue1 < __UNIFORM_COLOR_FLOAT3
+		ui_label = "色相 1";
+		ui_tooltip = "要调整的色相";
+		ui_category = "高级颜色校正";
+	> = float3(1.0, 0.0, 0.0);
+	uniform float Hue1Shift < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "色相偏移";
+		ui_tooltip = "色相 1 偏移 +-180°";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue1Saturation < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "饱和度";
+		ui_tooltip = "色相 1 饱和度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue1Brightness < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "亮度";
+		ui_tooltip = "色相 1 亮度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	//Hue 2
+	uniform float3 Hue2 < __UNIFORM_COLOR_FLOAT3
+		ui_label = "色相 2";
+		ui_tooltip = "要调整的色相";
+		ui_category = "高级颜色校正";
+	> = float3(1.0, 1.0, 0.0);
+	uniform float Hue2Shift < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "色相偏移";
+		ui_tooltip = "色相 2 偏移 +-180°";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue2Saturation < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "饱和度";
+		ui_tooltip = "色相 2 饱和度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue2Brightness < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "亮度";
+		ui_tooltip = "色相 2 亮度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	//Hue 3
+	uniform float3 Hue3 < __UNIFORM_COLOR_FLOAT3
+		ui_label = "色相 3";
+		ui_tooltip = "要调整的色相";
+		ui_category = "高级颜色校正";
+	> = float3(0.0, 1.0, 0.0);
+	uniform float Hue3Shift < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "色相偏移";
+		ui_tooltip = "色相 3 偏移 +-180°";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue3Saturation < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "饱和度";
+		ui_tooltip = "色相 3 饱和度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue3Brightness < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "亮度";
+		ui_tooltip = "色相 3 亮度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	//Hue 4
+	uniform float3 Hue4 < __UNIFORM_COLOR_FLOAT3
+		ui_label = "色相 4";
+		ui_tooltip = "要调整的色相";
+		ui_category = "高级颜色校正";
+	> = float3(0.0, 1.0, 1.0);
+	uniform float Hue4Shift < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "色相偏移";
+		ui_tooltip = "色相 4 偏移 +-180°";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue4Saturation < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "饱和度";
+		ui_tooltip = "色相 4 饱和度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue4Brightness < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "亮度";
+		ui_tooltip = "色相 4 亮度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	//Hue 5
+	uniform float3 Hue5 < __UNIFORM_COLOR_FLOAT3
+		ui_label = "色相 5";
+		ui_tooltip = "要调整的色相";
+		ui_category = "高级颜色校正";
+	> = float3(0.0, 0.0, 1.0);
+	uniform float Hue5Shift < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "色相偏移";
+		ui_tooltip = "色相 5 偏移 +-180°";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue5Saturation < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "饱和度";
+		ui_tooltip = "色相 5 饱和度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue5Brightness < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "亮度";
+		ui_tooltip = "色相 5 亮度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	//Hue 6
+	uniform float3 Hue6 < __UNIFORM_COLOR_FLOAT3
+		ui_label = "色相 6";
+		ui_tooltip = "要调整的色相";
+		ui_category = "高级颜色校正";
+	> = float3(1.0, 0.0, 1.0);
+	uniform float Hue6Shift < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "色相偏移";
+		ui_tooltip = "色相 6 偏移 +-180°";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue6Saturation < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "饱和度";
+		ui_tooltip = "色相 6 饱和度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+	uniform float Hue6Brightness < __UNIFORM_SLIDER_FLOAT1
+		ui_min = -1.0; ui_max = 1.0;
+		ui_label = "亮度";
+		ui_tooltip = "色相 6 亮度调节";
+		ui_category = "高级颜色校正";
+	> = 0.0;
+#endif
+
+
+//Shadows midtones highlights
+//Shadows
+uniform float3 ShadowTintColor < __UNIFORM_COLOR_FLOAT3
+	ui_label = "色调";
+	ui_tooltip = "阴影着色的颜色";
+	ui_category = "阴影";
+> = float3(0.69, 0.82, 1.0);
+uniform float ShadowSaturation < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "饱和度";
+	ui_tooltip = "阴影饱和度调节";
+	ui_category = "阴影";
+> = 0.0;
+uniform float ShadowBrightness < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "亮度";
+	ui_tooltip = "阴影亮度调节";
+	ui_category = "阴影";
+> = 0.0;
+uniform float ShadowThreshold < __UNIFORM_SLIDER_FLOAT1
+	ui_min = 0.0; ui_max = 1.0;
+	ui_label = "阈值";
+	ui_tooltip = "定义阴影的阈值";
+	ui_category = "阴影";
+> = 0.25;
+uniform float ShadowCurveSlope < __UNIFORM_SLIDER_FLOAT1
+	ui_min = 1.0; ui_max = 5.0;
+	ui_label = "曲线斜率";
+	ui_tooltip = "阴影过渡的陡峭程度";
+	ui_category = "阴影";
+> = 2.5;
+//Midtones
+uniform float3 MidtoneTintColor < __UNIFORM_COLOR_FLOAT3
+	ui_label = "色调";
+	ui_tooltip = "中间调着色的颜色";
+	ui_category = "中间调";
+> = float3(1.0, 1.0, 1.0);
+uniform float MidtoneSaturation < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "饱和度";
+	ui_tooltip = "中间调饱和度调节";
+	ui_category = "中间调";
+> = 0.0;
+uniform float MidtoneBrightness < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "亮度";
+	ui_tooltip = "中间调亮度调节";
+	ui_category = "中间调";
+> = 0.0;
+//Highlights
+uniform float3 HighlightTintColor < __UNIFORM_COLOR_FLOAT3
+	ui_label = "色调";
+	ui_tooltip = "高光着色的颜色";
+	ui_category = "高光";
+> = float3(1.0, 0.98, 0.90);
+uniform float HighlightSaturation < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "饱和度";
+	ui_tooltip = "高光饱和度调节";
+	ui_category = "高光";
+> = 0.0;
+uniform float HighlightBrightness < __UNIFORM_SLIDER_FLOAT1
+	ui_min = -1.0; ui_max = 1.0;
+	ui_label = "亮度";
+	ui_tooltip = "高光亮度调节";
+	ui_category = "高光";
+> = 0.0;
+uniform float HighlightThreshold < __UNIFORM_SLIDER_FLOAT1
+	ui_min = 0.0; ui_max = 1.0;
+	ui_label = "阈值";
+	ui_tooltip = "定义高光的阈值";
+	ui_category = "高光";
+> = 0.75;
+uniform float HighlightCurveSlope < __UNIFORM_SLIDER_FLOAT1
+	ui_min = 1.0; ui_max = 5.0;
+	ui_label = "曲线斜率";
+	ui_tooltip = "高光过渡的陡峭程度";
+	ui_category = "高光";
+> = 2.5;
+
+
+//LUT
+uniform bool EnableLUT <
+	ui_type = "bool";
+	ui_label = "启用 LUT";
+	ui_tooltip = "将 LUT 作为最终处理步骤应用\n\n如果启用此项导致剪切，请增加 HDR_PEAK_LUMINANCE_NITS";
+	ui_category = "查找表";
+> = false;
+
+#if BUFFER_COLOR_SPACE > 1	//Show LUT whitepoint setting if in HDR
+	uniform float LUT_WhitePoint < __UNIFORM_SLIDER_FLOAT1
+		ui_min = 0.0; ui_max = 1.0;
+		ui_label = "LUT 白点";
+		ui_tooltip = "调整 LUT 影响的亮度范围，适用于将 SDR LUT 应用于 HDR\n\n(0=不应用 LUT, 1=应用于整个图像)";
+		ui_category = "查找表";
+	> = 1.0;
+#else
+	static const float LUT_WhitePoint = 1.0;
+#endif
+
+#ifndef fLUT_TextureName //Use same name as LUT.fx and MultiLUT.fx for compatability
+	#define fLUT_TextureName "lut.png"
+#endif
+#ifndef fLUT_Resolution
+	#define fLUT_Resolution 32
+#endif
+#ifndef fLUT_Format
+	#define fLUT_Format RGBA8
+#endif
+texture LUT < source = fLUT_TextureName; > { Height = fLUT_Resolution; Width = fLUT_Resolution * fLUT_Resolution; Format = fLUT_Format; };
+sampler sLUT { Texture = LUT; };
+
+
+//Performance
+uniform bool UseApproximateTransforms <
+	ui_type = "bool";
+	ui_label = "快速色彩空间转换";
+	ui_tooltip = "使用不太精确的近似值代替完整的转换函数";
+	ui_category = "性能";
+> = false;
+
+
+
+float get_Weight(float v, float t, float s) //value, threshold, curve slope
+{
+	v = (v - t) * s;
+	return (v > 1.0)
+		? 1.0
+		: (v < 0.0)
+			? 0.0
+			: v * v * (3.0 - 2.0 * v);
+}
+
+float3 Apply_LUT(float3 c) //Adapted from LUT.fx by Marty McFly
+{
+	static const float EXPANSION_FACTOR = Oklab::INVNORM_FACTOR;
+	float3 LUT_coord = c / EXPANSION_FACTOR / LUT_WhitePoint;
+
+	float bounds = max(LUT_coord.x, max(LUT_coord.y, LUT_coord.z));
+	
+	if (bounds <= 1.0) //Only apply LUT if value is in LUT range
+	{
+		float2 texel_size = rcp(fLUT_Resolution);
+		texel_size.x /= fLUT_Resolution;
+
+		const float3 oc = LUT_coord;
+		LUT_coord.xy = (LUT_coord.xy * fLUT_Resolution - LUT_coord.xy + 0.5) * texel_size;
+		LUT_coord.z *= (fLUT_Resolution - 1.0);
+	
+		float lerp_factor = frac(LUT_coord.z);
+		LUT_coord.x += floor(LUT_coord.z) * texel_size.y;
+		c = lerp(tex2D(sLUT, LUT_coord.xy).rgb, tex2D(sLUT, float2(LUT_coord.x + texel_size.y, LUT_coord.y)).rgb, lerp_factor);
+
+		if (bounds > 0.9 && LUT_WhitePoint != 1.0) //Fade out LUT to avoid banding
+		{
+			c = lerp(c, oc, 10.0 * (bounds - 0.9));
+		}
+
+		return c * LUT_WhitePoint * EXPANSION_FACTOR;
+	}
+
+	return c;
+}
+
+float3 Manipulate_By_Hue(float3 color, float3 hue, float hue_shift, float hue_saturation, float hue_brightness)
+{
+	float weight = max(1.0 - pUtils::cdistance(color.z, hue.z), 0.0); //Linear with coverage of ~60deg
+
+	if (weight != 0.0)
+	{
+		color.z += hue_shift * weight;
+		color.xy *= 1.0 + float2(hue_brightness, hue_saturation) * weight; 
+		color = Oklab::Saturate_LCh(color);
+	}
+
+	return color;
+}
+
+
+
+float3 ColorsPass(float4 vpos : SV_Position, float2 texcoord : TexCoord) : SV_Target
+{
+	float3 color = tex2D(ReShade::BackBuffer, texcoord).rgb;
+
+	color = (UseApproximateTransforms)
+		? Oklab::Fast_DisplayFormat_to_Linear(color)
+		: Oklab::DisplayFormat_to_Linear(color);
+	float adapted_luminance = Oklab::get_Adapted_Luminance_RGB(color, 1.0);
+	color = Oklab::RGB_to_Oklab(color);
+
+	
+	////Processing
+	//White balance
+	if (WBTemperature != 0.0 || WBTint != 0.0)
+	{
+		color.g = color.g - WBTint;
+		color.b = (WBTint < 0.0)
+			? color.b + WBTemperature + WBTint
+			: color.b + WBTemperature;
+	}
+
+
+	//Global adjustments
+	color.r *= (1.0 + GlobalBrightness);
+	color.gb *= (1.0 + GlobalSaturation);
+
+
+	////Advanced color correction - Adjustments by hue
+	#if ENABLE_ADVANCED_COLOR_CORRECTION == 1
+		color = Oklab::Oklab_to_LCh(color);
+
+		if (Hue1Shift != 0.0 || Hue1Saturation != 0.0 || Hue1Brightness != 0.0)
+		{
+			color = Manipulate_By_Hue(color, Oklab::RGB_to_LCh(Hue1), Hue1Shift * PI, Hue1Saturation, Hue1Brightness);
+		}
+		if (Hue2Shift != 0.0 || Hue2Saturation != 0.0 || Hue2Brightness != 0.0)
+		{
+			color = Manipulate_By_Hue(color, Oklab::RGB_to_LCh(Hue2), Hue2Shift * PI, Hue2Saturation, Hue2Brightness);
+		}
+		if (Hue3Shift != 0.0 || Hue3Saturation != 0.0 || Hue3Brightness != 0.0)
+		{
+			color = Manipulate_By_Hue(color, Oklab::RGB_to_LCh(Hue3), Hue3Shift * PI, Hue3Saturation, Hue3Brightness);
+		}
+		if (Hue4Shift != 0.0 || Hue4Saturation != 0.0 || Hue3Brightness != 0.0)
+		{
+			color = Manipulate_By_Hue(color, Oklab::RGB_to_LCh(Hue4), Hue4Shift * PI, Hue4Saturation, Hue4Brightness);
+		}
+		if (Hue5Shift != 0.0 || Hue5Saturation != 0.0 || Hue5Brightness != 0.0)
+		{
+			color = Manipulate_By_Hue(color, Oklab::RGB_to_LCh(Hue5), Hue5Shift * PI, Hue5Saturation, Hue5Brightness);
+		}
+		if (Hue6Shift != 0.0 || Hue6Saturation != 0.0 || Hue6Brightness != 0.0)
+		{
+			color = Manipulate_By_Hue(color, Oklab::RGB_to_LCh(Hue6), Hue6Shift * PI, Hue6Saturation, Hue6Brightness);
+		}
+	
+		color = Oklab::LCh_to_Oklab(color);
+	#endif
+
+
+	//Shadows-midtones-highlights colors
+	static const float3 ShadowTintColor = Oklab::RGB_to_Oklab(ShadowTintColor) * (1 + GlobalSaturation);
+	static const float ShadowTintColorC = Oklab::get_Oklab_Chromacity(ShadowTintColor);
+	static const float3 MidtoneTintColor = Oklab::RGB_to_Oklab(MidtoneTintColor) * (1 + GlobalSaturation);
+	static const float MidtoneTintColorC = Oklab::get_Oklab_Chromacity(MidtoneTintColor);
+	static const float3 HighlightTintColor = Oklab::RGB_to_Oklab(HighlightTintColor) * (1 + GlobalSaturation);
+	static const float HighlightTintColorC = Oklab::get_Oklab_Chromacity(HighlightTintColor);
+
+	////Shadows-midtones-highlights
+	//Shadows
+	float shadow_weight = get_Weight(adapted_luminance, ShadowThreshold, -ShadowCurveSlope);
+	if (shadow_weight != 0.0)
+	{
+		color.r *= (1.0 + ShadowBrightness * shadow_weight);
+		color.g = lerp(color.g, ShadowTintColor.g + (1.0 - ShadowTintColorC) * color.g, shadow_weight) * (1.0 + ShadowSaturation * shadow_weight);
+		color.b = lerp(color.b, ShadowTintColor.b + (1.0 - ShadowTintColorC) * color.b, shadow_weight) * (1.0 + ShadowSaturation * shadow_weight);
+	}
+	//Highlights
+	float highlight_weight = get_Weight(adapted_luminance, HighlightThreshold, HighlightCurveSlope);
+	if (highlight_weight != 0.0)
+	{
+		color.r *= (1.0 + HighlightBrightness * highlight_weight);
+		color.g = lerp(color.g, HighlightTintColor.g + (1.0 - HighlightTintColorC) * color.g, highlight_weight) * (1.0 + HighlightSaturation * highlight_weight);
+		color.b = lerp(color.b, HighlightTintColor.b + (1.0 - HighlightTintColorC) * color.b, highlight_weight) * (1.0 + HighlightSaturation * highlight_weight);
+	}
+	//Midtones
+	float midtone_weight = max(1.0 - (shadow_weight + highlight_weight), 0.0);
+	if (midtone_weight != 0.0)
+	{
+		color.r *= (1.0 + MidtoneBrightness * midtone_weight);
+		color.g = lerp(color.g, MidtoneTintColor.g + (1.0 - MidtoneTintColorC) * color.g, midtone_weight) * (1.0 + MidtoneSaturation * midtone_weight);
+		color.b = lerp(color.b, MidtoneTintColor.b + (1.0 - MidtoneTintColorC) * color.b, midtone_weight) * (1.0 + MidtoneSaturation * midtone_weight);
+	}
+	color = Oklab::Oklab_to_RGB(color);
+
+
+	////LUT
+	if (EnableLUT)
+	{
+		color = Apply_LUT(Oklab::Saturate_RGB(color));
+	}
+	
+	if (!Oklab::IS_HDR) { color = Oklab::Saturate_RGB(color); }
+	color = (UseApproximateTransforms)
+		? Oklab::Fast_Linear_to_DisplayFormat(color)
+		: Oklab::Linear_to_DisplayFormat(color);
+	return color.rgb;
+}
+
+
+
+technique Colors <ui_tooltip =
+"用于高级颜色校正和调色的着色器。\n\n"
+"(支持 HDR)";>
+{
+	pass
+	{
+		VertexShader = PostProcessVS; PixelShader = ColorsPass;
+	}
+}

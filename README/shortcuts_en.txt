@@ -1,0 +1,8 @@
+Shortcut Keys：
+
+Home：			Open/Close settings panel
+Delete：			Enable/Disable effects
+Insert：			Reload effects
+Page Up：		Switch to previous preset
+Page Down：		Switch to next preset
+End：			Take screenshot

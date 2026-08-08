@@ -1,0 +1,8 @@
+Raccourcis clavier：
+
+Home：			Ouvrir/Fermer le panneau de paramètres
+Delete：			Activer/Désactiver les effets
+Insert：			Recharger les effets
+Page Up：		Passer au préréglage précédent
+Page Down：		Passer au préréglage suivant
+End：			Prendre une capture d'écran

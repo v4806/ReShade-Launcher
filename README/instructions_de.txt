@@ -1,0 +1,29 @@
+ReShade & Mod Launcher - Software-Einführung
+
+Wichtige Sicherheitserklärung
+Diese Software verwendet Prozessinjektionstechnologie, um ReShade-Grafikverbesserungs- und Mod-Ladefunktionen zu implementieren. Diese Art von technischem Mechanismus kann von Sicherheitssoftware fälschlicherweise als potenzielles Risiko eingestuft werden, wird jedoch tatsächlich nur zur Spielgrafikoptimierung und Mod-Verwaltung verwendet und enthält keine bösartigen Handlungen. Wenn Sie Sicherheitsbedenken bezüglich der Injektionstechnologie haben, verwenden Sie sie bitte mit Vorsicht.
+
+Grundlegende Verwendung
+• Installieren
+• Führen Sie das Programm zum ersten Mal aus und folgen Sie den Anweisungen, um das Hauptprogramm des Spiels oder den XXMI-Launcher auszuwählen
+• Bei nachfolgenden Starts müssen die Einstellungen nicht wiederholt werden
+• Ein-Klick-Spielstart über Desktop-Verknüpfung
+• Drücken Sie die Home-Taste im Spiel, um das ReShade-Effekt-Panel umzuschalten
+• Mod-Dateispeicherpfad: Installationsverzeichnis\Mods_Loader\mods
+
+Kernfunktionen
+• Option zur Verwendung von XXMI zum Starten des Spiels
+• Externes ReShade-Laden, um Konflikte mit nativen Spiel-Dateien zu vermeiden
+• Automatisierter Startprozess, der gleichzeitig Grafikverbesserungseffekte и Spiel-Mods lädt
+• Mehrsprachige Oberfläche, die sich an die Systemsprachumgebung anpasst
+• Konfigurationsdatei-Automatisches Backup-Mechanismus
+• Integrierter Mod-Loader (optionale Funktion, nach Bedarf verwenden)
+• Voreingestellte Optimierungsparameter, sofort einsatzbereit
+• Integrierte mehrere Grafikvoreinstellungen, standardmäßig wird der "Fokus"-Effekt verwendet
+• Integriertes voreingestelltes UI-Rendering-Filter-Plugin zur Verhinderung anomaler Anzeige der Spiel-UI
+
+Verwendungshinweise
+• Bei Fehlalarmen von Sicherheitssoftware können Sie den Schutz vorübergehend deaktivieren oder zur Vertrauensliste hinzufügen
+
+Erweiterte Einstellungen
+• Wenn Sie später die vollständige Shader-Liste für die "Leichtgewicht-Shader" erhalten möchten, können Sie "Installationsverzeichnis\ReShade\reshade-shaders\Full-Shaders.zip" entpacken (direkt "In aktuellen Ordner entpacken" und überschreiben), um alle vollständigen Shader zu erhalten
