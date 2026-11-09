@@ -91,6 +91,7 @@ class LaunchResult:
     root_pid: int
     target_pid: int
     root_process: "SuspendedProcess | None" = None
+    pre_launch_pids: tuple[int, ...] = ()
 
 
 class SuspendedProcess:
@@ -646,6 +647,62 @@ def _temporary_d3dx_target(dll_paths: tuple[Path, ...], target_exe_name: str):
                 _log.error("恢复 d3dx.ini 失败: %s, 错误=%s", d3dx_path, exc)
 
 
+def _run_pre_launch_command(config: dict, launch_program: str | Path) -> list[int]:
+    """在创建游戏进程之前执行启动前命令，返回本次启动的进程 PID 列表。"""
+    command = str(config.get("pre_launch_command") or "").strip()
+    if not command:
+        return []
+    try:
+        wait_seconds = float(config.get("pre_launch_wait_seconds") or 0)
+    except (TypeError, ValueError):
+        wait_seconds = 0.0
+    wait_seconds = max(0.0, min(wait_seconds, 300.0))
+
+    cwd = str(Path(launch_program).resolve().parent)
+    _log.debug("执行启动前命令: %s (工作目录=%s)", command, cwd)
+    try:
+        creationflags = CREATE_NO_WINDOW if sys.platform == "win32" else 0
+        process = subprocess.Popen(
+            command,
+            cwd=cwd,
+            shell=True,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creationflags,
+        )
+    except Exception as exc:
+        _log.error("启动前命令执行失败: %s", exc)
+        raise RuntimeError(f"启动前命令执行失败: {exc}") from exc
+
+    # 记录 shell 进程及其子进程：启动前命令若通过 cmd/start 派生程序，
+    # 仅记录 cmd 的 PID 在 cmd 退出后无法定位真正的程序，因此采集整棵进程树。
+    pids = {process.pid}
+    collect_until = time.monotonic() + max(wait_seconds, 0.3)
+    while True:
+        try:
+            for child in psutil.Process(process.pid).children(recursive=True):
+                pids.add(child.pid)
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+        remaining = collect_until - time.monotonic()
+        if remaining <= 0:
+            break
+        time.sleep(min(0.1, remaining))
+
+    _log.info(
+        "启动前命令已启动: PID=%s, 关联进程=%s, 等待=%.1f 秒",
+        process.pid, sorted(pids), wait_seconds,
+    )
+
+    returncode = process.poll()
+    if returncode is not None and returncode != 0:
+        _log.error("启动前命令异常退出: PID=%s, 退出码=%s", process.pid, returncode)
+        raise RuntimeError(f"启动前命令异常退出，退出码={returncode}")
+    _log.info("启动前命令检查通过: PID=%s", process.pid)
+    return sorted(pids)
+
+
 def launch_game(
     config: dict,
     script_dir: str | Path,
@@ -673,6 +730,7 @@ def launch_game(
         raise ValueError("launch_program is required")
 
     timeout = float(config.get("process_timeout") or 30)
+    pre_launch_pids = _run_pre_launch_command(config, launch_program)
     baseline_pids = set(psutil.pids())
     _log.info(
         "启动参数: 程序=%s, 目标=%s, 进程基线=%s, 超时=%ss",
@@ -724,7 +782,12 @@ def launch_game(
                 _inject_and_verify(injector, target_pid, plan.direct_dlls)
 
         _log.info("启动流程完成: root PID=%s, target PID=%s", process.pid, target_pid)
-        return LaunchResult(root_pid=process.pid, target_pid=target_pid, root_process=None)
+        return LaunchResult(
+            root_pid=process.pid,
+            target_pid=target_pid,
+            root_process=None,
+            pre_launch_pids=tuple(pre_launch_pids),
+        )
     except Exception:
         _log.exception("启动/注入流程失败")
         if not resumed:

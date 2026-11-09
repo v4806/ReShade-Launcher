@@ -111,6 +111,9 @@ class ProcessManager:
 
             # ❌ 已删除 ReShade 备份恢复的调用
 
+            # 终结启动前命令派生的进程
+            self._terminate_extra_processes(proc)
+
         with self._lock:
             self._launched_processes.clear()
 
@@ -188,7 +191,8 @@ class ProcessManager:
                 result.extend(self._get_all_child_pids(child, visited))
         return result
 
-    def register_launch(self, root_pid: int, target_pid: int, game_exe_name: str, game_dir: str):
+    def register_launch(self, root_pid: int, target_pid: int, game_exe_name: str,
+                        game_dir: str, extra_pids=None):
         with self._lock:
             self._launched_processes = [
                 p for p in self._launched_processes
@@ -198,12 +202,33 @@ class ProcessManager:
                 "root_pid": root_pid,
                 "target_pid": target_pid,
                 "game_exe_name": game_exe_name,
-                "game_dir": game_dir
+                "game_dir": game_dir,
+                "extra_pids": [int(pid) for pid in (extra_pids or [])],
             })
             _log.info(
-                "已注册根进程: PID=%s, 目标PID=%s, EXE=%s, DIR=%s",
-                root_pid, target_pid, game_exe_name, game_dir,
+                "已注册根进程: PID=%s, 目标PID=%s, 启动前命令PID=%s, EXE=%s, DIR=%s",
+                root_pid, target_pid, list(extra_pids or ()), game_exe_name, game_dir,
             )
+
+    def _terminate_extra_processes(self, record: dict):
+        """终结本次启动前命令派生的进程树（已记录的 PID）。"""
+        pids = list(record.get("extra_pids") or [])
+        record["extra_pids"] = []
+        for pid in pids:
+            if self.is_pid_running(pid):
+                self._kill_process_tree(pid)
+                _log.info("已终结启动前命令进程树: PID=%s", pid)
+
+    def terminate_extra_processes(self, game_exe_name: str, game_dir: str) -> int:
+        """按启动记录清理启动前命令派生的进程，返回处理的记录数。"""
+        with self._lock:
+            records = [
+                p for p in self._launched_processes
+                if p["game_exe_name"] == game_exe_name and p["game_dir"] == game_dir
+            ]
+        for record in records:
+            self._terminate_extra_processes(record)
+        return len(records)
 
     def _get_game_pid_from_root(self, root_pid: int, game_exe_name: str) -> Optional[int]:
         all_pids = self._get_all_child_pids(root_pid)
@@ -265,7 +290,10 @@ class ProcessManager:
         if root_pid is not None:
             self._kill_process_tree(root_pid)
 
-        # 3. 从记录中移除
+        # 3. 终结启动前命令派生的进程
+        self._terminate_extra_processes(record)
+
+        # 4. 从记录中移除
         with self._lock:
             self._launched_processes = [
                 p for p in self._launched_processes
@@ -275,6 +303,14 @@ class ProcessManager:
         return True
 
     def terminate_game_process(self, game_exe_name: str, game_dir: str, game_pid: int = None) -> bool:
+        # 先取出本次启动记录，确保关闭游戏时同时清理启动前命令进程
+        record = None
+        with self._lock:
+            for p in self._launched_processes:
+                if p["game_exe_name"] == game_exe_name and p["game_dir"] == game_dir:
+                    record = p
+                    break
+
         # 极速路径：直接杀指定PID
         if game_pid is not None:
             try:
@@ -282,6 +318,8 @@ class ProcessManager:
                 subprocess.run(cmd, shell=True, check=False, capture_output=True,
                                creationflags=CREATE_NO_WINDOW)
                 _log.info("已直接终结游戏进程 PID=%s", game_pid)
+                if record is not None:
+                    self._terminate_extra_processes(record)
                 with self._lock:
                     self._launched_processes = [
                         p for p in self._launched_processes
@@ -291,32 +329,33 @@ class ProcessManager:
             except Exception as e:
                 _log.warning("直接杀PID失败，降级到传统方法: %s", e)
 
-        # 查找记录中的 target_pid
-        with self._lock:
-            for p in self._launched_processes:
-                if p["game_exe_name"] == game_exe_name and p["game_dir"] == game_dir:
-                    target_pid = p.get("target_pid")
-                    if target_pid is not None and target_pid != p["root_pid"]:
-                        try:
-                            cmd = f'taskkill /F /PID {target_pid}'
-                            subprocess.run(cmd, shell=True, check=False, capture_output=True,
-                                           creationflags=CREATE_NO_WINDOW)
-                            _log.info("已根据记录终结游戏进程 PID=%s", target_pid)
-                            return True
-                        except Exception as e:
-                            _log.warning("杀目标PID失败: %s", e)
-                    # 如果没有 target_pid 或杀失败，则使用 root_pid 查找
-                    root_pid = p["root_pid"]
-                    game_pid = self._get_game_pid_from_root(root_pid, game_exe_name)
-                    if game_pid is not None:
-                        try:
-                            cmd = f'taskkill /F /PID {game_pid}'
-                            subprocess.run(cmd, shell=True, check=False, capture_output=True,
-                                           creationflags=CREATE_NO_WINDOW)
-                            _log.info("已通过进程树终结游戏进程 PID=%s", game_pid)
-                            return True
-                        except Exception as e:
-                            _log.error("终结失败: %s", e)
-                    break  # 找到记录但无法终结，跳出
+        if record is not None:
+            target_pid = record.get("target_pid")
+            if target_pid is not None and target_pid != record["root_pid"]:
+                try:
+                    cmd = f'taskkill /F /PID {target_pid}'
+                    subprocess.run(cmd, shell=True, check=False, capture_output=True,
+                                   creationflags=CREATE_NO_WINDOW)
+                    _log.info("已根据记录终结游戏进程 PID=%s", target_pid)
+                    self._terminate_extra_processes(record)
+                    return True
+                except Exception as e:
+                    _log.warning("杀目标PID失败: %s", e)
+
+            root_pid = record["root_pid"]
+            found_pid = self._get_game_pid_from_root(root_pid, game_exe_name)
+            if found_pid is not None:
+                try:
+                    cmd = f'taskkill /F /PID {found_pid}'
+                    subprocess.run(cmd, shell=True, check=False, capture_output=True,
+                                   creationflags=CREATE_NO_WINDOW)
+                    _log.info("已通过进程树终结游戏进程 PID=%s", found_pid)
+                    self._terminate_extra_processes(record)
+                    return True
+                except Exception as e:
+                    _log.error("终结失败: %s", e)
+
+            # 即使游戏进程未能定位，也要清理启动前命令进程
+            self._terminate_extra_processes(record)
 
         return False

@@ -14,8 +14,8 @@ _log = logging.getLogger(__name__)
 
 # ---------------- 应用版本信息（写进启动器内部；打包时同步注入 exe 资源）----------------
 APP_NAME = "ReShade Launcher"
-APP_VERSION = "2.6.1"
-APP_IDENTIFIER = "ReShade-Launcher-RUA-RUA_v2.6.1"
+APP_VERSION = "2.6.2"
+APP_IDENTIFIER = "ReShade-Launcher-RUA-RUA_v2.6.2"
 
 
 def load_version_config(app_root: str) -> dict:
@@ -263,7 +263,9 @@ class ConfigManager:
             "xxmi_exe_name": os.path.basename(xxmi_exe_path),
             "xxmi_module": module or "",
             "mode": "xxmi",
-            "injection_method": "direct"
+            "injection_method": "direct",
+        "pre_launch_command": "",
+        "pre_launch_wait_seconds": 0
         }
 
         if enable_reshade:
@@ -306,7 +308,9 @@ class ConfigManager:
             "mod_loader_dir": game_mod_dir.replace('\\', '/'),
             "d3d11_exists": d3d11_exists,
             "mode": "builtin",
-            "injection_method": "direct"
+            "injection_method": "direct",
+        "pre_launch_command": "",
+        "pre_launch_wait_seconds": 0
         }
 
         if d3d11_exists:
@@ -346,7 +350,9 @@ class ConfigManager:
             "game_dir": game_exe_path,
             "game_exe_name": os.path.basename(game_exe_path),
             "mode": "game",
-            "injection_method": "direct"
+            "injection_method": "direct",
+        "pre_launch_command": "",
+        "pre_launch_wait_seconds": 0
         }
         
         if enable_reshade:
@@ -385,7 +391,9 @@ class ConfigManager:
             "game_exe_name": os.path.basename(game_exe_path),
             "dll_files": [dll.replace('\\', '/') for dll in dll_files],
             "mode": "custom",
-            "injection_method": "direct"
+            "injection_method": "direct",
+        "pre_launch_command": "",
+        "pre_launch_wait_seconds": 0
         }
         
         if enable_reshade:

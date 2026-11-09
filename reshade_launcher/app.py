@@ -62,7 +62,7 @@ from reshade_launcher.game.xxmi_scanner import XXMIGameScanner   # 三级扫描�
 
 class DesignedWindow(QMainWindow):
     launch_status_signal = pyqtSignal(str)
-    game_launched_signal = pyqtSignal(int, int, str, str)
+    game_launched_signal = pyqtSignal(int, int, str, str, object)
     game_exited_signal = pyqtSignal(int)
     game_window_detected_signal = pyqtSignal()
     restart_quit_requested = pyqtSignal()
@@ -361,6 +361,10 @@ class DesignedWindow(QMainWindow):
 
             if not result.get('ok'):
                 msg = _tr("update.fail", msg=result.get('error', ''))
+            elif app_update.get('error'):
+                self.launch_status_signal.emit(_tr("update.fail", msg=app_update['error']))
+                self.button_update.setEnabled(True)
+                return
             elif app_update.get('need_update'):
                 msg = _tr("update.app_ready", version=app_update.get('remote', ''))
             elif not updated:
@@ -821,11 +825,17 @@ class DesignedWindow(QMainWindow):
         self.label_4.setText(full_text)
 
     # ---------- 游戏启动成功回调 ----------
-    def on_game_launched(self, root_pid, target_pid, game_exe_name, game_dir):
+    def on_game_launched(self, root_pid, target_pid, game_exe_name, game_dir, pre_launch_pids=None):
         if target_pid is not None:
-            self.process_manager.register_launch(root_pid, target_pid, game_exe_name, game_dir)
+            self.process_manager.register_launch(
+                root_pid, target_pid, game_exe_name, game_dir,
+                extra_pids=pre_launch_pids,
+            )
             self.current_game_pid = target_pid  # 记录目标 PID 用于窗口检测
-            _log.info("[主窗口] 已注册启动进程: 根PID=%s, 目标PID=%s, EXE=%s", root_pid, target_pid, game_exe_name)
+            _log.info(
+                "[主窗口] 已注册启动进程: 根PID=%s, 目标PID=%s, 启动前命令PID=%s, EXE=%s",
+                root_pid, target_pid, list(pre_launch_pids or ()), game_exe_name,
+            )
 
             # ═══ 窗口强制居中（若配置启用）═══
             if self.current_config and self.current_config.get('force_center_window', False):
@@ -1145,9 +1155,9 @@ class DesignedWindow(QMainWindow):
             # 安装失败，终止启动
             self.game_exited_signal.emit(launch_id)  # 确保恢复按钮状态
             return
+        game_dir = os.path.dirname(config.get('game_dir', ''))
+        game_exe_name = config.get('game_exe_name', os.path.basename(config.get('game_dir', '')))
         try:
-            game_dir = os.path.dirname(config.get('game_dir', ''))
-            game_exe_name = config.get('game_exe_name', os.path.basename(config.get('game_dir', '')))
             game_name = os.path.splitext(game_exe_name)[0]
             self.current_game_dir = game_dir
             self.current_game_name = game_name
@@ -1157,9 +1167,11 @@ class DesignedWindow(QMainWindow):
 
             result = launch_game(config, script_dir)
             if result is not None:
-                root_pid, target_pid = result
+                root_pid, target_pid, pre_launch_pids = result
                 if target_pid is not None:
-                    self.game_launched_signal.emit(root_pid, target_pid, game_exe_name, game_dir)
+                    self.game_launched_signal.emit(
+                        root_pid, target_pid, game_exe_name, game_dir, pre_launch_pids
+                    )
                 else:
                     self.launch_status_signal.emit(_tr("status.launch_failed_no_pid"))
                     return
@@ -1172,6 +1184,14 @@ class DesignedWindow(QMainWindow):
             if launch_id == self.current_launch_id:
                 self.launch_status_signal.emit(f"{_tr('dialog.error')}: {str(e)}")
         finally:
+            # 游戏退出/启动取消后，清理本次启动前命令派生的进程
+            if launch_id == self.current_launch_id:
+                try:
+                    self.process_manager.terminate_extra_processes(game_exe_name, game_dir)
+                    # 游戏退出后同时清掉本次启动链（root 进程树），避免引导/启动器残留
+                    self.process_manager.terminate_software_chain(game_exe_name, game_dir)
+                except Exception as e:
+                    _log.exception("清理本次启动进程失败: %s", e)
             self.game_exited_signal.emit(launch_id)
             self.window_detection_timer.stop()
             self.current_game_pid = None

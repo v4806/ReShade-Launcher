@@ -57,15 +57,10 @@ MANIFEST_ITEMS = [
 ]
 
 # 更新组件分组（用于「更新选择对话框」；item 的 id 与 MANIFEST_ITEMS 的 path 或特殊值 'app' 对应）
+# 核心文件（翻译/version/背景/图标）和说明文档随「程序本体」整包覆盖，不再单独列出。
 UPDATE_GROUPS = [
     {"key": "update.group.program", "items": [
         {"id": "app", "label": "update.item.app"},
-    ]},
-    {"key": "update.group.config", "items": [
-        {"id": "translations.json", "label": "update.item.translations"},
-        {"id": "version.json", "label": "update.item.version"},
-        {"id": "b.jpg", "label": "update.item.background"},
-        {"id": "icon.ico", "label": "update.item.icon"},
     ]},
     {"key": "update.group.reshade", "items": [
         {"id": "ReShade/ReShade64.dll", "label": "update.item.reshade_dll"},
@@ -74,10 +69,16 @@ UPDATE_GROUPS = [
         {"id": "ReShade/sound", "label": "update.item.sound"},
         {"id": "ReShade/Presets", "label": "update.item.presets"},
     ]},
-    {"key": "update.group.docs", "items": [
-        {"id": "README", "label": "update.item.readme"},
-    ]},
 ]
+
+# 这些条目由「程序本体」便携包整包覆盖更新，不再通过 update_manifest 单文件下载。
+PACKAGE_ITEM_PATHS = {
+    "translations.json",
+    "version.json",
+    "b.jpg",
+    "icon.ico",
+    "README",
+}
 
 
 def get_base_url() -> str:
@@ -303,17 +304,19 @@ def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
         result['error'] = f"获取更新清单失败: {e}"
         return result
 
-    # 2. 比对本地文件（支持按 selected 过滤组件）
+    # 2. 比对本地数据文件（按 selected 过滤组件）
+    # 核心文件/说明文档随「程序本体」整包覆盖，不再走单文件清单更新。
     try:
-        selected_set = None
-        filtered_manifest = manifest
-        if selected is not None:
-            selected_set = set(selected)
-            filtered_manifest = dict(manifest)
-            filtered_manifest['items'] = [
-                it for it in manifest.get('items', [])
-                if it['path'] in selected_set
-            ]
+        selected_set = set(selected) if selected is not None else None
+        package_selected = selected is None or 'app' in (selected_set or set())
+        data_ids = None if selected_set is None else (selected_set - {'app'})
+        items = list(manifest.get('items', []))
+        if package_selected:
+            items = [it for it in items if it['path'] not in PACKAGE_ITEM_PATHS]
+        if data_ids is not None:
+            items = [it for it in items if it['path'] in data_ids]
+        filtered_manifest = dict(manifest)
+        filtered_manifest['items'] = items
         pending, orphans = check_updates(local_root, filtered_manifest)
     except Exception as e:
         _log.error("比对本地文件失败: %s", e)
@@ -326,7 +329,7 @@ def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
     total = len(pending)
     if total >= SNAPSHOT_THRESHOLD:
         result['updated'], result['failed'] = _apply_snapshot(
-            local_root, manifest, progress_cb, total)
+            local_root, filtered_manifest, progress_cb, total)
     elif total > 0:
         max_workers = min(6, total)
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as _executor:
@@ -339,24 +342,29 @@ def update_all(local_root: str, progress_cb=None, selected=None) -> dict:
                 else:
                     result['failed'].append((rel, err))
 
-    # 5. 检测并准备 exe/_internal 更新（按版本号，整体 zip 更新；仅当未过滤或选中 app）
-    app_update = {'need_update': False, 'local': '', 'remote': '', 'error': ''}
-    if selected is None or 'app' in (selected_set or set()):
+    # 4. 检测并准备程序本体更新：检测最新 release tag，下载便携包整包覆盖（ReShade 除外）
+    app_update = {'need_update': False, 'local': '', 'remote': '', 'tag': '', 'error': ''}
+    if package_selected:
+        if progress_cb:
+            progress_cb("正在检测最新版本 tag...")
         try:
-            app_update = check_app_update(local_root, manifest)
-            if app_update.get('need_update'):
+            app_update = check_app_update(local_root)
+            if app_update.get('error'):
+                _log.warning("检测最新版本失败: %s", app_update['error'])
+            elif app_update.get('need_update'):
                 if progress_cb:
-                    progress_cb(f"检测到新版本 {app_update.get('remote')}，正在下载更新包...")
+                    progress_cb(f"检测到新版本 {app_update.get('remote')}，正在下载便携包...")
                 app_update['stage_dir'] = stage_app_update(local_root, app_update)
         except Exception as e:
+            _log.exception("准备程序本体更新失败")
             app_update['error'] = str(e)
             app_update['need_update'] = False
     result['app_update'] = app_update
 
     _log.info(
-        "更新检查完成: 成功=%s, 失败=%s, 多余=%s, app 需要更新=%s",
+        "更新检查完成: 成功=%s, 失败=%s, 多余=%s, 程序本体需要更新=%s, tag=%s",
         len(result['updated']), len(result['failed']), len(result['orphans']),
-        app_update.get('need_update'),
+        app_update.get('need_update'), app_update.get('tag'),
     )
     result['ok'] = True
     return result
@@ -432,69 +440,159 @@ def get_local_app_version(exe_path: str) -> str:
         return "0.0.0.0"
 
 
-def check_app_update(app_root: str, manifest: dict) -> dict:
-    """按版本号检测 exe/_internal 是否有更新，返回更新信息 dict"""
-    app = manifest.get('app') or {}
-    remote = app.get('version', '0.0.0.0')
+def fetch_latest_release() -> dict:
+    """获取最新正式 release 的 tag 与便携包 zip 资产。"""
+    api_url = f"https://api.github.com/repos/{REPO}/releases/latest"
+    req = urllib.request.Request(
+        api_url,
+        headers={
+            'User-Agent': 'ReShade-Launcher',
+            'Accept': 'application/vnd.github+json',
+        },
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        release = json.loads(resp.read().decode('utf-8'))
+
+    tag = str(release.get('tag_name') or '').strip()
+    if not tag:
+        raise ValueError('最新 release 缺少 tag')
+
+    assets = release.get('assets') or []
+    zip_asset = next(
+        (
+            asset for asset in assets
+            if str(asset.get('name', '')).lower().endswith('.zip')
+            and 'portable' in str(asset.get('name', '')).lower()
+        ),
+        None,
+    )
+    if zip_asset is None:
+        zip_asset = next(
+            (asset for asset in assets if str(asset.get('name', '')).lower().endswith('.zip')),
+            None,
+        )
+    if zip_asset is None:
+        raise ValueError(f'最新版本 {tag} 缺少便携版 zip 资产')
+
+    return {
+        'tag': tag,
+        'version': tag.lstrip('vV'),
+        'url': zip_asset.get('browser_download_url', ''),
+        'name': zip_asset.get('name', ''),
+        'digest': zip_asset.get('digest', ''),
+        'size': zip_asset.get('size', 0),
+    }
+
+
+def check_app_update(app_root: str) -> dict:
+    """按最新 release 的 tag 版本检测程序本体更新。"""
     local_exe = _local_path(app_root, APP_EXE_NAMES[0])
     local = get_local_app_version(local_exe)
+    try:
+        release = fetch_latest_release()
+    except Exception as e:
+        _log.warning("获取最新 release 失败: %s", e)
+        return {
+            'need_update': False,
+            'local': local,
+            'remote': '',
+            'tag': '',
+            'url': '',
+            'name': '',
+            'digest': '',
+            'error': str(e),
+        }
+
+    remote = release['version']
     need = _version_tuple(local) < _version_tuple(remote)
     return {
         'need_update': need,
         'local': local,
         'remote': remote,
-        'url': app.get('url', ''),
-        'sha256': app.get('sha256', ''),
+        'tag': release['tag'],
+        'url': release['url'],
+        'name': release['name'],
+        'digest': release.get('digest', ''),
+        'size': release.get('size', 0),
+        'error': '',
     }
 
 
 def stage_app_update(app_root: str, app_info: dict) -> str:
-    """
-    下载 app 更新包 zip 并解压到临时目录（不覆盖运行中的文件）。
-    返回解压后的目录（含新 exe 与 _internal）。
-    """
+    """下载最新 release 的便携包，安全解压到临时 stage 目录。"""
     url = app_info.get('url', '')
     if not url:
         raise ValueError('更新包下载地址缺失')
+
     tmp_root = tempfile.mkdtemp(prefix='ReShadeUpdate_')
     zip_path = os.path.join(tmp_root, 'app_update.zip')
     download_to(url, zip_path)
-    # zip 是二进制，用原始字节哈希校验
-    if app_info.get('sha256'):
+
+    digest = str(app_info.get('digest') or '')
+    if digest.startswith('sha256:'):
+        expected = digest.split(':', 1)[1].strip().lower()
         actual = hashlib.sha256(open(zip_path, 'rb').read()).hexdigest()
-        if actual != app_info['sha256']:
+        if actual != expected:
             raise ValueError('更新包校验失败，可能下载不完整')
-    with zipfile.ZipFile(zip_path, 'r') as z:
-        z.extractall(tmp_root)
-    return tmp_root
+
+    stage_dir = os.path.join(tmp_root, 'stage')
+    os.makedirs(stage_dir, exist_ok=True)
+    stage_abs = os.path.abspath(stage_dir)
+    with zipfile.ZipFile(zip_path, 'r') as archive:
+        for info in archive.infolist():
+            name = info.filename.replace('\\', '/')
+            if not name or name.endswith('/'):
+                continue
+            target = os.path.abspath(os.path.join(stage_abs, name))
+            if not target.startswith(stage_abs + os.sep):
+                raise ValueError('更新包包含非法路径')
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            with archive.open(info) as src, open(target, 'wb') as dst:
+                shutil.copyfileobj(src, dst)
+
+    if not os.path.isfile(os.path.join(stage_dir, APP_EXE_NAMES[0])):
+        raise ValueError('更新包缺少主程序 exe，可能不是便携版')
+    if not os.path.isdir(os.path.join(stage_dir, '_internal')):
+        raise ValueError('更新包缺少 _internal 目录')
+
+    try:
+        os.remove(zip_path)
+    except OSError:
+        pass
+    return stage_dir
 
 
 def make_restart_bat(app_root: str, stage_dir: str) -> str:
-    """
-    生成「退出→备份→覆盖→启动新 exe→清理」的重启替换批处理，返回 bat 绝对路径。
-    由主程序用 detach 方式启动后立即退出；bat 等待主程序退出后替换 exe/_internal。
-    """
+    """生成退出后整包覆盖的批处理：保留 ReShade 组件与用户数据。"""
     bat_path = os.path.join(stage_dir, 'apply_update.bat')
+    current_exe = os.path.basename(sys.executable)
+    launch_exe = current_exe if current_exe in APP_EXE_NAMES else APP_EXE_NAMES[0]
     lines = [
         '@echo off',
         'title ReShade Launcher Updater',
-        'rem wait for main exe to exit',
-        'ping 127.0.0.1 -n 3 >nul',
+        'setlocal',
+        'rem wait for the running launcher to exit',
+        'ping 127.0.0.1 -n 4 >nul',
         'set "APP=%s"' % app_root,
+        'set "SRC=%~dp0"',
+        'rem backup current _internal',
         'if exist "%APP%\\_internal" (',
         '  if exist "%APP%\\_internal_old" rmdir /s /q "%APP%\\_internal_old"',
-        '  rename "%APP%\\_internal" "_internal_old"',
+        '  move "%APP%\\_internal" "%APP%\\_internal_old" >nul',
         ')',
-        'xcopy /y /e /q "%~dp0_internal" "%APP%\\_internal"',
-        'copy /y /q "%~dp0ReShade Launcher Build.exe" "%APP%\\ReShade Launcher Build.exe"',
-        'copy /y /q "%~dp0ReShade Debug.exe" "%APP%\\ReShade Debug.exe"',
-        'if exist "%~dp0translations.json" copy /y /q "%~dp0translations.json" "%APP%\\translations.json"',
-        'if exist "%~dp0icon.ico" copy /y /q "%~dp0icon.ico" "%APP%\\icon.ico"',
-        'if exist "%~dp0b.jpg" copy /y /q "%~dp0b.jpg" "%APP%\\b.jpg"',
+        'rem copy the whole portable package except ReShade and user data',
+        'robocopy "%SRC%." "%APP%" /E /IS /IT /R:1 /W:1 /XD "%SRC%ReShade" "%APP%\\ReShade" "%SRC%launch_config" "%APP%\\launch_config" "%SRC%custom_data" "%APP%\\custom_data" "%SRC%MOD_loader" "%APP%\\MOD_loader" "%APP%\\_internal_old" /XF "apply_update.bat" /NFL /NDL /NJH /NJS /NP',
+        'set "RC=%ERRORLEVEL%"',
+        'if %RC% GEQ 8 (',
+        '  if exist "%APP%\\_internal" rmdir /s /q "%APP%\\_internal"',
+        '  if exist "%APP%\\_internal_old" move "%APP%\\_internal_old" "%APP%\\_internal" >nul',
+        '  start "" "%%APP%%\\%s"' % launch_exe,
+        '  exit /b 1',
+        ')',
         'if exist "%APP%\\_internal_old" rmdir /s /q "%APP%\\_internal_old"',
-        'start "" "%APP%\\ReShade Launcher Build.exe"',
+        'start "" "%%APP%%\\%s"' % launch_exe,
         'start "" cmd /c "ping 127.0.0.1 -n 4 >nul & rmdir /s /q \"%~dp0\""',
-        'exit',
+        'exit /b 0',
     ]
     with open(bat_path, 'w', encoding='gbk', errors='replace') as f:
         f.write('\r\n'.join(lines))

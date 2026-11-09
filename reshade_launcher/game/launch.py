@@ -133,8 +133,11 @@ def launch_game(config, script_dir):
             script_dir,
             injector_factory=XxmiInjector,
         )
-        _log.info("启动成功: root PID=%s, target PID=%s", result.root_pid, result.target_pid)
-        return result.root_pid, result.target_pid
+        _log.info(
+            "启动成功: root PID=%s, target PID=%s, 启动前命令 PID=%s",
+            result.root_pid, result.target_pid, list(result.pre_launch_pids or ()),
+        )
+        return result.root_pid, result.target_pid, tuple(result.pre_launch_pids or ())
     except Exception as exc:
         _log.exception("启动过程异常: %s", exc)
         return None

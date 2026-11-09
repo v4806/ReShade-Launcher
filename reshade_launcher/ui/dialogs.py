@@ -494,8 +494,8 @@ class EditConfigDialog(StyledDialog):
                                   max(1, int(5 * sf)), max(1, int(5 * sf)))
 
 
-        # ========== 图标预览区域（使用 StrokeGroupBox，标题描边）==========
-        icon_group = StrokeGroupBox(_tr("edit_config.icon_group"), self,
+        # ========== 图标与配置名称区域（合并）==========
+        icon_group = StrokeGroupBox(_tr("edit_config.basic_group", "图标与配置名称"), self,
                                     stroke_width=int(2*sf), stroke_color='#000000',
                                     scale_factor=sf)
         icon_group.setStyleSheet(f"""
@@ -529,7 +529,7 @@ class EditConfigDialog(StyledDialog):
         self.load_icon()
 
         icon_layout.addWidget(self.icon_label, alignment=Qt.AlignmentFlag.AlignCenter)
-        icon_layout.addStretch()
+        icon_layout.addSpacing(max(1, int(8 * sf)))
 
         icon_btn_layout = QVBoxLayout()
         icon_btn_layout.setSpacing(max(1, int(6 * sf)))
@@ -573,29 +573,17 @@ class EditConfigDialog(StyledDialog):
         icon_btn_layout.addStretch()
 
         icon_layout.addLayout(icon_btn_layout)
-        icon_group.setLayout(icon_layout)
-        layout.addWidget(icon_group)
+        icon_layout.addSpacing(max(1, int(10 * sf)))
 
-        # ========== 配置名称编辑区域（使用 StrokeGroupBox）==========
-        name_group = StrokeGroupBox(_tr("edit_config.name_group"), self,
-                                    stroke_width=int(2*sf), stroke_color='#000000',
-                                    scale_factor=sf)
-        name_group.setStyleSheet(f"""
-            QGroupBox {{
-                color: #FFFFFF;
-                font-weight: bold;
-                border: 2px solid #555555;
-                border-radius: {max(1, int(8 * sf))}px;
-                margin-top: {max(1, int(8 * sf))}px;
-                padding-top: {max(1, int(8 * sf))}px;
-                background-color: rgba(0, 0, 0, 0.7);
-            }}
-        """)
-        name_group.setFont(small_group_font)
-
-        name_layout = QVBoxLayout()
-        name_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
-                                       max(1, int(8 * sf)), max(1, int(8 * sf)))
+        # 右侧：配置名称
+        name_col = QVBoxLayout()
+        name_col.setSpacing(max(1, int(6 * sf)))
+        name_title = QLabel(_tr("edit_config.name_group"), self)
+        name_title.setStyleSheet(
+            f"color: #FFFFFF; font-weight: bold; background-color: transparent; "
+            f"font-size: {max(1, int(11 * sf))}px;"
+        )
+        name_col.addWidget(name_title)
 
         self.name_edit = QLineEdit(self)
         self.name_edit.setText(self.custom_data.get('display_name', self.config_name))
@@ -615,9 +603,12 @@ class EditConfigDialog(StyledDialog):
         edit_font = QFont()
         edit_font.setPointSize(max(1, int(12 * sf)))
         self.name_edit.setFont(edit_font)
-        name_layout.addWidget(self.name_edit)
-        name_group.setLayout(name_layout)
-        layout.addWidget(name_group)
+        name_col.addWidget(self.name_edit)
+        name_col.addStretch()
+        icon_layout.addLayout(name_col, 1)
+
+        icon_group.setLayout(icon_layout)
+        layout.addWidget(icon_group)
 
         # ========== 程序与参数编辑区域（使用 StrokeGroupBox）==========
         program_group = StrokeGroupBox(_tr("edit_config.program_group"), self,
@@ -640,33 +631,40 @@ class EditConfigDialog(StyledDialog):
         form_layout.setSpacing(max(1, int(8 * sf)))
         form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
 
-        # 创建三个描边标签
+        # 创建描边标签
         launch_label = StrokeLabel_4(_tr("edit_config.launch_program_label"), self)
         target_label = StrokeLabel_4(_tr("edit_config.target_program_label"), self)
         args_label = StrokeLabel_4(_tr("edit_config.launch_args_label"), self)
+        pre_launch_label = StrokeLabel_4(
+            _tr("edit_config.pre_launch_command_label", "启动前命令:"), self)
+        pre_launch_wait_label = StrokeLabel_4(
+            _tr("edit_config.pre_launch_wait_label", "命令后等待:"), self)
         injection_label = StrokeLabel_4(_tr("edit_config.injection_method", "注入方式"), self)
 
         # 统一设置描边属性
-        for label in (launch_label, target_label, args_label, injection_label):
+        for label in (launch_label, target_label, args_label,
+                      pre_launch_label, pre_launch_wait_label, injection_label):
             label.set_stroke_properties(int(2 * sf), '#000000')
             label.setStyleSheet("color: #FFFFFF; background-color: transparent;")
             label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setWordWrap(False)  # 禁止换行
 
-        # 计算三个标签中最长文本的宽度，并统一设置最小宽度（确保足够）
+        # 计算标签中最长文本的宽度，并统一设置最小宽度（确保足够）
         # 使用当前缩放后的字体度量
         fm = QFontMetrics(launch_label.font())  # 所有标签字体相同
-        label_texts = [launch_label.text(), target_label.text(), args_label.text(), injection_label.text()]
+        label_texts = [
+            launch_label.text(), target_label.text(), args_label.text(),
+            pre_launch_label.text(), pre_launch_wait_label.text(), injection_label.text(),
+        ]
         max_width = 0
         for text in label_texts:
             width = fm.horizontalAdvance(text) + int(10 * sf)  # 增加 10*sf 像素的额外空间
             if width > max_width:
                 max_width = width
         # 为所有标签设置相同的最小宽度
-        launch_label.setMinimumWidth(max_width)
-        target_label.setMinimumWidth(max_width)
-        args_label.setMinimumWidth(max_width)
-        injection_label.setMinimumWidth(max_width)
+        for label in (launch_label, target_label, args_label,
+                      pre_launch_label, pre_launch_wait_label, injection_label):
+            label.setMinimumWidth(max_width)
 
         # 启动程序行
         self.launch_program_edit = QLineEdit(self)
@@ -727,6 +725,27 @@ class EditConfigDialog(StyledDialog):
         self.launch_args_edit.setFixedHeight(max(1, int(26 * sf)))
         self.launch_args_edit.setStyleSheet(self.launch_program_edit.styleSheet())
         form_layout.addRow(args_label, self.launch_args_edit)
+
+        # 启动前命令（在创建/注入游戏进程之前执行）
+        self.pre_launch_command_edit = QLineEdit(self)
+        self.pre_launch_command_edit.setText(self.config_data.get('pre_launch_command', ''))
+        self.pre_launch_command_edit.setPlaceholderText(
+            _tr("edit_config.pre_launch_command_placeholder",
+                "留空则不执行；示例: C:\\path\\program.exe --arg"))
+        self.pre_launch_command_edit.setFixedHeight(max(1, int(26 * sf)))
+        self.pre_launch_command_edit.setStyleSheet(self.launch_program_edit.styleSheet())
+        form_layout.addRow(pre_launch_label, self.pre_launch_command_edit)
+
+        from PyQt6.QtWidgets import QSpinBox
+        self.pre_launch_wait_spin = QSpinBox(self)
+        self.pre_launch_wait_spin.setRange(0, 300)
+        self.pre_launch_wait_spin.setValue(
+            int(self.config_data.get('pre_launch_wait_seconds', 0) or 0))
+        self.pre_launch_wait_spin.setSuffix(" " + _tr("edit_config.center_seconds"))
+        self.pre_launch_wait_spin.setFixedHeight(max(1, int(26 * sf)))
+        self.pre_launch_wait_spin.setFixedWidth(max(1, int(110 * sf)))
+        self.pre_launch_wait_spin.setStyleSheet(self.launch_program_edit.styleSheet())
+        form_layout.addRow(pre_launch_wait_label, self.pre_launch_wait_spin)
 
         self.injection_method_combo = QComboBox(self)
         self.injection_method_combo.addItem(_tr("edit_config.injection_method_direct", "DIRECT（兼容）"), "direct")
@@ -813,7 +832,7 @@ class EditConfigDialog(StyledDialog):
             }}
         """)
         add_dll_btn.setFont(btn_font)
-        add_dll_btn.clicked.connect(lambda: self._add_dll_row())
+        add_dll_btn.clicked.connect(self._add_dll_from_dialog)
         dll_layout.addWidget(add_dll_btn)
 
         dll_group.setLayout(dll_layout)
@@ -828,11 +847,11 @@ class EditConfigDialog(StyledDialog):
         for dll_path in self.config_data.get('dll_files', []):
             self._add_dll_row(dll_path)
 
-                # ========== 窗口居中设置区域 ==========
-        center_group = StrokeGroupBox(_tr("edit_config.center_group"), self,
+        # ========== 窗口与缩放设置区域（左右分栏） ==========
+        window_group = StrokeGroupBox(_tr("edit_config.window_dpi_group", "窗口与缩放"), self,
                                       stroke_width=int(2*sf), stroke_color='#000000',
                                       scale_factor=sf)
-        center_group.setStyleSheet(f"""
+        window_group.setStyleSheet(f"""
             QGroupBox {{
                 color: #FFFFFF;
                 font-weight: bold;
@@ -843,7 +862,11 @@ class EditConfigDialog(StyledDialog):
                 background-color: rgba(0, 0, 0, 0.7);
             }}
         """)
-        center_group.setFont(small_group_font)
+        window_group.setFont(small_group_font)
+        window_layout = QHBoxLayout()
+        window_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
+                                         max(1, int(8 * sf)), max(1, int(8 * sf)))
+        window_layout.setSpacing(max(1, int(12 * sf)))
 
         center_layout = QVBoxLayout()
         center_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
@@ -934,25 +957,14 @@ class EditConfigDialog(StyledDialog):
         duration_row.addStretch()
 
         center_layout.addLayout(duration_row)
-        center_group.setLayout(center_layout)
-        layout.addWidget(center_group)
+        center_layout.addStretch()
 
-                # ========== Windows 缩放替代设置区域 ==========
-        dpi_group = StrokeGroupBox(_tr("edit_config.dpi_group"), self,
-                                   stroke_width=int(2*sf), stroke_color='#000000',
-                                   scale_factor=sf)
-        dpi_group.setStyleSheet(f"""
-            QGroupBox {{
-                color: #FFFFFF;
-                font-weight: bold;
-                border: 2px solid #555555;
-                border-radius: {max(1, int(8 * sf))}px;
-                margin-top: {max(1, int(10 * sf))}px;
-                padding-top: {max(1, int(15 * sf))}px;
-                background-color: rgba(0, 0, 0, 0.7);
-            }}
-        """)
-        dpi_group.setFont(small_group_font)
+        left_container = QWidget()
+        left_container.setStyleSheet("background-color: transparent;")
+        left_container.setLayout(center_layout)
+        window_layout.addWidget(left_container, 1)
+
+        # 右列：Windows 高 DPI 缩放替代
 
         dpi_layout = QVBoxLayout()
         dpi_layout.setContentsMargins(max(1, int(8 * sf)), max(1, int(8 * sf)),
@@ -960,7 +972,9 @@ class EditConfigDialog(StyledDialog):
         dpi_layout.setSpacing(max(1, int(8 * sf)))
 
         from PyQt6.QtWidgets import QCheckBox as PlainCheckBox
-        self.dpi_checkbox = PlainCheckBox(_tr("edit_config.dpi_enable"), self)
+        self.dpi_checkbox = PlainCheckBox(
+            _tr("edit_config.dpi_enable_short", "替代此程序的高 DPI 缩放行为"), self)
+        self.dpi_checkbox.setToolTip(_tr("edit_config.dpi_enable"))
         self.dpi_checkbox.setStyleSheet(f"""
             QCheckBox {{
                 color: #FFFFFF;
@@ -1005,9 +1019,15 @@ class EditConfigDialog(StyledDialog):
         exe_display = self._dpi_exe_path.replace('/', '\\') if self._dpi_exe_path else _tr("edit_config.dpi_no_exe")
         dpi_hint.setText(_tr("edit_config.dpi_exe_hint", exe=exe_display))
         dpi_layout.addWidget(dpi_hint)
+        dpi_layout.addStretch()
 
-        dpi_group.setLayout(dpi_layout)
-        layout.addWidget(dpi_group)
+        right_container = QWidget()
+        right_container.setStyleSheet("background-color: transparent;")
+        right_container.setLayout(dpi_layout)
+        window_layout.addWidget(right_container, 1)
+
+        window_group.setLayout(window_layout)
+        layout.addWidget(window_group)
 
         # 提示信息（改为描边标签，样式与原 QLabel 完全一致）
         info_label = StrokeLabel_4(_tr("edit_config.hint"), self)
@@ -1218,6 +1238,18 @@ class EditConfigDialog(StyledDialog):
         }
 
 
+    def _add_dll_from_dialog(self):
+        """点击添加 DLL：直接弹出文件选择框，选中后追加一行。"""
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            _tr("file_dialog.select_dll", "选择 DLL 文件"),
+            "",
+            f"DLL (*.dll);;{_tr('filter.all')} (*.*)",
+        )
+        if path:
+            self._add_dll_row(path.replace('\\', '/'))
+
+
     def _add_dll_row(self, dll_path: str = ""):
         """添加一行 DLL 路径编辑控件"""
         sf = self.scale_factor
@@ -1370,6 +1402,8 @@ class EditConfigDialog(StyledDialog):
         new_config['injection_method'] = self.injection_method_combo.currentData()
         new_config['force_center_window'] = self.center_checkbox.isChecked()
         new_config['center_window_duration'] = self.center_duration_spin.value()
+        new_config['pre_launch_command'] = self.pre_launch_command_edit.text().strip()
+        new_config['pre_launch_wait_seconds'] = int(self.pre_launch_wait_spin.value())
         # 收集 DLL 列表
         dll_files = []
         has_reshade = False
@@ -2307,12 +2341,17 @@ class UpdateSelectDialog(StyledDialog):
         super().__init__(parent)
         self.setWindowTitle(_tr("update.select_title"))
         self.setWindowFlags(Qt.WindowType.Dialog)
-        self.setFixedSize(
-            max(1, int(560 * self.scale_factor)),
-            max(1, int(740 * self.scale_factor))
-        )
         self.checkboxes = {}
         self.setup_ui()
+
+        # 组件分组精简后使用更紧凑的高度，内容仍可滚动
+        from PyQt6.QtWidgets import QApplication
+        screen = QApplication.primaryScreen()
+        max_h = screen.availableGeometry().height() - int(60 * self.scale_factor) if screen else 800
+        self.setFixedSize(
+            max(1, int(560 * self.scale_factor)),
+            max(1, min(int(540 * self.scale_factor), max_h)),
+        )
 
     def setup_ui(self):
         sf = self.scale_factor
@@ -2402,7 +2441,25 @@ class UpdateSelectDialog(StyledDialog):
                 gl.addWidget(cb)
                 self.checkboxes[item['id']] = cb
             vbox.addWidget(gb)
-        vbox.addStretch()
+        vbox.addStretch(1)
+
+        # 发布页面链接（点击默认浏览器打开，放在滚动区下方中央）
+        release_link = QLabel(
+            '<a style="color:#82FF55; text-decoration:none;" '
+            'href="https://github.com/v4806/ReShade-Launcher/releases">'
+            + _tr("update.release_page", "查看 GitHub 发布页面")
+            + '</a>',
+            container,
+        )
+        release_link.setOpenExternalLinks(True)
+        release_link.setTextFormat(Qt.TextFormat.RichText)
+        release_link.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByMouse)
+        release_link.setCursor(Qt.CursorShape.PointingHandCursor)
+        release_link.setStyleSheet("background-color: transparent;")
+        release_link.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        vbox.addWidget(release_link, alignment=Qt.AlignmentFlag.AlignHCenter)
+        vbox.addStretch(1)
+
         scroll.setWidget(container)
         layout.addWidget(scroll)
 
