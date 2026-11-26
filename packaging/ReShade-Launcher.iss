@@ -3,7 +3,7 @@
 ; 仅供非商业使用
 
 #define MyAppName "ReShade Launcher"
-#define MyAppVersion "2.6.2"
+#define MyAppVersion "2.6.3"
 #define MyAppURL "https://github.com/v4806/ReShade-Launcher/tree/main"
 #define MyAppExeName "ReShade Launcher Build.exe"
 #define MyProjectDir AddBackslash(SourcePath) + ".."
@@ -26,7 +26,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 PrivilegesRequiredOverridesAllowed=commandline
 OutputDir=D:\inno打包\ReShade
-OutputBaseFilename=ReShade-Launcher-installer-v2.6.2
+OutputBaseFilename=ReShade-Launcher-installer-v2.6.3
 SetupIconFile={#MySourceDir}\icon.ico
 SolidCompression=yes
 WizardStyle=modern dark
