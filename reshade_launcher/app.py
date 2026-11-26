@@ -1735,6 +1735,15 @@ class DesignedWindow(QMainWindow):
                 enable_reshade=enable_reshade
             )
             config_path = self.config_manager.get_config_path(config_name)
+
+            custom_data = self.custom_data_manager.get_custom_data(config_name)
+            profile = self.config_manager.get_builtin_game_profile(game_file)
+            if profile and not custom_data.get('display_name'):
+                self.custom_data_manager.update_custom_data(
+                    config_name, 'display_name', profile['display_name']
+                )
+                custom_data = self.custom_data_manager.get_custom_data(config_name)
+
             self.current_config = config
             self.current_config_name = config_name
             self.update_button8_icon(config_name)
@@ -1743,7 +1752,6 @@ class DesignedWindow(QMainWindow):
             self.update_tray_icon()   # 同步更新窗口图标
 
             # 获取显示名称
-            custom_data = self.custom_data_manager.get_custom_data(config_name)
             display_name = custom_data.get('display_name', config_name)
 
             # 创建桌面快捷方式

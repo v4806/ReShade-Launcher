@@ -17,6 +17,13 @@ APP_NAME = "ReShade Launcher"
 APP_VERSION = "2.6.2"
 APP_IDENTIFIER = "ReShade-Launcher-RUA-RUA_v2.6.2"
 
+BUILTIN_GAME_PROFILES = {
+    "azurpromilia": {
+        "display_name": "蓝色星原",
+        "launch_args": "-start=azurpromilia_launcher",
+    },
+}
+
 
 def load_version_config(app_root: str) -> dict:
     """
@@ -96,6 +103,11 @@ class ConfigManager:
         filename = os.path.basename(exe_path)
         return os.path.splitext(filename)[0]
     
+    def get_builtin_game_profile(self, exe_path: str) -> Optional[Dict]:
+        """获取内置模式已知游戏的特殊配置。"""
+        game_name = self.get_game_name_from_exe(exe_path).lower()
+        return BUILTIN_GAME_PROFILES.get(game_name)
+
     def get_config_path(self, config_name: str) -> str:
         """获取配置文件的完整路径"""
         return os.path.join(self.launch_config_dir, f"{config_name}.json")
@@ -289,6 +301,10 @@ class ConfigManager:
         game_mod_dir = os.path.join(self.mod_loader_dir, game_name)
         d3d11_path = os.path.join(game_mod_dir, "d3d11.dll")
         d3d11_exists = os.path.exists(d3d11_path)
+
+        profile = self.get_builtin_game_profile(game_exe_path)
+        if launch_args is None and profile:
+            launch_args = profile["launch_args"]
 
         if launch_program is None or target_program is None:
             lp, tp, da = self._determine_programs(game_exe_path, 'builtin')

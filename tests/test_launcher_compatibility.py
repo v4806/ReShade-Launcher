@@ -38,6 +38,18 @@ def test_saved_configs_include_explicit_direct_method(tmp_path):
     assert custom["injection_method"] == "direct"
 
 
+def test_azurpromilia_builtin_config_uses_game_launch_args(tmp_path):
+    game = _write(tmp_path / "game" / "AzurPromilia.exe")
+    _write(tmp_path / "MOD_loader" / "AzurPromilia" / "d3d11.dll")
+    manager = ConfigManager(str(tmp_path))
+
+    config, _ = manager.save_builtin_config(str(game))
+
+    assert config["launch_args"] == "-start=azurpromilia_launcher"
+    assert config["d3d11_exists"] is True
+    assert manager.get_builtin_game_profile(str(game))["display_name"] == "蓝色星原"
+
+
 def test_xxmi_config_saves_explicit_direct_method(tmp_path):
     game = _write(tmp_path / "game" / "ZenlessZoneZero.exe")
     xxmi_exe = _write(tmp_path / "xxmi" / "Resources" / "Bin" / "XXMI Launcher.exe")
