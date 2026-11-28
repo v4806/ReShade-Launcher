@@ -2654,10 +2654,7 @@ struct MessageDialogState {
     HFONT title_font = nullptr;
     HFONT body_font = nullptr;
     HFONT button_font = nullptr;
-    HBRUSH background_brush = nullptr;
     HBRUSH panel_brush = nullptr;
-    BackgroundImage background;
-    std::filesystem::path background_path;
     RECT card{};
 };
 
@@ -2665,13 +2662,10 @@ void DestroyMessageDialogResources(MessageDialogState& state) {
     if (state.title_font) DeleteObject(state.title_font);
     if (state.body_font) DeleteObject(state.body_font);
     if (state.button_font) DeleteObject(state.button_font);
-    if (state.background_brush) DeleteObject(state.background_brush);
     if (state.panel_brush) DeleteObject(state.panel_brush);
-    state.background.Clear();
     state.title_font = nullptr;
     state.body_font = nullptr;
     state.button_font = nullptr;
-    state.background_brush = nullptr;
     state.panel_brush = nullptr;
 }
 
@@ -2682,12 +2676,7 @@ void CreateMessageDialogResources(MessageDialogState& state) {
     state.title_font = CreateUiFont(state.dpi, 13, FW_SEMIBOLD);
     state.body_font = CreateUiFont(state.dpi, 10, FW_NORMAL);
     state.button_font = CreateUiFont(state.dpi, 10, FW_SEMIBOLD);
-    state.background_brush = CreateSolidBrush(ColorBackground());
     state.panel_brush = CreateSolidBrush(ColorPanel());
-    if (state.background_path.empty()) {
-        state.background_path = DefaultDialogBackground();
-    }
-    LoadBackgroundImage(state.background_path, &state.background);
 }
 
 void SizeAndCenterMessageDialog(MessageDialogState& state) {
@@ -2828,9 +2817,7 @@ void PaintMessageDialog(MessageDialogState& state) {
     HDC dc = BeginPaint(state.dialog, &paint);
     RECT client{};
     GetClientRect(state.dialog, &client);
-    FillRect(dc, &client, state.background_brush);
-    DrawBackgroundCover(dc, client, state.background, 150);
-    DrawRoundedSurface(dc, state.card, ColorPanel(), ColorBorder(), state.dpi, 8);
+    DrawRoundedSurface(dc, client, ColorPanel(), ColorBorder(), state.dpi, 8);
 
     SetBkMode(dc, TRANSPARENT);
     HGDIOBJ old_font = SelectObject(dc, state.title_font);
@@ -2973,7 +2960,7 @@ INT_PTR CALLBACK MessageDialogProc(HWND dialog, UINT message,
         }
         case WM_CTLCOLORDLG:
             return reinterpret_cast<INT_PTR>(
-                state->background_brush);
+                state->panel_brush);
         case WM_COMMAND:
             if (LOWORD(wparam) == state->primary_id ||
                 LOWORD(wparam) == state->secondary_id ||
