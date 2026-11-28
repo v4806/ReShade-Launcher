@@ -32,6 +32,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_release.ps1 -I
 
 内置 Mod 加载器的按需下载包位于 `mod-loaders\`，构建时会根据 `MOD_loader\` 内容生成并写入 `version.json`。Inno Setup 脚本位于 `packaging\ReShade-Launcher.iss`。完整着色器包作为 GitHub Release 资产单独发布，不进入安装器或便携包；内置 Mod 加载器也不会进入安装器或便携包。
 
+程序目录同时包含 `ReShade Debug.exe`。它带独立控制台和调试日志，日志写入 `%LOCALAPPDATA%\ReShade-Launcher\logs`；构建目录中同时保留 PDB 供开发定位。
+
 ## 测试
 
 ```powershell

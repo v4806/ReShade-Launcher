@@ -5,9 +5,11 @@
 #include <richedit.h>
 #include <shellapi.h>
 #include <shobjidl.h>
+#include <uxtheme.h>
 #include <wincodec.h>
 #include <windowsx.h>
 
+#include "core/diagnostics.h"
 #include "ui/overlay_window.h"
 
 #include <algorithm>
@@ -49,6 +51,7 @@ constexpr int kResetIcon = 1009;
 constexpr int kToggleReshade = 1010;
 constexpr int kHelpTabBase = 1100;
 constexpr int kIconPreview = 1110;
+constexpr int kHelpTextMarginDip = 22;
 constexpr UINT_PTR kProfileCheckboxSubclass = 1;
 constexpr UINT_PTR kHoverTrackingSubclass = 9001;
 constexpr wchar_t kHoverProperty[] = L"ReShadeLauncher.Hovered";
@@ -365,13 +368,20 @@ void ClearWindowTheme(HWND control) {
     }
 }
 
+std::wstring DpiLayerValueName(const std::filesystem::path& executable) {
+    std::error_code path_error;
+    auto absolute = std::filesystem::absolute(executable, path_error);
+    if (path_error) absolute = executable;
+    std::wstring value_name = absolute.lexically_normal().wstring();
+    std::replace(value_name.begin(), value_name.end(), L'/', L'\\');
+    return value_name;
+}
+
 bool ReadDpiOverride(const std::filesystem::path& executable) {
     if (executable.empty()) {
         return false;
     }
-    std::error_code path_error;
-    auto absolute = std::filesystem::absolute(executable, path_error);
-    if (path_error) absolute = executable;
+    const std::wstring value_name = DpiLayerValueName(executable);
 
     constexpr wchar_t kLayersKey[] =
         L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers";
@@ -384,7 +394,7 @@ bool ReadDpiOverride(const std::filesystem::path& executable) {
     DWORD type = 0;
     DWORD size = 0;
     LSTATUS status =
-        RegQueryValueExW(key, absolute.c_str(), nullptr, &type, nullptr, &size);
+        RegQueryValueExW(key, value_name.c_str(), nullptr, &type, nullptr, &size);
     if (status != ERROR_SUCCESS || (type != REG_SZ && type != REG_EXPAND_SZ) ||
         size < sizeof(wchar_t)) {
         RegCloseKey(key);
@@ -393,7 +403,7 @@ bool ReadDpiOverride(const std::filesystem::path& executable) {
 
     std::wstring value(size / sizeof(wchar_t), L'\0');
     status = RegQueryValueExW(
-        key, absolute.c_str(), nullptr, &type,
+        key, value_name.c_str(), nullptr, &type,
         reinterpret_cast<BYTE*>(value.data()), &size);
     RegCloseKey(key);
     if (status != ERROR_SUCCESS) {
@@ -417,9 +427,7 @@ std::wstring ApplyDpiOverride(const std::filesystem::path& executable,
     if (executable.empty()) {
         return L"DPI executable path is empty";
     }
-    std::error_code path_error;
-    auto absolute = std::filesystem::absolute(executable, path_error);
-    if (path_error) absolute = executable;
+    const std::wstring value_name = DpiLayerValueName(executable);
 
     constexpr wchar_t kLayersKey[] =
         L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers";
@@ -430,16 +438,14 @@ std::wstring ApplyDpiOverride(const std::filesystem::path& executable,
     if (layer_status != ERROR_SUCCESS) return FormatLastError(layer_status);
 
     std::wstring current_flags;
-    bool layer_value_exists = false;
     DWORD value_type = REG_SZ;
     DWORD value_size = 0;
     layer_status = RegQueryValueExW(
-        key, absolute.c_str(), nullptr, &value_type, nullptr, &value_size);
+        key, value_name.c_str(), nullptr, &value_type, nullptr, &value_size);
     if (layer_status == ERROR_SUCCESS && value_size >= sizeof(wchar_t)) {
-        layer_value_exists = true;
         std::wstring value(value_size / sizeof(wchar_t), L'\0');
         layer_status = RegQueryValueExW(
-            key, absolute.c_str(), nullptr, &value_type,
+            key, value_name.c_str(), nullptr, &value_type,
             reinterpret_cast<BYTE*>(value.data()), &value_size);
         if (layer_status != ERROR_SUCCESS) {
             RegCloseKey(key);
@@ -452,7 +458,6 @@ std::wstring ApplyDpiOverride(const std::filesystem::path& executable,
         RegCloseKey(key);
         return FormatLastError(layer_status);
     }
-    const std::wstring previous_flags = current_flags;
 
     std::wistringstream token_stream(current_flags);
     std::vector<std::wstring> preserved;
@@ -473,14 +478,14 @@ std::wstring ApplyDpiOverride(const std::filesystem::path& executable,
     if (enabled) updated_flags += L" DPIUNAWARE";
 
     if (updated_flags.empty() || updated_flags == L"~") {
-        const LSTATUS removed = RegDeleteValueW(key, absolute.c_str());
+        const LSTATUS removed = RegDeleteValueW(key, value_name.c_str());
         if (removed != ERROR_SUCCESS && removed != ERROR_FILE_NOT_FOUND) {
             RegCloseKey(key);
             return FormatLastError(removed);
         }
     } else {
         const LSTATUS set = RegSetValueExW(
-            key, absolute.c_str(), 0, REG_SZ,
+            key, value_name.c_str(), 0, REG_SZ,
             reinterpret_cast<const BYTE*>(updated_flags.c_str()),
             static_cast<DWORD>((updated_flags.size() + 1) * sizeof(wchar_t)));
         if (set != ERROR_SUCCESS) {
@@ -489,61 +494,6 @@ std::wstring ApplyDpiOverride(const std::filesystem::path& executable,
         }
     }
     RegCloseKey(key);
-    auto restore_layer = [&] {
-        HKEY restore_key = nullptr;
-        if (RegCreateKeyExW(
-                HKEY_CURRENT_USER, kLayersKey, 0, nullptr, 0,
-                KEY_SET_VALUE, nullptr, &restore_key, nullptr) != ERROR_SUCCESS) {
-            return;
-        }
-        if (layer_value_exists) {
-            RegSetValueExW(
-                restore_key, absolute.c_str(), 0, REG_SZ,
-                reinterpret_cast<const BYTE*>(previous_flags.c_str()),
-                static_cast<DWORD>(
-                    (previous_flags.size() + 1) * sizeof(wchar_t)));
-        } else {
-            RegDeleteValueW(restore_key, absolute.c_str());
-        }
-        RegCloseKey(restore_key);
-    };
-
-    const std::wstring ifeo_key =
-        L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution "
-        L"Options\\" +
-        absolute.filename().wstring();
-    if (enabled) {
-        const LSTATUS create = RegCreateKeyExW(
-            HKEY_LOCAL_MACHINE, ifeo_key.c_str(), 0, nullptr, 0, KEY_SET_VALUE,
-            nullptr, &key, nullptr);
-        if (create != ERROR_SUCCESS) {
-            restore_layer();
-            return FormatLastError(create);
-        }
-        const DWORD value = 0;
-        const LSTATUS set =
-            RegSetValueExW(key, L"dpiAwareness", 0, REG_DWORD,
-                           reinterpret_cast<const BYTE*>(&value), sizeof(value));
-        RegCloseKey(key);
-        if (set != ERROR_SUCCESS) {
-            restore_layer();
-            return FormatLastError(set);
-        }
-    } else {
-        const LSTATUS open = RegOpenKeyExW(
-            HKEY_LOCAL_MACHINE, ifeo_key.c_str(), 0, KEY_SET_VALUE, &key);
-        if (open == ERROR_SUCCESS) {
-            const LSTATUS removed = RegDeleteValueW(key, L"dpiAwareness");
-            RegCloseKey(key);
-            if (removed != ERROR_SUCCESS && removed != ERROR_FILE_NOT_FOUND) {
-                restore_layer();
-                return FormatLastError(removed);
-            }
-        } else if (open != ERROR_FILE_NOT_FOUND) {
-            restore_layer();
-            return FormatLastError(open);
-        }
-    }
     RefreshDpiSettings();
     return {};
 }
@@ -667,7 +617,7 @@ void LayoutControls(ProfileDialogState& state) {
         MulDiv(static_cast<int>(client.right), 96, static_cast<int>(dpi));
     const int panel_left = 20;
     const int panel_right = std::min(client_width - 20, 740);
-    const int panel_width = std::max(520, panel_right - panel_left);
+    const int panel_width = std::max(1, panel_right - panel_left);
     const int inner_left = panel_left + 14;
     const int inner_right = panel_left + panel_width - 14;
     const int field_left = inner_left + 130;
@@ -1527,6 +1477,8 @@ INT_PTR CALLBACK ProfileDialogProc(HWND dialog, UINT message, WPARAM wparam,
         SetWindowLongPtrW(dialog, GWL_EXSTYLE,
                           GetWindowLongPtrW(dialog, GWL_EXSTYLE) |
                               WS_EX_COMPOSITED);
+        SetWindowTheme(dialog, L"DarkMode_Explorer", nullptr);
+        AttachOverlayToOwner(dialog, GetWindow(dialog, GW_OWNER));
         ConfigureOverlayWindow(dialog);
         SetDarkWindowFrame(dialog);
         CreateStateResources(*state);
@@ -1556,6 +1508,7 @@ INT_PTR CALLBACK ProfileDialogProc(HWND dialog, UINT message, WPARAM wparam,
         case WM_ERASEBKGND:
             return TRUE;
         case WM_SIZE:
+            LayoutControls(*state);
             UpdateScrollBar(*state);
             RefreshOverlayRegion(dialog);
             RedrawWindow(dialog, nullptr, nullptr,
@@ -2239,6 +2192,34 @@ void SizeAndCenterHelpDialog(HelpDialogState& state) {
                         Dip(state.dpi, 980), Dip(state.dpi, 680));
 }
 
+void UpdateHelpTextLayout(HelpDialogState& state) {
+    if (!state.text) return;
+
+    RECT text_client{};
+    GetClientRect(state.text, &text_client);
+    const int margin = Dip(state.dpi, kHelpTextMarginDip);
+    const int scrollbar_width =
+        GetSystemMetricsForDpi(SM_CXVSCROLL, state.dpi);
+    const int target_width_pixels =
+        std::max(1, static_cast<int>(text_client.right) - margin -
+                        scrollbar_width);
+
+    SendMessageW(state.text, EM_SETMARGINS,
+                 EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                 MAKELPARAM(margin, margin));
+    SendMessageW(state.text, EM_SETOPTIONS, ECOOP_AND,
+                 static_cast<LPARAM>(~ECO_AUTOHSCROLL));
+
+    HDC text_dc = GetDC(state.text);
+    if (!text_dc) return;
+    const int text_dpi = std::max(1, GetDeviceCaps(text_dc, LOGPIXELSX));
+    const int target_width =
+        std::max(1, MulDiv(target_width_pixels, 1440, text_dpi));
+    SendMessageW(state.text, EM_SETTARGETDEVICE,
+                 reinterpret_cast<WPARAM>(text_dc), target_width);
+    ReleaseDC(state.text, text_dc);
+}
+
 void LayoutHelpDialog(HelpDialogState& state) {
     RECT client{};
     GetClientRect(state.dialog, &client);
@@ -2330,18 +2311,7 @@ void LayoutHelpDialog(HelpDialogState& state) {
                                                state.body_frame.top) -
                                   body_padding * 2),
                  SWP_NOACTIVATE);
-    RECT text_client{};
-    GetClientRect(state.text, &text_client);
-    HDC text_dc = GetDC(state.text);
-    const int text_dpi = std::max(1, GetDeviceCaps(text_dc, LOGPIXELSX));
-    const int target_width =
-        std::max(1, MulDiv(static_cast<int>(text_client.right), 1440, text_dpi));
-    SendMessageW(state.text, EM_SETTARGETDEVICE,
-                 reinterpret_cast<WPARAM>(text_dc),
-                 target_width);
-    ReleaseDC(state.text, text_dc);
-    SendMessageW(state.text, EM_SETOPTIONS, ECOOP_AND,
-                 static_cast<LPARAM>(~ECO_AUTOHSCROLL));
+    UpdateHelpTextLayout(state);
     SetWindowPos(state.close, nullptr,
                  static_cast<int>(client.right) - margin - button_width,
                  static_cast<int>(client.bottom) - margin - button_height,
@@ -2353,21 +2323,9 @@ void UpdateHelpPage(HelpDialogState& state) {
     if (selected >= 0 &&
         selected < static_cast<int>(state.page_rtf.size())) {
         SetRichText(state.text, state.page_rtf[selected]);
-        RECT text_client{};
-        GetClientRect(state.text, &text_client);
-        HDC text_dc = GetDC(state.text);
-        const int text_dpi = std::max(1, GetDeviceCaps(text_dc, LOGPIXELSX));
-        const int target_width =
-            std::max(1, MulDiv(static_cast<int>(text_client.right), 1440, text_dpi));
-        SendMessageW(state.text, EM_SETTARGETDEVICE,
-                     reinterpret_cast<WPARAM>(text_dc),
-                     target_width);
-        ReleaseDC(state.text, text_dc);
+        UpdateHelpTextLayout(state);
         SendMessageW(state.text, EM_SETBKGNDCOLOR, 0,
                      static_cast<LPARAM>(ColorPanel()));
-        SendMessageW(state.text, EM_SETMARGINS,
-                     EC_LEFTMARGIN | EC_RIGHTMARGIN,
-                     MAKELPARAM(Dip(state.dpi, 22), Dip(state.dpi, 22)));
         SendMessageW(state.text, EM_SETSEL, 0, 0);
         SendMessageW(state.text, EM_SCROLLCARET, 0, 0);
         InvalidateRect(state.text, nullptr, FALSE);
@@ -2423,6 +2381,7 @@ INT_PTR CALLBACK HelpDialogProc(HWND dialog, UINT message, WPARAM wparam,
         SetWindowLongPtrW(dialog, GWL_EXSTYLE,
                           GetWindowLongPtrW(dialog, GWL_EXSTYLE) |
                               WS_EX_COMPOSITED);
+        AttachOverlayToOwner(dialog, GetWindow(dialog, GW_OWNER));
         ConfigureOverlayWindow(dialog);
         SetDarkWindowFrame(dialog);
         CreateHelpResources(*state);
@@ -2454,10 +2413,11 @@ INT_PTR CALLBACK HelpDialogProc(HWND dialog, UINT message, WPARAM wparam,
         SendMessageW(state->close, WM_SETFONT,
                      reinterpret_cast<WPARAM>(state->text_font), TRUE);
         SendMessageW(state->text, EM_SETMARGINS,
-                     EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELPARAM(12, 12));
+                     EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                     MAKELPARAM(Dip(state->dpi, kHelpTextMarginDip),
+                                Dip(state->dpi, kHelpTextMarginDip)));
         SendMessageW(state->text, EM_SETEDITSTYLE, SES_EXTENDBACKCOLOR,
                      SES_EXTENDBACKCOLOR);
-        SendMessageW(state->text, EM_SETTARGETDEVICE, 0, 0);
         SendMessageW(state->text, EM_SETBKGNDCOLOR, 0,
                      static_cast<LPARAM>(ColorPanel()));
 
@@ -2872,6 +2832,7 @@ INT_PTR CALLBACK MessageDialogProc(HWND dialog, UINT message,
         state = reinterpret_cast<MessageDialogState*>(lparam);
         state->dialog = dialog;
         SetWindowLongPtrW(dialog, DWLP_USER, lparam);
+        AttachOverlayToOwner(dialog, GetWindow(dialog, GW_OWNER));
         ConfigureOverlayWindow(dialog);
         SetDarkWindowFrame(dialog);
         CreateMessageDialogResources(*state);
@@ -2988,6 +2949,7 @@ INT_PTR CALLBACK MessageDialogProc(HWND dialog, UINT message,
 INT_PTR ShowMessageDialog(HWND owner, std::wstring_view title,
                           std::wstring_view message, bool confirmation,
                           bool error) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     MessageDialogState state;
     state.title = title;
     state.message = message;
@@ -3011,6 +2973,7 @@ INT_PTR ShowMessageDialog(HWND owner, std::wstring_view title,
 std::optional<std::filesystem::path> PickFile(
     HWND owner, const wchar_t* title, const COMDLG_FILTERSPEC* filters,
     UINT filter_count) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     IFileOpenDialog* dialog = nullptr;
     if (FAILED(CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER,
                                 IID_PPV_ARGS(&dialog)))) {
@@ -3040,6 +3003,7 @@ std::optional<std::filesystem::path> PickFile(
 std::vector<std::filesystem::path> PickFiles(
     HWND owner, const wchar_t* title, const COMDLG_FILTERSPEC* filters,
     UINT filter_count) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     std::vector<std::filesystem::path> results;
     IFileOpenDialog* dialog = nullptr;
     if (FAILED(CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER,
@@ -3076,6 +3040,7 @@ std::vector<std::filesystem::path> PickFiles(
 }
 
 std::optional<std::filesystem::path> PickFolder(HWND owner, const wchar_t* title) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     IFileOpenDialog* dialog = nullptr;
     if (FAILED(CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER,
                                 IID_PPV_ARGS(&dialog)))) {
@@ -3111,12 +3076,19 @@ void ShowInfo(HWND owner, std::wstring_view title, std::wstring_view message) {
 }
 
 void ShowError(HWND owner, std::wstring_view title, std::wstring_view message) {
+    DebugLog("Error: " + WideToUtf8(title) + " | " + WideToUtf8(message));
     ShowMessageDialog(owner, title, message, false, true);
 }
 
 void ShowDetails(HWND owner, std::wstring_view title,
                  std::wstring_view message, std::wstring_view details,
                  bool error) {
+    if (error) {
+        DebugLog("Error details: " + WideToUtf8(title) + " | " +
+                 WideToUtf8(message));
+        DebugLog(WideToUtf8(details));
+    }
+    ScopedOwnerUiSuppression suppress_owner(owner);
     MessageDialogState state;
     state.title = title;
     state.message = message;
@@ -3136,6 +3108,7 @@ int ShowChoiceDialog(HWND owner, std::wstring_view title,
                      std::wstring_view primary_label,
                      std::wstring_view secondary_label,
                      std::wstring_view cancel_label) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     constexpr UINT kPrimaryId = 1001;
     constexpr UINT kSecondaryId = 1002;
     MessageDialogState state;
@@ -3159,6 +3132,7 @@ std::optional<ProfileEditResult> EditProfile(
     HWND owner, const Translation& translation, std::string_view config_name,
     const Json& config, std::string_view display_name,
     std::string_view custom_icon, const std::filesystem::path& background) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     ProfileDialogState state;
     state.translation = &translation;
     state.config = config;
@@ -3180,6 +3154,7 @@ std::optional<ProfileEditResult> EditProfile(
 
 void ShowHelp(HWND owner, const Translation& translation,
               const std::filesystem::path& background) {
+    ScopedOwnerUiSuppression suppress_owner(owner);
     HelpDialogState state;
     state.translation = &translation;
     state.background_path = background;

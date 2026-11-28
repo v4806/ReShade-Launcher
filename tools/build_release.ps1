@@ -359,8 +359,10 @@ Invoke-Checked $python @(
 ) $root
 
 $mainExe = Join-Path $buildDir "bin\ReShade Launcher Build.exe"
+$debugExe = Join-Path $buildDir "bin\ReShade Debug.exe"
+$debugPdb = Join-Path $buildDir "bin\ReShade Debug.pdb"
 $updaterExe = Join-Path $buildDir "bin\ReShadeLauncherUpdater.exe"
-foreach ($requiredPath in @($mainExe, $updaterExe)) {
+foreach ($requiredPath in @($mainExe, $debugExe, $debugPdb, $updaterExe)) {
     if (-not (Test-Path -LiteralPath $requiredPath -PathType Leaf)) {
         throw "Expected build output was not produced: $requiredPath"
     }
@@ -371,6 +373,7 @@ Reset-GeneratedDirectory -Path $defaultsDir
 Reset-GeneratedDirectory -Path $releaseDir
 
 Copy-FileIfPresent -Source $mainExe -DestinationDirectory $stageDir
+Copy-FileIfPresent -Source $debugExe -DestinationDirectory $stageDir
 Copy-FileIfPresent -Source $updaterExe -DestinationDirectory $stageDir
 
 foreach ($fileName in @(
@@ -576,6 +579,7 @@ try {
     }
     foreach ($requiredEntry in @(
         "ReShade Launcher Build.exe",
+        "ReShade Debug.exe",
         "3dmloader.dll",
         "ReShade/ReShade64.dll"
     )) {

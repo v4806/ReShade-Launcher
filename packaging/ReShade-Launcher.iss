@@ -161,6 +161,7 @@ Source: "{#MySourceDir}\README\shortcuts_pt.txt"; Flags: dontcopy ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\ReShade Debug"; Filename: "{app}\ReShade Debug.exe"
 Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\ReShade Build"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon

@@ -59,6 +59,15 @@ configure_file(
     @ONLY
 )
 
+set(VERSION_RC_INTERNAL_NAME "ReShadeLauncherDebug")
+set(VERSION_RC_ORIGINAL_FILENAME "ReShade Debug.exe")
+set(VERSION_RC_FILE_DESCRIPTION "ReShade Launcher Debug")
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/packaging/version.rc.in"
+    "${GENERATED_DIR}/debug_version.rc"
+    @ONLY
+)
+
 set(VERSION_RC_INTERNAL_NAME "ReShadeLauncherUpdater")
 set(VERSION_RC_ORIGINAL_FILENAME "ReShadeLauncherUpdater.exe")
 set(VERSION_RC_FILE_DESCRIPTION "ReShade Launcher Updater")
@@ -132,6 +141,7 @@ set(WINDOWS_DEPENDENCIES
     shlwapi
     shcore
     comctl32
+    uxtheme
     shell32
     ole32
     oleaut32
@@ -206,6 +216,49 @@ target_link_options(
 )
 
 add_executable(
+    ReShadeLauncherDebug
+    ${RESHADE_LAUNCHER_SOURCES}
+    "${GENERATED_DIR}/debug_version.rc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/packaging/app.manifest.rc"
+)
+set_target_properties(
+    ReShadeLauncherDebug
+    PROPERTIES
+        OUTPUT_NAME "ReShade Debug"
+        VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+target_include_directories(
+    ReShadeLauncherDebug
+    PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/src"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/miniz"
+        "${GENERATED_DIR}"
+)
+target_compile_definitions(
+    ReShadeLauncherDebug
+    PRIVATE
+        UNICODE
+        _UNICODE
+        WIN32_LEAN_AND_MEAN
+        NOMINMAX
+        RESHADE_LAUNCHER_DEBUG_BUILD=1
+)
+target_compile_options(ReShadeLauncherDebug PRIVATE /Zi)
+target_link_libraries(
+    ReShadeLauncherDebug
+    PRIVATE
+        ReShadeLauncherMiniz
+        ${WINDOWS_DEPENDENCIES}
+)
+target_link_options(
+    ReShadeLauncherDebug
+    PRIVATE
+        "/MANIFEST:NO"
+        "/DEBUG"
+)
+
+add_executable(
     ReShadeLauncherUpdater
     ${RESHADE_LAUNCHER_UPDATER_SOURCES}
     "${GENERATED_DIR}/updater_version.rc"
@@ -254,7 +307,7 @@ source_group(
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ReShadeLauncher)
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/3dmloader.dll")
-    foreach(target IN ITEMS ReShadeLauncher ReShadeLauncherUpdater)
+    foreach(target IN ITEMS ReShadeLauncher ReShadeLauncherDebug ReShadeLauncherUpdater)
         add_custom_command(
             TARGET ${target}
             POST_BUILD
@@ -303,6 +356,6 @@ elseif(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.tx
 endif()
 
 install(
-    TARGETS ReShadeLauncher ReShadeLauncherUpdater
+    TARGETS ReShadeLauncher ReShadeLauncherDebug ReShadeLauncherUpdater
     RUNTIME DESTINATION .
 )

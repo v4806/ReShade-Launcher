@@ -55,6 +55,15 @@ int wmain() {
 
     rs::AppData app(temp);
     app.Load();
+    Check(!app.WindowClientSize(), "window size starts unset");
+    Check(app.SetWindowClientSize(SIZE{812, 644}),
+          "window size persisted");
+    rs::AppData reloaded_app(temp);
+    reloaded_app.Load();
+    const auto saved_window_size = reloaded_app.WindowClientSize();
+    Check(saved_window_size && saved_window_size->cx == 812 &&
+              saved_window_size->cy == 644,
+          "window size restored");
     rs::WriteUtf8Atomic(
         temp / L"version.json",
         R"({

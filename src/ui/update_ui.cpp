@@ -10,6 +10,7 @@
 #include <memory>
 #include <thread>
 
+#include "core/diagnostics.h"
 #include "update/update_client.h"
 #include "ui/dialogs.h"
 #include "ui/overlay_window.h"
@@ -117,6 +118,8 @@ public:
           job_(std::move(job)) {}
 
     std::optional<DownloadOutcome> Run() {
+        DebugLog("Download started: " + WideToUtf8(title_));
+        ScopedOwnerUiSuppression suppress_owner(owner_);
         WNDCLASSEXW wc{};
         wc.cbSize = sizeof(wc);
         wc.lpfnWndProc = WindowProc;
@@ -129,9 +132,9 @@ public:
             WS_POPUP | WS_CLIPCHILDREN, 0, 0, 430, 155, owner_, nullptr,
             wc.hInstance, this);
         if (!hwnd_) return std::nullopt;
+        AttachOverlayToOwner(hwnd_, owner_);
         ConfigureOverlayWindow(hwnd_);
         SizeWindow();
-        if (owner_ && IsWindow(owner_)) EnableWindow(owner_, FALSE);
         ShowWindow(hwnd_, SW_SHOWNORMAL);
         UpdateWindow(hwnd_);
 
@@ -141,9 +144,11 @@ public:
             DispatchMessageW(&message);
         }
         if (worker_.joinable()) worker_.join();
-        if (owner_ && IsWindow(owner_)) {
-            EnableWindow(owner_, TRUE);
-            SetForegroundWindow(owner_);
+        if (owner_ && IsWindow(owner_)) SetForegroundWindow(owner_);
+        if (outcome_) {
+            DebugLog(outcome_->success
+                         ? "Download completed: " + WideToUtf8(title_)
+                         : "Download failed: " + outcome_->error);
         }
         return outcome_;
     }
@@ -459,6 +464,7 @@ public:
                                    L"Checking for updates...")) {}
 
     std::optional<UpdateCheckOutcome> Run() {
+        ScopedOwnerUiSuppression suppress_owner(owner_);
         constexpr wchar_t kClass[] = L"ReShadeLauncherUpdateCheck";
         WNDCLASSEXW wc{};
         wc.cbSize = sizeof(wc);
@@ -472,9 +478,9 @@ public:
             WS_POPUP | WS_CLIPCHILDREN, 0, 0, 480, 180, owner_, nullptr,
             wc.hInstance, this);
         if (!hwnd_) return std::nullopt;
+        AttachOverlayToOwner(hwnd_, owner_);
         ConfigureOverlayWindow(hwnd_);
         SizeWindow();
-        if (owner_ && IsWindow(owner_)) EnableWindow(owner_, FALSE);
         ShowWindow(hwnd_, SW_SHOWNORMAL);
         UpdateWindow(hwnd_);
         worker_ = std::thread([this] { Work(); });
@@ -485,7 +491,6 @@ public:
             DispatchMessageW(&message);
         }
         if (worker_.joinable()) worker_.join();
-        if (owner_ && IsWindow(owner_)) EnableWindow(owner_, TRUE);
         return outcome_;
     }
 
@@ -577,10 +582,18 @@ private:
         try {
             reshade_launcher::update::UpdateClient client;
             outcome->result = client.CheckForUpdate(current_version_);
+            if (outcome->result) {
+                DebugLog("Update check: current=" + outcome->result->currentVersion +
+                         " latest=" + outcome->result->release.version +
+                         " available=" +
+                         (outcome->result->updateAvailable ? "true" : "false"));
+            }
         } catch (const std::exception& error) {
             outcome->error = error.what();
+            DebugLog(std::string("Update check failed: ") + error.what());
         } catch (...) {
             outcome->error = "unknown update check error";
+            DebugLog("Update check failed: unknown error");
         }
         auto* raw = outcome.release();
         if (!PostMessageW(hwnd_, WM_APP + 51, 0,
@@ -671,6 +684,8 @@ bool DownloadGitHubAsset(HWND owner, const Translation& translation,
                          std::string* error, bool* cancelled) {
     if (error) error->clear();
     if (cancelled) *cancelled = false;
+    DebugLog("GitHub download: " + std::string(url) + " size=" +
+             std::to_string(expected_size));
     std::error_code ec;
     std::filesystem::create_directories(destination.parent_path(), ec);
     if (ec) {
@@ -690,6 +705,7 @@ bool DownloadGitHubAsset(HWND owner, const Translation& translation,
             });
         if (!download) {
             if (error) *error = "The download window could not be opened.";
+            DebugLog("GitHub download failed: progress window unavailable");
             return false;
         }
         if (cancelled) *cancelled = download->cancelled;
@@ -698,17 +714,24 @@ bool DownloadGitHubAsset(HWND owner, const Translation& translation,
                 *error = download->cancelled ? "Download cancelled."
                                              : download->error;
             }
+            DebugLog(download->cancelled
+                         ? "GitHub download cancelled"
+                         : "GitHub download failed: " + download->error);
             return false;
         }
+        DebugLog("GitHub download completed: " +
+                 WideToUtf8(destination.wstring()));
         return true;
     } catch (const std::exception& exception) {
         if (error) *error = exception.what();
+        DebugLog(std::string("GitHub download exception: ") + exception.what());
         return false;
     }
 }
 
 void RunManualUpdate(HWND owner, const AppData&, const Translation& translation) {
     const std::string current = WideToUtf8(ExecutableVersionString(ExecutablePath()));
+    DebugLog("Manual update check requested; current version=" + current);
     if (current.empty()) {
         ShowError(
             owner, translation.GetW("cxx.update.title", L"Update"),

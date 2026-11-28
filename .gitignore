@@ -9,7 +9,9 @@ ReShade Debug.exe
 # ── Python 缓存/虚拟环境 ──
 __pycache__/
 *.pyc
+*.obj
 .venv/
+tests/native/bin/
 
 # ── 用户配置/运行数据（不入库） ──
 custom_data/

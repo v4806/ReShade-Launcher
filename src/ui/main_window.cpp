@@ -14,6 +14,7 @@
 #include <exception>
 #include <sstream>
 
+#include "core/diagnostics.h"
 #include "ui/dialogs.h"
 #include "ui/overlay_window.h"
 
@@ -34,6 +35,10 @@ constexpr int kTrayShow = 40002;
 constexpr int kTrayMods = 40003;
 constexpr int kTrayModPresetAll = 40004;
 constexpr int kTrayModPresetSelect = 40005;
+constexpr int kDefaultWindowClientWidthDip = 640;
+constexpr int kDefaultWindowClientHeightDip = 530;
+constexpr int kMinimumWindowClientWidthDip = 610;
+constexpr int kMinimumWindowClientHeightDip = 500;
 
 D2D1_COLOR_F ColorBackground() {
     return D2D1::ColorF(0.035f, 0.045f, 0.09f, 1.0f);
@@ -363,6 +368,7 @@ public:
           log_root_(std::move(log_root)) {}
 
     std::optional<ModPresetProgressOutcome> Run() {
+        ScopedOwnerUiSuppression suppress_owner(owner_);
         constexpr wchar_t kClass[] = L"ReShadeLauncherModPresetProgress";
         static bool registered = false;
         if (!registered) {
@@ -383,9 +389,9 @@ public:
             WS_POPUP | WS_CLIPCHILDREN, 0, 0, 700, 470, owner_, nullptr,
             GetModuleHandleW(nullptr), this);
         if (!hwnd_) return std::nullopt;
+        AttachOverlayToOwner(hwnd_, owner_);
         ConfigureOverlayWindow(hwnd_);
         CenterOverOwner();
-        EnableWindow(owner_, FALSE);
         ShowWindow(hwnd_, SW_SHOWNORMAL);
         UpdateWindow(hwnd_);
 
@@ -395,7 +401,6 @@ public:
             DispatchMessageW(&message);
         }
         if (worker_.joinable()) worker_.join();
-        if (owner_ && IsWindow(owner_)) EnableWindow(owner_, TRUE);
         return outcome_;
     }
 
@@ -532,7 +537,6 @@ private:
                 return 0;
             case WM_DESTROY:
                 destroyed_ = true;
-                if (owner_ && IsWindow(owner_)) EnableWindow(owner_, TRUE);
                 return 0;
             case WM_NCDESTROY:
                 if (font_) DeleteObject(font_);
@@ -710,10 +714,66 @@ MainWindow::~MainWindow() {
     SafeRelease(wic_factory_);
 }
 
+SIZE MainWindow::PreferredWindowClientSize() const {
+    int width = MulDiv(kDefaultWindowClientWidthDip, dpi_, 96);
+    int height = MulDiv(kDefaultWindowClientHeightDip, dpi_, 96);
+    const int minimum_width =
+        MulDiv(kMinimumWindowClientWidthDip, dpi_, 96);
+    const int minimum_height =
+        MulDiv(kMinimumWindowClientHeightDip, dpi_, 96);
+    if (const auto saved = app_.WindowClientSize()) {
+        width = std::max(static_cast<int>(saved->cx), minimum_width);
+        height = std::max(static_cast<int>(saved->cy), minimum_height);
+    }
+    return SIZE{width, height};
+}
+
+void MainWindow::ApplyPreferredWindowClientSize(bool preserve_position) {
+    const SIZE client_size = PreferredWindowClientSize();
+    RECT desired{0, 0, client_size.cx, client_size.cy};
+    AdjustWindowRectExForDpi(&desired, WS_OVERLAPPEDWINDOW, FALSE,
+                             WS_EX_APPWINDOW, dpi_);
+
+    UINT flags = SWP_NOZORDER | SWP_NOACTIVATE;
+    RECT current{};
+    if (preserve_position && GetWindowRect(hwnd_, &current)) {
+        SetWindowPos(hwnd_, nullptr, current.left, current.top,
+                     desired.right - desired.left,
+                     desired.bottom - desired.top, flags);
+    } else {
+        flags |= SWP_NOMOVE;
+        SetWindowPos(hwnd_, nullptr, 0, 0, desired.right - desired.left,
+                     desired.bottom - desired.top, flags);
+    }
+}
+
+void MainWindow::SaveWindowClientSize() {
+    if (!hwnd_ || IsIconic(hwnd_) || IsZoomed(hwnd_)) return;
+
+    RECT client{};
+    if (!GetClientRect(hwnd_, &client)) return;
+    const int width = client.right - client.left;
+    const int height = client.bottom - client.top;
+    if (width < MulDiv(kMinimumWindowClientWidthDip, dpi_, 96) ||
+        height < MulDiv(kMinimumWindowClientHeightDip, dpi_, 96)) {
+        return;
+    }
+
+    const UINT dpi = GetDpiForWindow(hwnd_);
+    if (!dpi) return;
+    const SIZE size{width, height};
+    if (const auto current = app_.WindowClientSize();
+        current && current->cx == size.cx && current->cy == size.cy) {
+        return;
+    }
+    app_.SetWindowClientSize(size);
+}
+
 bool MainWindow::Create(std::optional<std::string> startup_config) {
     startup_config_ = std::move(startup_config);
     WNDCLASSEXW wc{};
     wc.cbSize = sizeof(wc);
+    wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = instance_;
     wc.hCursor = LoadCursorW(nullptr, IDC_ARROW);
@@ -737,17 +797,17 @@ bool MainWindow::Create(std::optional<std::string> startup_config) {
         RegisterWindowMessageW(L"TaskbarCreated");
     const BOOL dark_titlebar = TRUE;
     DwmSetWindowAttribute(hwnd_, 20, &dark_titlebar, sizeof(dark_titlebar));
+    const BOOL transitions_disabled = TRUE;
+    DwmSetWindowAttribute(hwnd_, DWMWA_TRANSITIONS_FORCEDISABLED,
+                          &transitions_disabled,
+                          sizeof(transitions_disabled));
     const COLORREF caption_color = RGB(8, 13, 26);
     const COLORREF text_color = RGB(240, 245, 255);
     DwmSetWindowAttribute(hwnd_, 35, &caption_color, sizeof(caption_color));
     DwmSetWindowAttribute(hwnd_, 36, &text_color, sizeof(text_color));
     const UINT dpi = GetDpiForWindow(hwnd_);
     dpi_ = dpi ? dpi : 96;
-    RECT desired{0, 0, MulDiv(640, dpi_, 96), MulDiv(530, dpi_, 96)};
-    AdjustWindowRectExForDpi(&desired, WS_OVERLAPPEDWINDOW, FALSE, WS_EX_APPWINDOW, dpi_);
-    SetWindowPos(hwnd_, nullptr, 0, 0, desired.right - desired.left,
-                 desired.bottom - desired.top,
-                 SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+    ApplyPreferredWindowClientSize(false);
     InitializeGraphics();
     const bool shader_recovery_ok = shaders_.Recover();
     shader_mode_ = shaders_.CurrentMode();
@@ -778,12 +838,7 @@ bool MainWindow::Create(std::optional<std::string> startup_config) {
     const UINT current_dpi = GetDpiForWindow(hwnd_);
     const UINT previous_dpi = dpi_;
     if (current_dpi) dpi_ = current_dpi;
-    RECT logical{0, 0, MulDiv(640, dpi_, 96), MulDiv(530, dpi_, 96)};
-    AdjustWindowRectExForDpi(&logical, WS_OVERLAPPEDWINDOW, FALSE,
-                             WS_EX_APPWINDOW, dpi_);
-    SetWindowPos(hwnd_, nullptr, 0, 0, logical.right - logical.left,
-                 logical.bottom - logical.top,
-                 SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+    ApplyPreferredWindowClientSize(false);
     if (dpi_ != previous_dpi) {
         DiscardGraphics();
         InitializeGraphics();
@@ -833,6 +888,7 @@ LRESULT MainWindow::HandleMessage(UINT message, WPARAM wparam, LPARAM lparam) {
             return 1;
         case WM_SIZE:
             ResizeGraphics(LOWORD(lparam), HIWORD(lparam));
+            ResizeOverlayWindows(hwnd_);
             return 0;
         case WM_MOUSEMOVE:
             mouse_ = PointToDips({GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam)}, dpi_);
@@ -943,9 +999,15 @@ LRESULT MainWindow::HandleMessage(UINT message, WPARAM wparam, LPARAM lparam) {
             OnDpiChanged(dpi_, reinterpret_cast<RECT*>(lparam));
             return 0;
         }
+        case WM_EXITSIZEMOVE:
+            SaveWindowClientSize();
+            return 0;
         case WM_GETMINMAXINFO: {
             auto* info = reinterpret_cast<MINMAXINFO*>(lparam);
-            RECT minimum{0, 0, MulDiv(610, dpi_, 96), MulDiv(500, dpi_, 96)};
+            RECT minimum{
+                0, 0,
+                MulDiv(kMinimumWindowClientWidthDip, dpi_, 96),
+                MulDiv(kMinimumWindowClientHeightDip, dpi_, 96)};
             AdjustWindowRectExForDpi(&minimum, WS_OVERLAPPEDWINDOW, FALSE,
                                      WS_EX_APPWINDOW, dpi_);
             info->ptMinTrackSize = {minimum.right - minimum.left,
@@ -1065,9 +1127,14 @@ LRESULT MainWindow::HandleMessage(UINT message, WPARAM wparam, LPARAM lparam) {
             }
             return 0;
         case WM_CLOSE:
+            if (IsOwnerUiSuppressed(hwnd_)) {
+                CloseTopOverlay(hwnd_);
+                return 0;
+            }
             HideToTray();
             return 0;
         case WM_DESTROY:
+            SaveWindowClientSize();
             KillTimer(hwnd_, kTimerWindow);
             KillTimer(hwnd_, kTimerGif);
             xxmi_scan_cancel_ = true;
@@ -1135,19 +1202,37 @@ void MainWindow::DiscardGraphics() {
 
 void MainWindow::ResizeGraphics(UINT width, UINT height) {
     if (!d2d_factory_) return;
+    width = std::max(1u, width);
+    height = std::max(1u, height);
     if (!render_target_) {
-        const auto size = D2D1::SizeU(std::max(1u, width), std::max(1u, height));
+        const auto size = D2D1::SizeU(width, height);
         const auto properties = D2D1::RenderTargetProperties(
             D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(),
             96.0f, 96.0f);
-        d2d_factory_->CreateHwndRenderTarget(
+        if (FAILED(d2d_factory_->CreateHwndRenderTarget(
             properties,
-            D2D1::HwndRenderTargetProperties(hwnd_, size), &render_target_);
-        render_target_->CreateSolidColorBrush(ColorText(), &brush_);
+            D2D1::HwndRenderTargetProperties(hwnd_, size), &render_target_))) {
+            return;
+        }
+        if (FAILED(render_target_->CreateSolidColorBrush(ColorText(), &brush_))) {
+            SafeRelease(render_target_);
+            return;
+        }
         LoadBackground();
-    } else if (width && height) {
-        render_target_->Resize(D2D1::SizeU(width, height));
+    } else {
+        const auto current = render_target_->GetPixelSize();
+        if (current.width != width || current.height != height) {
+            const HRESULT resize =
+                render_target_->Resize(D2D1::SizeU(width, height));
+            if (FAILED(resize)) {
+                SafeRelease(brush_);
+                SafeRelease(render_target_);
+                ResizeGraphics(width, height);
+                RebuildProfileIcons();
+            }
+        }
     }
+    InvalidateRect(hwnd_, nullptr, FALSE);
 }
 
 void MainWindow::LoadBackground() {
@@ -1579,6 +1664,21 @@ void MainWindow::DrawShaderSwitch(const RECT& rect, ShaderPackManager::Mode mode
 void MainWindow::Draw() {
     PAINTSTRUCT paint{};
     BeginPaint(hwnd_, &paint);
+    RECT client{};
+    GetClientRect(hwnd_, &client);
+    const UINT client_width =
+        static_cast<UINT>(std::max(1L, client.right - client.left));
+    const UINT client_height =
+        static_cast<UINT>(std::max(1L, client.bottom - client.top));
+    if (render_target_) {
+        const auto target_size = render_target_->GetPixelSize();
+        if (target_size.width != client_width ||
+            target_size.height != client_height) {
+            ResizeGraphics(client_width, client_height);
+        }
+    } else {
+        ResizeGraphics(client_width, client_height);
+    }
     if (!render_target_ || !brush_) {
         EndPaint(hwnd_, &paint);
         return;
@@ -1586,11 +1686,10 @@ void MainWindow::Draw() {
     render_target_->BeginDraw();
     hit_areas_.clear();
     keyboard_focus_rect_ = {};
-    const auto physical_size = render_target_->GetSize();
     const float scale = Scale();
     const D2D1_SIZE_F size = D2D1::SizeF(
-        physical_size.width / std::max(0.01f, scale),
-        physical_size.height / std::max(0.01f, scale));
+        static_cast<float>(client_width) / std::max(0.01f, scale),
+        static_cast<float>(client_height) / std::max(0.01f, scale));
     render_target_->SetTransform(D2D1::Matrix3x2F::Scale(scale, scale));
     brush_->SetColor(ColorBackground());
     render_target_->FillRectangle(D2D1::RectF(0, 0, size.width, size.height), brush_);
@@ -1608,6 +1707,12 @@ void MainWindow::Draw() {
             D2D1::RectF((size.width - width) / 2, (size.height - height) / 2,
                         (size.width + width) / 2, (size.height + height) / 2),
             0.72f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
+    }
+    if (IsOwnerUiSuppressed(hwnd_)) {
+        render_target_->SetTransform(D2D1::Matrix3x2F::Identity());
+        render_target_->EndDraw();
+        EndPaint(hwnd_, &paint);
+        return;
     }
 
     const float left = 22.0f;
@@ -2300,6 +2405,8 @@ void MainWindow::StartLaunch(bool shortcut) {
     const Json config = profile.data;
     const auto app_root = app_.root();
     HWND window = hwnd_;
+    DebugLog("Launch requested: config=" + config_name +
+             " game=" + WideToUtf8(profile.game_exe.wstring()));
     std::thread([config, config_name, game_name, launch_id, window, app_root,
                  stale_pid] {
         AppData thread_app(app_root);
@@ -2320,9 +2427,11 @@ void MainWindow::StartLaunch(bool shortcut) {
             }
             if (stale_process_running) {
                 result.error = "The previous game process did not exit";
+                DebugLog("Launch blocked: previous process did not exit");
             } else {
                 result = thread_processes.Launch(
                     config, [window](const std::string& text) {
+                        DebugLog("[launch] " + text);
                         auto* value = new std::string(text);
                         if (!PostMessageW(window, WM_APP + 20, 0,
                                           reinterpret_cast<LPARAM>(value))) {
@@ -2332,9 +2441,14 @@ void MainWindow::StartLaunch(bool shortcut) {
             }
         } catch (const std::exception& error) {
             result.error = error.what();
+            DebugLog(std::string("Launch exception: ") + error.what());
         } catch (...) {
             result.error = "Unexpected launch error";
+            DebugLog("Launch exception: unknown error");
         }
+        DebugLog(result.ok()
+                     ? "Launch completed successfully"
+                     : "Launch failed: " + result.error);
         auto* payload = new LaunchPayload{
             launch_id, result.ok(), result.error, config_name, game_name,
             std::move(result.session)};
@@ -2479,14 +2593,7 @@ void MainWindow::CheckGameWindow() {
         const UINT current_dpi = GetDpiForWindow(hwnd_);
         const UINT old_dpi = dpi_;
         if (current_dpi) dpi_ = current_dpi;
-        RECT logical{0, 0, MulDiv(640, dpi_, 96), MulDiv(530, dpi_, 96)};
-        AdjustWindowRectExForDpi(&logical, WS_OVERLAPPEDWINDOW, FALSE,
-                                 WS_EX_APPWINDOW, dpi_);
-        RECT current{};
-        GetWindowRect(hwnd_, &current);
-        SetWindowPos(hwnd_, nullptr, current.left, current.top,
-                     logical.right - logical.left, logical.bottom - logical.top,
-                     SWP_NOZORDER | SWP_NOACTIVATE);
+        ApplyPreferredWindowClientSize(true);
         if (old_dpi != dpi_) {
             DiscardGraphics();
             InitializeGraphics();
@@ -2781,6 +2888,9 @@ void MainWindow::HandleMode(Action mode) {
     if (!game) return;
     if (mode == Action::ModeBuiltin) {
         const auto loader_info = configs_.ResolveBuiltinModLoader(*game);
+        DebugLog("Built-in profile requested: game=" +
+                 WideToUtf8(game->wstring()) +
+                 " loader=" + loader_info.folder_name);
         auto loader_dll =
             app_.mod_loader_dir() / Utf8ToWide(loader_info.folder_name) /
             L"d3d11.dll";
@@ -2811,9 +2921,13 @@ void MainWindow::HandleMode(Action mode) {
                 if (!has_loader) {
                     download_error = std::move(install_error);
                     loader_error = Utf8ToWide(download_error);
+                    DebugLog("Mod loader install failed: " + download_error);
+                } else {
+                    DebugLog("Mod loader installed: " + loader_info.folder_name);
                 }
             } else if (!download_cancelled) {
                 loader_error = Utf8ToWide(download_error);
+                DebugLog("Mod loader download failed: " + download_error);
             }
             std::error_code cleanup_error;
             std::filesystem::remove(archive, cleanup_error);
@@ -2862,6 +2976,7 @@ void MainWindow::EditSelectedProfile() {
                               background_path_);
     if (!result) return;
     if (result->deleted) {
+        DebugLog("Deleting profile: " + profile.config_name);
         const bool config_deleted =
             configs_.Delete(profile.config_name);
         const bool custom_deleted =
@@ -2875,7 +2990,9 @@ void MainWindow::EditSelectedProfile() {
             RefreshProfiles(true);
             return;
         }
+        DebugLog("Profile deleted: " + profile.config_name);
     } else {
+        DebugLog("Saving profile: " + profile.config_name);
         if (!configs_.Save(profile.config_name, result->config)) {
             std::wstring message = translation_.GetW(
                 "cxx.config.save_failed",
@@ -2903,6 +3020,7 @@ void MainWindow::EditSelectedProfile() {
                             .wstring())));
             return;
         }
+        DebugLog("Profile saved: " + profile.config_name);
     }
     RefreshProfiles(true);
 }
@@ -2959,6 +3077,8 @@ void MainWindow::ChooseBackground() {
 void MainWindow::ToggleShaderMode() {
     if (busy_) return;
     const auto current = shader_mode_;
+    DebugLog(std::string("Shader mode toggle requested from ") +
+             (current == ShaderPackManager::Mode::Full ? "full" : "lite"));
     const std::wstring title =
         translation_.GetW("cxx.shader.title", L"Shader mode");
     if (current == ShaderPackManager::Mode::Full) {
@@ -2972,10 +3092,12 @@ void MainWindow::ToggleShaderMode() {
         std::string error;
         if (!shaders_.SetMode(ShaderPackManager::Mode::Lite, false, &error)) {
             const auto message = LocalizedShaderError(translation_, error);
+            DebugLog("Lite shader switch failed: " + error);
             SetStatus(WideToUtf8(message));
             ShowError(hwnd_, title, message);
         } else {
             shader_mode_ = ShaderPackManager::Mode::Lite;
+            DebugLog("Lite shaders activated");
             SetStatus(translation_.Get("shader.switch.lite", "Lite shaders"));
         }
     } else {
@@ -2996,9 +3118,11 @@ void MainWindow::ToggleShaderMode() {
                                             L"Full shader pack could not be activated.")
                         : LocalizedShaderError(translation_, error);
                 SetStatus(WideToUtf8(message));
+                DebugLog("Full shader switch failed: " + error);
                 ShowError(hwnd_, title, message);
             } else {
                 shader_mode_ = ShaderPackManager::Mode::Full;
+                DebugLog("Full shaders activated");
                 SetStatus(translation_.Get("shader.full_done",
                                            "Full shaders deployed"));
             }
@@ -3296,6 +3420,7 @@ void MainWindow::ResolveAndOpenMods() {
 }
 
 void MainWindow::SetStatus(std::string text) {
+    DebugLog("Status: " + text);
     status_ = std::move(text);
     InvalidateRect(hwnd_, nullptr, FALSE);
 }
@@ -3411,15 +3536,7 @@ void MainWindow::OnDpiChanged(UINT dpi, const RECT* suggested) {
                      suggested->bottom - suggested->top,
                      SWP_NOZORDER | SWP_NOACTIVATE);
     } else {
-        RECT logical{0, 0, MulDiv(640, dpi_, 96),
-                     MulDiv(530, dpi_, 96)};
-        AdjustWindowRectExForDpi(
-            &logical, WS_OVERLAPPEDWINDOW, FALSE,
-            WS_EX_APPWINDOW, dpi_);
-        SetWindowPos(hwnd_, nullptr, 0, 0,
-                     logical.right - logical.left,
-                     logical.bottom - logical.top,
-                     SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+        ApplyPreferredWindowClientSize(true);
     }
     DiscardGraphics();
     InitializeGraphics();

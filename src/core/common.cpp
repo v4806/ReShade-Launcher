@@ -407,6 +407,31 @@ void AppData::SetBackgroundImage(const std::filesystem::path& path) {
     SaveGlobals();
 }
 
+std::optional<SIZE> AppData::WindowClientSize() const {
+    if (!globals_.contains("window_size") ||
+        !globals_["window_size"].is_object()) {
+        return std::nullopt;
+    }
+    const auto& size = globals_["window_size"];
+    if (!size.contains("width") || !size["width"].is_number_integer() ||
+        !size.contains("height") || !size["height"].is_number_integer()) {
+        return std::nullopt;
+    }
+    const int width = size["width"].get<int>();
+    const int height = size["height"].get<int>();
+    if (width <= 0 || height <= 0) return std::nullopt;
+    return SIZE{width, height};
+}
+
+bool AppData::SetWindowClientSize(SIZE size) {
+    if (size.cx <= 0 || size.cy <= 0) return false;
+    globals_["window_size"] = {
+        {"width", size.cx},
+        {"height", size.cy},
+    };
+    return SaveGlobals();
+}
+
 std::string AppData::DisplayName(std::string_view config_name) const {
     const auto it = custom_configs_.find(std::string(config_name));
     if (it != custom_configs_.end() && it->contains("display_name") &&

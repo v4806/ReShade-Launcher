@@ -69,6 +69,8 @@ public:
     void SetLastSelectedConfig(std::string_view name);
     std::string BackgroundImage() const;
     void SetBackgroundImage(const std::filesystem::path& path);
+    std::optional<SIZE> WindowClientSize() const;
+    bool SetWindowClientSize(SIZE size);
     std::string DisplayName(std::string_view config_name) const;
     std::string CustomIcon(std::string_view config_name) const;
     bool SetCustomData(std::string_view config_name, std::string_view display_name,

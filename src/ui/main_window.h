@@ -159,6 +159,9 @@ private:
     void OnGameExited(std::uint64_t launch_id);
     void CheckGameWindow();
     void OnDpiChanged(UINT dpi, const RECT* suggested);
+    SIZE PreferredWindowClientSize() const;
+    void ApplyPreferredWindowClientSize(bool preserve_position);
+    void SaveWindowClientSize();
     RECT ScaledRect(float x, float y, float width, float height) const;
     float Scale() const;
     bool IsBusy() const { return busy_; }
