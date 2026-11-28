@@ -42,7 +42,7 @@ def _payload_files(game_root: Path) -> list[Path]:
         if not path.is_file():
             continue
         relative = path.relative_to(game_root)
-        if "Mods" in relative.parts:
+        if any(part.casefold() == "mods" for part in relative.parts):
             continue
         if path.name.casefold() == "d3dx_user.ini":
             continue

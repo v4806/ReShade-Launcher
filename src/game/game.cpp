@@ -346,6 +346,20 @@ InjectionPlan ProcessManager::BuildInjectionPlan(const Json& config,
         AppendUniquePath(
             &plan.direct_dlls,
             Utf8ToWide(config["d3d11_path"].get<std::string>()));
+    } else if (config.value("mode", "") == "builtin" &&
+               config.contains("mod_loader_dir") &&
+               config["mod_loader_dir"].is_string()) {
+        const std::filesystem::path loader_dir =
+            Utf8ToWide(config["mod_loader_dir"].get<std::string>());
+        const auto fallback = loader_dir / L"d3d11.dll";
+        if (!FileExists(fallback)) {
+            if (error) {
+                *error = "Built-in Mod loader not found: " +
+                         WideToUtf8(fallback.wstring());
+            }
+            return {};
+        }
+        AppendUniquePath(&plan.direct_dlls, fallback);
     }
     if (config.contains("dll_files") && config["dll_files"].is_array()) {
         for (const auto& path : config["dll_files"]) {

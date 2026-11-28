@@ -642,16 +642,27 @@ std::optional<DownloadOutcome> RunDownload(
 
 bool LaunchUpdater(const std::filesystem::path& installer,
                    const reshade_launcher::update::ReleaseInfo& release) {
-    const auto updater = ExecutableDirectory() / L"ReShadeLauncherUpdater.exe";
-    if (!FileExists(updater)) {
+    const auto updater_source =
+        ExecutableDirectory() / L"ReShadeLauncherUpdater.exe";
+    if (!FileExists(updater_source)) {
         return false;
     }
     const auto local = LocalAppDataDirectory() / L"ReShade-Launcher";
+    const auto updater_dir = local / L"updater";
+    const auto updater = updater_dir / L"ReShadeLauncherUpdater.exe";
+    std::error_code ec;
+    std::filesystem::create_directories(updater_dir, ec);
+    ec.clear();
+    if (!std::filesystem::copy_file(
+            updater_source, updater,
+            std::filesystem::copy_options::overwrite_existing, ec) ||
+        ec) {
+        return false;
+    }
     const auto backup =
         local / L"rollback" / (Utf8ToWide(release.version) + L"-" +
                                Utf8ToWide(TimestampForPath()));
     const auto logs = local / L"logs";
-    std::error_code ec;
     std::filesystem::create_directories(logs, ec);
     std::wstring command =
         L"\"" + updater.wstring() + L"\" --wait-pid " +

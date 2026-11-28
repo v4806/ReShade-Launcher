@@ -99,6 +99,7 @@ Type: filesandordirs; Name: "{app}\_internal"
 Type: filesandordirs; Name: "{app}\ReShade\Shaders"
 Type: filesandordirs; Name: "{app}\ReShade\Textures"
 Type: files; Name: "{app}\ReShade\full.zip"
+Type: files; Name: "{app}\ReShade\Addons\ReshadeEffectShaderToggler.addon64"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
@@ -108,7 +109,8 @@ Name: "{app}\MOD_loader"
 
 [Files]
 ; Program payload: these files are always replaced on upgrade.
-Source: "{#MySourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MySourceDir}\ReShade\Addons\*.ini"; DestDir: "{app}\ReShade\Addons"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "{#MySourceDir}\*"; DestDir: "{app}"; Excludes: "ReShade\Addons\*.ini"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Preserved content: only seed defaults when a user copy does not already exist.
 Source: "{#MyDefaultsDir}\ReShade\Presets\*"; DestDir: "{app}\ReShade\Presets"; Flags: onlyifdoesntexist uninsneveruninstall recursesubdirs createallsubdirs skipifsourcedoesntexist

@@ -97,6 +97,15 @@ int wmain() {
           "Azur Promilia launch arguments");
     Check(builtin.display_name == "蓝色星原", "Azur Promilia display name");
     Check(builtin.data.contains("d3d11_path"), "builtin d3d11 discovery");
+    const auto missing_loader_game = temp / L"game" / L"UnknownGame.exe";
+    WriteEmpty(missing_loader_game);
+    const auto missing_loader_config =
+        configs.CreateBuiltin(missing_loader_game, true);
+    Check(missing_loader_config.save_error.empty(),
+          "builtin configuration without loader persisted");
+    Check(missing_loader_config.data.contains("d3d11_path") &&
+              missing_loader_config.data["d3d11_exists"] == false,
+          "builtin loader path is retained for later manual installation");
     Check(builtin.data.contains("reshade_dll"), "ReShade option persisted");
     const auto azur_loader = configs.ResolveBuiltinModLoader(game);
     Check(azur_loader.folder_name == "AzurPromilia" &&
@@ -196,6 +205,23 @@ int wmain() {
     WriteEmpty(first);
     WriteEmpty(second);
     custom["reshade_dll"] = "ReShade64.dll";
+
+    rs::Json builtin_launch = {
+        {"mode", "builtin"},
+        {"mod_loader_dir",
+         rs::WideToUtf8(
+             (temp / L"MOD_loader" / L"AzurPromilia").wstring())},
+        {"injection_method", "direct"},
+        {"launch_program", rs::WideToUtf8(game.wstring())},
+        {"target_program", rs::WideToUtf8(game.wstring())},
+    };
+    rs::ProcessManager builtin_processes(app);
+    std::string builtin_error;
+    const auto builtin_plan =
+        builtin_processes.BuildInjectionPlan(builtin_launch, &builtin_error);
+    Check(builtin_error.empty() && builtin_plan.direct_dlls.size() == 1 &&
+              builtin_plan.direct_dlls.front().filename() == L"d3d11.dll",
+          "builtin loader is resolved at launch time");
 
     const auto custom_config = configs.CreateCustom(
         game,

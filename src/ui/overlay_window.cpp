@@ -174,6 +174,17 @@ ScopedOwnerUiSuppression::ScopedOwnerUiSuppression(HWND owner)
     }
     const auto depth = reinterpret_cast<INT_PTR>(
         GetPropW(owner_, kOwnerUiSuppressedProperty));
+    if (depth == 0) {
+        for (HWND child = GetWindow(owner_, GW_CHILD); child;
+             child = GetWindow(child, GW_HWNDNEXT)) {
+            if (GetPropW(child, kOverlayWindowProperty) ||
+                !IsWindowEnabled(child)) {
+                continue;
+            }
+            EnableWindow(child, FALSE);
+            disabled_controls_.push_back(child);
+        }
+    }
     SetPropW(owner_, kOwnerUiSuppressedProperty,
              reinterpret_cast<HANDLE>(depth + 1));
     RefreshOwner(owner_);
@@ -185,6 +196,9 @@ ScopedOwnerUiSuppression::~ScopedOwnerUiSuppression() {
         GetPropW(owner_, kOwnerUiSuppressedProperty));
     if (depth <= 1) {
         RemovePropW(owner_, kOwnerUiSuppressedProperty);
+        for (HWND child : disabled_controls_) {
+            if (IsWindow(child)) EnableWindow(child, TRUE);
+        }
     } else {
         SetPropW(owner_, kOwnerUiSuppressedProperty,
                  reinterpret_cast<HANDLE>(depth - 1));

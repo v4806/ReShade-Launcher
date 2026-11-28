@@ -2,6 +2,8 @@
 
 #include <windows.h>
 
+#include <vector>
+
 namespace rs {
 
 void AttachOverlayToOwner(HWND window, HWND owner);
@@ -24,6 +26,7 @@ public:
 
 private:
     HWND owner_ = nullptr;
+    std::vector<HWND> disabled_controls_;
 };
 
 }  // namespace rs

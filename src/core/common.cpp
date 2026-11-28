@@ -577,25 +577,29 @@ BuiltinModLoaderInfo ConfigManager::ResolveBuiltinModLoader(
 
 std::string ConfigManager::DetermineXXMIModule(
     const std::filesystem::path& game_exe) const {
-    const auto game = GameName(game_exe);
+    const auto game = ToLower(GameName(game_exe));
     const Json version = ReadVersionConfig();
-    const std::string key = "xxmi_launch_args_" + game;
-    if (version.contains(key) && version[key].is_array()) {
-        const auto& args = version[key];
-        for (size_t i = 0; i + 1 < args.size(); ++i) {
-            if (args[i].is_string() && args[i].get<std::string>() == "--xxmi") {
-                return args[i + 1].get<std::string>();
+    const std::string wanted_key = "xxmi_launch_args_" + game;
+    for (auto it = version.begin(); it != version.end(); ++it) {
+        if (ToLower(it.key()) != wanted_key || !it.value().is_array()) {
+            continue;
+        }
+        const auto& args = it.value();
+        for (size_t index = 0; index + 1 < args.size(); ++index) {
+            if (args[index].is_string() &&
+                args[index].get<std::string>() == "--xxmi") {
+                return args[index + 1].get<std::string>();
             }
         }
     }
-    if (game == "YuanShen" || game == "GenshinImpact") return "GIMI";
-    if (game == "BH3") return "HIMI";
-    if (game == "StarRail") return "SRMI";
-    if (game == "ZenlessZoneZero" || game == "ZenlessZoneZeroBeta") {
+    if (game == "yuanshen" || game == "genshinimpact") return "GIMI";
+    if (game == "bh3") return "HIMI";
+    if (game == "starrail") return "SRMI";
+    if (game == "zenlesszonezero" || game == "zenlesszonezerobeta") {
         return "ZZMI";
     }
-    if (game == "Client-Win64-Shipping") return "WWMI";
-    if (game == "Endfield") return "EFMI";
+    if (game == "client-win64-shipping") return "WWMI";
+    if (game == "endfield") return "EFMI";
     return {};
 }
 
@@ -739,15 +743,13 @@ LaunchProfile ConfigManager::CreateBuiltin(const std::filesystem::path& game_exe
         {"game_dir", WideToUtf8(game_exe.wstring())},
         {"game_exe_name", WideToUtf8(game_exe.filename().wstring())},
         {"mod_loader_dir", WideToUtf8(loader.wstring())},
+        {"d3d11_path", WideToUtf8(d3d11.wstring())},
         {"d3d11_exists", FileExists(d3d11)},
         {"mode", "builtin"},
         {"injection_method", "direct"},
         {"pre_launch_command", ""},
         {"pre_launch_wait_seconds", 0},
     };
-    if (FileExists(d3d11)) {
-        data["d3d11_path"] = WideToUtf8(d3d11.wstring());
-    }
     if (enable_reshade) {
         data["reshade_dll"] = "ReShade64.dll";
     }

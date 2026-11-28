@@ -18,6 +18,7 @@ def test_builds_known_loader_archives_and_manifest(tmp_path):
     _write(root / "AzurPromilia" / "d3d11.dll", b"loader")
     _write(root / "AzurPromilia" / "Core" / "Core.ini", "core")
     _write(root / "AzurPromilia" / "Mods" / "user" / "mod.ini", "user")
+    _write(root / "AzurPromilia" / "MODS" / "user" / "leak.ini", "user")
     _write(root / "AzurPromilia" / "d3dx_user.ini", "user")
     _write(root / "UnknownGame" / "d3d11.dll", b"unknown")
     version_file = tmp_path / "version.json"
@@ -40,7 +41,10 @@ def test_builds_known_loader_archives_and_manifest(tmp_path):
     assert "d3d11.dll" in names
     assert "Core/Core.ini" in names
     assert "d3dx_user.ini" not in names
-    assert all("Mods/" not in name for name in names)
+    assert all(
+        not any(part.casefold() == "mods" for part in name.split("/"))
+        for name in names
+    )
 
     version = json.loads(version_file.read_text(encoding="utf-8"))
     assert version["builtin_mod_loaders"] == entries

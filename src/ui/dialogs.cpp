@@ -1507,14 +1507,18 @@ INT_PTR CALLBACK ProfileDialogProc(HWND dialog, UINT message, WPARAM wparam,
             return TRUE;
         case WM_ERASEBKGND:
             return TRUE;
-        case WM_SIZE:
+        case WM_SIZE: {
+            const int previous_scroll = state->scroll_position;
+            state->scroll_position = 0;
             LayoutControls(*state);
             UpdateScrollBar(*state);
+            if (previous_scroll > 0) ScrollTo(*state, previous_scroll);
             RefreshOverlayRegion(dialog);
             RedrawWindow(dialog, nullptr, nullptr,
                          RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN |
                              RDW_FRAME);
             return TRUE;
+        }
         case WM_DPICHANGED: {
             DestroyStateResources(*state);
             state->dpi_value = HIWORD(wparam);
