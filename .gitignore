@@ -17,6 +17,13 @@ launch_config/
 MOD_loader/*
 !MOD_loader/AzurPromilia/
 !MOD_loader/AzurPromilia/**
+!MOD_loader/Client-Win64-Shipping/
+!MOD_loader/Client-Win64-Shipping/**
+!MOD_loader/Endfield/
+!MOD_loader/Endfield/**
+!MOD_loader/ZenlessZoneZero/
+!MOD_loader/ZenlessZoneZero/**
+MOD_loader/**/d3dx_user.ini
 
 # ── 日志 ──
 *.log

@@ -1,0 +1,37 @@
+#include <windows.h>
+
+#define IDI_APP_ICON 1
+IDI_APP_ICON ICON "@APP_ICON_RC_PATH@"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION @VERSION_RC_FILE_VERSION@
+ PRODUCTVERSION @VERSION_RC_PRODUCT_VERSION@
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS VS_FF_DEBUG
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "@VERSION_RC_COMPANY_NAME@"
+            VALUE "FileDescription", "@VERSION_RC_FILE_DESCRIPTION@"
+            VALUE "FileVersion", "@PROJECT_VERSION@"
+            VALUE "InternalName", "@VERSION_RC_INTERNAL_NAME@"
+            VALUE "LegalCopyright", "@VERSION_RC_LEGAL_COPYRIGHT@"
+            VALUE "OriginalFilename", "@VERSION_RC_ORIGINAL_FILENAME@"
+            VALUE "ProductName", "@VERSION_RC_PRODUCT_NAME@"
+            VALUE "ProductVersion", "@PROJECT_VERSION@"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

@@ -1,0 +1,8 @@
+Atajos de ReShade：
+
+Inicio：          Abrir/Cerrar el panel de ajustes
+Suprimir：        Activar/Desactivar efectos
+Insertar：        Recargar efectos
+Re Pág：          Preset anterior
+Av Pág：          Preset siguiente
+Fin：             Capturar pantalla

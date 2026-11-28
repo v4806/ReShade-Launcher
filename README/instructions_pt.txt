@@ -1,0 +1,26 @@
+ReShade e Mod Launcher - Introdução
+
+Aviso de segurança
+Este software usa injeção de processos para carregar o ReShade e Mods. Alguns
+programas de segurança podem classificá-lo como suspeito, embora ele seja usado
+apenas para melhorar gráficos e gerenciar Mods. Se não aceitar esse mecanismo,
+não utilize o aplicativo.
+
+Uso básico
+• Execute o programa e selecione o executável do jogo ou o XXMI Launcher.
+• Nas próximas inicializações, a última configuração usada será mantida.
+• Pressione Home no jogo para abrir ou fechar o painel do ReShade.
+• No modo integrado, os Mods ficam em MOD_loader\<jogo>\Mods.
+
+Recursos principais
+• Inicialização por XXMI, Mod Loader integrado, ReShade ou DLLs personalizadas.
+• ReShade carregado externamente e configurações separadas por jogo.
+• Interface adaptada ao idioma do sistema.
+• Presets incluídos e alternância entre shaders leves e completos.
+• Gerenciamento de presets de Mods e criação de atalhos.
+
+Observações
+• O modo leve já vem incluído. O pacote completo é baixado do GitHub quando o
+  modo completo é ativado.
+• Se o antivírus exibir um alerta, verifique o arquivo e só adicione o aplicativo
+  à lista de confiança se confiar nele.

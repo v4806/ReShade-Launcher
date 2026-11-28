@@ -1,0 +1,8 @@
+Atalhos do ReShade：
+
+Home：            Abrir/Fechar o painel de ajustes
+Delete：          Ativar/Desativar efeitos
+Insert：          Recarregar efeitos
+Page Up：         Preset anterior
+Page Down：       Próximo preset
+End：             Capturar tela

@@ -63,5 +63,48 @@
         "--nogui",
         "--xxmi",
         "EFMI"
+    ],
+    "builtin_mod_loaders": [
+        {
+            "folder_name": "AzurPromilia",
+            "display_name": "蓝色星原",
+            "exe_names": [
+                "AzurPromilia.exe"
+            ],
+            "download_url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/mod-loaders/AzurPromilia.zip",
+            "size": 3465485,
+            "sha256": "ca3b5e38944ec222aa31582e18cbf050414b506942abef1cf5a489cd71f75eaa"
+        },
+        {
+            "folder_name": "Client-Win64-Shipping",
+            "display_name": "鸣潮",
+            "exe_names": [
+                "Client-Win64-Shipping.exe"
+            ],
+            "download_url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/mod-loaders/Client-Win64-Shipping.zip",
+            "size": 3376005,
+            "sha256": "62028908032c0fd6efa213d876e106bfb5d229a8e5cea4ec8c80981bdc08c376"
+        },
+        {
+            "folder_name": "Endfield",
+            "display_name": "明日方舟：终末地",
+            "exe_names": [
+                "Endfield.exe"
+            ],
+            "download_url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/mod-loaders/Endfield.zip",
+            "size": 3423330,
+            "sha256": "2789bac886adaf82835eac2f6058e7b0b459983aaf7cc514d24bda62a9ed659b"
+        },
+        {
+            "folder_name": "ZenlessZoneZero",
+            "display_name": "绝区零",
+            "exe_names": [
+                "ZenlessZoneZero.exe",
+                "ZenlessZoneZeroBeta.exe"
+            ],
+            "download_url": "https://raw.githubusercontent.com/v4806/ReShade-Launcher/main/mod-loaders/ZenlessZoneZero.zip",
+            "size": 3884245,
+            "sha256": "b7839b851e74e9ace3b6239e1cd0a70b584943e902e1084cf6baf9c7a5d02ff6"
+        }
     ]
 }
